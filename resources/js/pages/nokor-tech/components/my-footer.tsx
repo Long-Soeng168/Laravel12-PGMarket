@@ -122,9 +122,9 @@ export default function MyFooter() {
                 {/* Footer Bottom */}
                 <div className="mt-8 flex flex-col items-center justify-between gap-4 border-t border-white py-6 md:flex-row">
                     <p className="text-sm">{application_info?.copyright}</p>
-                    <a className="text-sm" href="https://kampu.solutions">
-                        Developed by : <strong>Kampu Solutions</strong>
-                    </a>
+                    {/* <a className="text-sm" href="https://kampu.solutions">
+                        Developed by : <strong>Long Soeng</strong>
+                    </a> */}
                     {/* <div className="flex gap-4">
                         {links?.map((item) => (
                             <a href={item?.link ? item?.link : '#'}>
