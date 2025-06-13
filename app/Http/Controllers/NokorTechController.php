@@ -29,22 +29,6 @@ class NokorTechController extends Controller
 
 
         $newArrivals = Item::with('images', 'shop')->where('status', 'active')->orderBy('id', 'desc')->take(12)->get();
-        $bodyTypes = ItemBodyType::orderBy('order_index')->orderBy('name')
-            ->orderBy('name')
-            ->where('status', 'active')
-            ->get();
-
-        $brandsWithItems = ItemBrand::with([
-            'items' => function ($query) {
-                $query->with('images', 'shop')
-                    ->where('items.status', 'active') // Specify 'items' table for status
-                    ->orderBy('id', 'desc')
-                    ->take(12); // Limit to 12 items
-            },
-        ])
-            ->orderBy('order_index')->orderBy('name')
-            ->where('item_brands.status', 'active') // Specify 'item_categories' table for status
-            ->get();
 
 
         $categoriesWithItems = ItemCategory::with([
@@ -86,8 +70,6 @@ class NokorTechController extends Controller
             'posts' => $posts,
             'newArrivals' => $newArrivals,
             'categoriesWithItems' => $categoriesWithItems,
-            'brandsWithItems' => $brandsWithItems,
-            'bodyTypes' => $bodyTypes,
         ]);
     }
     public function shops(Request $request)

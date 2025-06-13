@@ -1,8 +1,6 @@
 import MyNoData from '@/components/my-no-data';
 import { usePage } from '@inertiajs/react';
 import MyBlogList from './components/my-blogs-list';
-import MyBodyTypeList from './components/my-body-types-list copy';
-import MyBrandList from './components/my-brand-list';
 import MyCategoryList from './components/my-category-list';
 import MyMiddleSlide from './components/my-middle-slide';
 import MyProductList from './components/my-product-list';
@@ -11,7 +9,7 @@ import MySlide from './components/my-slide';
 import NokorTechLayout from './layouts/nokor-tech-layout';
 
 const Index = () => {
-    const { topBanners, middleBanners, posts, newArrivals, categoriesWithItems, brandsWithItems, bodyTypes } = usePage<any>().props;
+    const { topBanners, middleBanners, posts, newArrivals, categoriesWithItems } = usePage<any>().props;
     return (
         <NokorTechLayout>
             <main className="px-2">
@@ -21,8 +19,6 @@ const Index = () => {
                         {/* end slide */}
                         <div className="mt-10 mb-4 space-y-4">
                             {categoriesWithItems?.length > 0 && <MyCategoryList items={categoriesWithItems} />}
-                            {/* {brandsWithItems?.length > 0 && <MyBrandList items={brandsWithItems} />}
-                            {bodyTypes?.length > 0 && <MyBodyTypeList items={bodyTypes} />} */}
                         </div>
 
                         {newArrivals?.length > 0 ? (
@@ -46,19 +42,6 @@ const Index = () => {
                                         image={`/assets/images/item_categories/thumb/${category.image}`}
                                     />
                                     <MyProductList items={category.all_items} />
-                                </div>
-                            ))}
-
-                        {brandsWithItems
-                            .filter((brand: any) => brand.items.length > 0)
-                            .map((brand: any) => (
-                                <div key={brand.id}>
-                                    <MyProductListHeader
-                                        link={`/products?brand_code=${brand?.code}`}
-                                        title={brand.name}
-                                        image={`/assets/images/item_brands/thumb/${brand.image}`}
-                                    />
-                                    <MyProductList items={brand.items} />
                                 </div>
                             ))}
 
