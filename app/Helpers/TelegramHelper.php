@@ -31,7 +31,7 @@ class TelegramHelper
                 }
 
                 // Assuming images are stored in /assets/images/items/thumb/ accessible via your public URL
-                $imageUrl = public_path('/assets/images/items/thumb/' . $item->images[0]->image);
+                $imageUrl = url('/assets/images/items/thumb/' . $item->images[0]->image);
 
                 $photo = [
                     'type'  => 'photo',
