@@ -1,7 +1,7 @@
 import { MyTooltipButton } from '@/components/my-tooltip-button';
 import useRole from '@/hooks/use-role';
 import { Link, usePage } from '@inertiajs/react';
-import { CarIcon, PackageIcon, StoreIcon, UserIcon } from 'lucide-react';
+import { PackageIcon, StoreIcon, UserIcon } from 'lucide-react';
 
 const SectionCards = () => {
     const { item_counts, garage_post_counts, auth } = usePage().props;
@@ -50,7 +50,7 @@ const SectionCards = () => {
                 )}
 
                 {/* Garage Settings */}
-                {hasRole('Garage') && (
+                {/* {hasRole('Garage') && (
                     <Link
                         prefetch
                         href={`${auth?.garage?.id ? '/user-garages/update' : '/user-garages/create'}`}
@@ -70,10 +70,10 @@ const SectionCards = () => {
                             </div>
                         </div>
                     </Link>
-                )}
+                )} */}
 
                 {/* User Plans */}
-                {hasRole('User') && (
+                {/* {hasRole('User') && (
                     <Link
                         prefetch
                         href="/user/plans"
@@ -86,7 +86,7 @@ const SectionCards = () => {
                             <span className="text-lg font-bold underline-offset-4 hover:underline">User Plans</span>
                         </div>
                     </Link>
-                )}
+                )} */}
             </div>
 
             <hr className="mt-6" />
@@ -106,7 +106,7 @@ const SectionCards = () => {
                         </div>
                     </Link>
                 )}
-                {!hasRole('Garage') && (
+                {/* {!hasRole('Garage') && (
                     <Link
                         prefetch
                         href="/user-garages/create"
@@ -119,7 +119,7 @@ const SectionCards = () => {
                             <span className="text-lg font-bold underline-offset-4 hover:underline">Register Garage</span>
                         </div>
                     </Link>
-                )}
+                )} */}
             </div>
         </div>
     );

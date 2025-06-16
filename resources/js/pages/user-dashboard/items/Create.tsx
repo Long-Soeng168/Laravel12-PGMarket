@@ -22,6 +22,7 @@ import * as z from 'zod';
 
 const formSchema = z.object({
     name: z.string().min(1).max(255),
+    price: z.string().optional(),
     short_description: z.string().optional(),
     code: z.string().max(255).optional(),
     link: z.string().max(255).optional(),
@@ -62,6 +63,7 @@ export default function Create() {
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: editData?.name || '',
+            price: editData?.price?.toString() || '',
             code: editData?.code || '',
             short_description: editData?.short_description || '',
             link: editData?.link || '',
@@ -160,7 +162,7 @@ export default function Create() {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 p-5">
-                    <div className="grid md:grid-cols-12 gap-4">
+                    <div className="grid gap-4 md:grid-cols-12">
                         {/* <div className="col-span-6">
                             <FormField
                                 control={form.control}
@@ -250,6 +252,21 @@ export default function Create() {
                             />
                         </div>
 
+                        <div className="col-span-6">
+                            <FormField
+                                control={form.control}
+                                name="price"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>{t('Price')}</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder={t('Price ($)')} type="text" {...field} />
+                                        </FormControl>
+                                        <FormMessage>{errors.price && <div>{errors.price}</div>}</FormMessage>
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
                         <div className="col-span-12">
                             <FormField
                                 control={form.control}
@@ -397,7 +414,7 @@ export default function Create() {
                             />
                         </div>
 
-                        <div className="col-span-6">
+                        {/* <div className="col-span-6">
                             <FormField
                                 control={form.control}
                                 name="brand_code"
@@ -462,7 +479,6 @@ export default function Create() {
                                                                         />
                                                                     )}
                                                                     {brand.name}
-                                                                    {/* {brand.name_kh && `(${brand.name_kh})`} */}
                                                                 </CommandItem>
                                                             ))}
                                                         </CommandGroup>
@@ -475,9 +491,9 @@ export default function Create() {
                                     </FormItem>
                                 )}
                             />
-                        </div>
+                        </div> */}
 
-                        <div className="col-span-6">
+                        {/* <div className="col-span-6">
                             <FormField
                                 control={form.control}
                                 name="model_code"
@@ -538,7 +554,6 @@ export default function Create() {
                                                                                 )}
                                                                             />
                                                                             {model.name}
-                                                                            {/* {model.name_kh && `(${model.name_kh})`} */}
                                                                         </CommandItem>
                                                                     ))}
                                                         </CommandGroup>
@@ -551,9 +566,9 @@ export default function Create() {
                                     </FormItem>
                                 )}
                             />
-                        </div>
+                        </div> */}
 
-                        <div className="col-span-6">
+                        {/* <div className="col-span-6">
                             <FormField
                                 control={form.control}
                                 name="body_type_code"
@@ -617,7 +632,6 @@ export default function Create() {
                                                                         />
                                                                     )}
                                                                     {bodyType.name}
-                                                                    {/* {bodyType.name_kh && `(${bodyType.name_kh})`} */}
                                                                 </CommandItem>
                                                             ))}
                                                         </CommandGroup>
@@ -629,7 +643,7 @@ export default function Create() {
                                     </FormItem>
                                 )}
                             />
-                        </div>
+                        </div> */}
 
                         <div className="col-span-6">
                             <FormField

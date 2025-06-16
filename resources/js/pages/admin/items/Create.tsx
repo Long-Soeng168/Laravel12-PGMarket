@@ -11,7 +11,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import useTranslation from '@/hooks/use-translation';
 import AppLayout from '@/layouts/app-layout';
 import { cn } from '@/lib/utils';
-import MyCkeditor5 from '@/pages/plugins/ckeditor5/my-ckeditor5';
 import { BreadcrumbItem } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm as inertiaUseForm, usePage } from '@inertiajs/react';
@@ -24,6 +23,7 @@ import * as z from 'zod';
 const formSchema = z.object({
     name: z.string().min(1).max(255),
     short_description: z.string().optional(),
+    price: z.string().optional(),
     code: z.string().max(255).optional(),
     link: z.string().max(255).optional(),
     status: z.string().optional(),
@@ -64,6 +64,7 @@ export default function Create() {
         defaultValues: {
             name: editData?.name || '',
             code: editData?.code || '',
+            price: editData?.price?.toString() || '',
             short_description: editData?.short_description || '',
             link: editData?.link || '',
             status: editData?.status || 'active',
@@ -161,7 +162,7 @@ export default function Create() {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 p-5">
-                    <div className="grid md:grid-cols-12 gap-4">
+                    <div className="grid gap-4 md:grid-cols-12">
                         {/* <div className="col-span-6">
                             <FormField
                                 control={form.control}
@@ -298,8 +299,22 @@ export default function Create() {
                                 )}
                             />
                         </div>
-
-                        <div className="col-span-12">
+                        <div className="col-span-3">
+                            <FormField
+                                control={form.control}
+                                name="price"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>{t('Price')}</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder={t('Price ($)')} type="number" {...field} />
+                                        </FormControl>
+                                        <FormMessage>{errors.price && <div>{errors.price}</div>}</FormMessage>
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                        <div className="col-span-9">
                             <FormField
                                 control={form.control}
                                 name="name"
@@ -446,7 +461,7 @@ export default function Create() {
                             />
                         </div>
 
-                        <div className="col-span-6">
+                        {/* <div className="col-span-6">
                             <FormField
                                 control={form.control}
                                 name="brand_code"
@@ -511,7 +526,6 @@ export default function Create() {
                                                                         />
                                                                     )}
                                                                     {brand.name}
-                                                                    {/* {brand.name_kh && `(${brand.name_kh})`} */}
                                                                 </CommandItem>
                                                             ))}
                                                         </CommandGroup>
@@ -524,9 +538,9 @@ export default function Create() {
                                     </FormItem>
                                 )}
                             />
-                        </div>
+                        </div> */}
 
-                        <div className="col-span-6">
+                        {/* <div className="col-span-6">
                             <FormField
                                 control={form.control}
                                 name="model_code"
@@ -587,7 +601,6 @@ export default function Create() {
                                                                                 )}
                                                                             />
                                                                             {model.name}
-                                                                            {/* {model.name_kh && `(${model.name_kh})`} */}
                                                                         </CommandItem>
                                                                     ))}
                                                         </CommandGroup>
@@ -600,9 +613,9 @@ export default function Create() {
                                     </FormItem>
                                 )}
                             />
-                        </div>
+                        </div> */}
 
-                        <div className="col-span-6">
+                        {/* <div className="col-span-6">
                             <FormField
                                 control={form.control}
                                 name="body_type_code"
@@ -665,8 +678,7 @@ export default function Create() {
                                                                             src={`/assets/images/item_body_types/thumb/${bodyType.image}`}
                                                                         />
                                                                     )}
-                                                                    {bodyType.name} 
-                                                                    {/* {bodyType.name_kh && `(${bodyType.name_kh})`} */}
+                                                                    {bodyType.name}
                                                                 </CommandItem>
                                                             ))}
                                                         </CommandGroup>
@@ -678,7 +690,7 @@ export default function Create() {
                                     </FormItem>
                                 )}
                             />
-                        </div>
+                        </div> */}
 
                         <div className="col-span-6">
                             <FormField

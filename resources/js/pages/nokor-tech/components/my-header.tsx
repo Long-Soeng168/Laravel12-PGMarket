@@ -50,7 +50,7 @@ const MyHeader = () => {
         <>
             {/* Top Bar */}
             <nav className="bg-true-primary text-white">
-                <div className="mx-auto flex min-h-10 max-w-screen-xl flex-wrap items-center justify-between px-4 py-2 text-sm">
+                <div className="mx-auto flex min-h-10 max-w-screen-xl flex-wrap items-center justify-between py-2 pl-4 lg:pl-0 text-sm">
                     {application_info?.image && (
                         <Link prefetch href="/" className="flex items-center gap-2">
                             <img
@@ -58,9 +58,12 @@ const MyHeader = () => {
                                 height={65}
                                 src={`/assets/images/application_info/thumb/${application_info.image}`}
                                 alt={`${application_info.name}'s logo`}
-                                className="rounded-full"
+                                className="rounded-md"
                             />
-                            <span className="text-xl font-bold">{application_info.name}</span>
+                            <div>
+                                <p className="text-xl font-bold font-siemreap-regular">{application_info.name_kh}</p>
+                                <p className="text-xl font-bold">{application_info.name}</p>
+                            </div>
                         </Link>
                     )}
                     <div className="hidden md:block lg:justify-self-center">
@@ -79,9 +82,9 @@ const MyHeader = () => {
                             </li>
                         </ul>
                     </div>
-                    <div className="flex items-center gap-4 font-semibold">
-                        <Link prefetch href="/download-app" className="rainbow-button flex items-center gap-2 pr-4 pl-2">
-                            <img src="/assets/icons/phone-car.png" alt="Download App" className="aspect-square w-12 object-contain py-1" />
+                    <div className="flex items-center gap-4 px-4 font-semibold">
+                        <Link prefetch href="/download-app" className="rainbow-button flex items-center gap-2 pr-4 pl-2 text-sm lg:text-lg">
+                            <img src="/assets/icons/phone-car.png" alt="Download App" className="aspect-square w-10 object-contain py-1 lg:w-12" />
                             Download App
                         </Link>
                     </div>

@@ -71,7 +71,7 @@ class ItemController extends Controller implements HasMiddleware
     public function create(Request $request)
     {
         return Inertia::render('admin/items/Create', [
-            'itemCategories' => ItemCategory::where('status', 'active')->orderBy('name')->get(),
+            'itemCategories' => ItemCategory::where('status', 'active')->orderBy('order_index')->get(),
             'itemBrands' => ItemBrand::where('status', 'active')->orderBy('name')->get(),
             'itemModels' => ItemModel::where('status', 'active')->orderBy('name')->get(),
             'itemBodyTypes' => ItemBodyType::where('status', 'active')->orderBy('name')->get(),
@@ -87,6 +87,7 @@ class ItemController extends Controller implements HasMiddleware
         $validated = $request->validate([
             'code' => 'nullable|string|max:255',
             'name' => 'required|string|max:255',
+            'price' => 'required|numeric',
             'name_kh' => 'nullable|string|max:255',
             'short_description' => 'nullable|string',
             'short_description_kh' => 'nullable|string',
@@ -152,7 +153,7 @@ class ItemController extends Controller implements HasMiddleware
         return Inertia::render('admin/items/Create', [
             'editData' => $item->load('images'),
             'readOnly' => true,
-            'itemCategories' => ItemCategory::where('status', 'active')->orderBy('name')->get(),
+            'itemCategories' => ItemCategory::where('status', 'active')->orderBy('order_index')->get(),
             'itemBrands' => ItemBrand::where('status', 'active')->orderBy('name')->get(),
             'itemModels' => ItemModel::where('status', 'active')->orderBy('name')->get(),
             'itemBodyTypes' => ItemBodyType::where('status', 'active')->orderBy('name')->get(),
@@ -168,7 +169,7 @@ class ItemController extends Controller implements HasMiddleware
     {
         return Inertia::render('admin/items/Create', [
             'editData' => $item->load('images'),
-            'itemCategories' => ItemCategory::where('status', 'active')->orderBy('name')->get(),
+            'itemCategories' => ItemCategory::where('status', 'active')->orderBy('order_index')->get(),
             'itemBrands' => ItemBrand::where('status', 'active')->orderBy('name')->get(),
             'itemModels' => ItemModel::where('status', 'active')->orderBy('name')->get(),
             'itemBodyTypes' => ItemBodyType::where('status', 'active')->orderBy('name')->get(),
@@ -185,6 +186,7 @@ class ItemController extends Controller implements HasMiddleware
         $validated = $request->validate([
             'code' => 'nullable|string|max:255',
             'name' => 'required|string|max:255',
+            'price' => 'required|numeric',
             'name_kh' => 'nullable|string|max:255',
             'short_description' => 'nullable|string',
             'short_description_kh' => 'nullable|string',

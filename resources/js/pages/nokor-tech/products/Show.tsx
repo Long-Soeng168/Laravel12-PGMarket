@@ -45,22 +45,24 @@ const ProductDetailPage = () => {
 
                             <AddToCart item={itemShow} />
 
-                            <Link href={`/shops/${itemShow.shop?.id}`} className="hover:bg-muted mt-8 block cursor-pointer rounded-md p-2">
-                                <figcaption className="flex items-center space-x-4">
-                                    <img
-                                        src={`/assets/images/shops/thumb/${itemShow.shop?.logo}`}
-                                        alt=""
-                                        className="h-14 w-14 flex-none rounded-full object-cover"
-                                        loading="lazy"
-                                        decoding="async"
-                                    />
-                                    <div className="flex-auto">
-                                        <div className="text-base font-semibold text-slate-900 dark:text-slate-200">{itemShow.shop?.name}</div>
-                                        <div className="mt-0.5 dark:text-slate-300">{itemShow.shop?.address}</div>
-                                        <div className="mt-0.5 dark:text-slate-300">{itemShow.shop?.phone}</div>
-                                    </div>
-                                </figcaption>
-                            </Link>
+                            {itemShow.shop?.id && (
+                                <Link href={`/shops/${itemShow.shop?.id}`} className="hover:bg-muted mt-8 block cursor-pointer rounded-md p-2">
+                                    <figcaption className="flex items-center space-x-4">
+                                        <img
+                                            src={`/assets/images/shops/thumb/${itemShow.shop?.logo}`}
+                                            alt=""
+                                            className="h-14 w-14 flex-none rounded-full object-cover"
+                                            loading="lazy"
+                                            decoding="async"
+                                        />
+                                        <div className="flex-auto">
+                                            <div className="text-base font-semibold text-slate-900 dark:text-slate-200">{itemShow.shop?.name}</div>
+                                            <div className="mt-0.5 dark:text-slate-300">{itemShow.shop?.address}</div>
+                                            <div className="mt-0.5 dark:text-slate-300">{itemShow.shop?.phone}</div>
+                                        </div>
+                                    </figcaption>
+                                </Link>
+                            )}
 
                             {itemShow?.short_description && (
                                 <div>

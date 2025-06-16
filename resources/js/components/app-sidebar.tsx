@@ -8,7 +8,6 @@ import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
 import {
     AppWindowIcon,
-    BookmarkCheckIcon,
     BriefcaseBusinessIcon,
     CarIcon,
     FilePenLineIcon,
@@ -33,7 +32,6 @@ import {
     SignalIcon,
     SquareUserIcon,
     StoreIcon,
-    TagsIcon,
     Tally5Icon,
     TvMinimalPlayIcon,
     UserCogIcon,
@@ -72,24 +70,24 @@ export function AppSidebar() {
                     icon: Layers2Icon,
                     url: '/admin/item_categories',
                 },
-                {
-                    title: t('Brands'),
-                    permission: 'item view',
-                    icon: TagsIcon,
-                    url: '/admin/item_brands',
-                },
-                {
-                    title: t('Models'),
-                    permission: 'item view',
-                    icon: BookmarkCheckIcon,
-                    url: '/admin/item_models',
-                },
-                {
-                    title: t('Body Types'),
-                    permission: 'item view',
-                    icon: ShapesIcon,
-                    url: '/admin/item_body_types',
-                },
+                // {
+                //     title: t('Brands'),
+                //     permission: 'item view',
+                //     icon: TagsIcon,
+                //     url: '/admin/item_brands',
+                // },
+                // {
+                //     title: t('Models'),
+                //     permission: 'item view',
+                //     icon: BookmarkCheckIcon,
+                //     url: '/admin/item_models',
+                // },
+                // {
+                //     title: t('Body Types'),
+                //     permission: 'item view',
+                //     icon: ShapesIcon,
+                //     url: '/admin/item_body_types',
+                // },
                 {
                     title: t('View Counts'),
                     permission: 'item view',
@@ -418,26 +416,26 @@ export function AppSidebar() {
                 },
             ],
         },
-        {
-            title: t('Your Garage'),
-            permission: 'Garage',
-            url: '/user-garages/update',
-            icon: CarIcon,
-            subItems: [
-                {
-                    title: t('Garage Settings'),
-                    permission: 'Garage',
-                    url: '/user-garages/update',
-                    icon: CarIcon,
-                },
-                {
-                    title: t('Posts'),
-                    permission: 'Garage',
-                    icon: FilePenLineIcon,
-                    url: '/user-garage_posts',
-                },
-            ],
-        },
+        // {
+        //     title: t('Your Garage'),
+        //     permission: 'Garage',
+        //     url: '/user-garages/update',
+        //     icon: CarIcon,
+        //     subItems: [
+        //         {
+        //             title: t('Garage Settings'),
+        //             permission: 'Garage',
+        //             url: '/user-garages/update',
+        //             icon: CarIcon,
+        //         },
+        //         {
+        //             title: t('Posts'),
+        //             permission: 'Garage',
+        //             icon: FilePenLineIcon,
+        //             url: '/user-garage_posts',
+        //         },
+        //     ],
+        // },
     ];
     return (
         <Sidebar collapsible="icon" variant="inset" className={`${currentLocale == 'kh' ? 'font-siemreap-regular' : 'font-poppins-regular'}`}>

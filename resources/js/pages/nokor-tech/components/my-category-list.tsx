@@ -22,11 +22,13 @@ const MyCategoryList: React.FC<MyCategoryListProps> = ({ items }) => {
                             key={i}
                             className="border-primary bg-background flex cursor-pointer flex-col items-center justify-center gap-2 rounded border border-dashed px-1 py-4 transition-all duration-300 hover:-translate-2 hover:border-solid hover:shadow-[5px_5px_rgba(104,_96,_255,_0.4),_10px_10px_rgba(104,_96,_255,_0.3),_15px_15px_rgba(104,_96,_255,_0.2)]"
                         >
-                            <img
-                                src={`/assets/images/item_categories/thumb/${item?.image}`}
-                                alt={`Partner ${i + 1}`}
-                                className="h-16 object-contain"
-                            />
+                            {item?.image && (
+                                <img
+                                    src={`/assets/images/item_categories/thumb/${item?.image}`}
+                                    alt={`Partner ${i + 1}`}
+                                    className="h-16 object-contain"
+                                />
+                            )}
                             <p className="text-lg font-semibold text-gray-600 dark:text-white">
                                 {currentLocale == 'kh' ? item?.name_kh : item?.name}
                             </p>
