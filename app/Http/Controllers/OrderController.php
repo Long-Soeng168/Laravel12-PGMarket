@@ -43,7 +43,7 @@ class OrderController extends Controller implements HasMiddleware
         }
 
         $tableData = $query->withCount('order_items')->paginate(perPage: 10)->onEachSide(1);
- 
+
         return Inertia::render('admin/orders/Index', [
             'tableData' => $tableData,
         ]);
@@ -111,14 +111,14 @@ class OrderController extends Controller implements HasMiddleware
 
             DB::commit();
 
-            return back()->with('success', 'Order placed successfully!');
+            // return back()->with('success', 'Order placed successfully!');
 
-            // $result = TelegramHelper::sendOrderItems($order);
-            // if ($result['success']) {
-            //     return back()->with('success', 'Order placed successfully!');
-            // } else {
-            //     return back()->with('error', $result['message']);
-            // }
+            $result = TelegramHelper::sendOrderItems($order);
+            if ($result['success']) {
+                return back()->with('success', 'Order placed successfully!');
+            } else {
+                return back()->with('error', $result['message']);
+            }
         } catch (\Exception $e) {
             DB::rollback();
 
