@@ -39,7 +39,7 @@ class TelegramHelper
                 ];
 
                 if ($index === 0) {
-                    $caption  = "🚀 <b>New order #{$order->id} placed!</b>\n\n";
+                    $caption  = "🚀 <b>New order ID: {$order->id} placed!</b>\n\n";
                     $caption .= "<b>Name:</b> " . ($order->name ?? '-') . "\n";
                     $caption .= "<b>Phone:</b> " . $order->phone . "\n";
                     $caption .= "<b>Note:</b> " . ($order->note ?? '-') . "\n";
