@@ -80,9 +80,10 @@
               <input type="text"
                 class="form-control"
                 id="paypal-amount"
-                value="0"
+                value="0.5"
+                disabled
                 aria-label="Amount (to the nearest pound)">
-              <span class="input-group-text">.50</span>
+              <!-- <span class="input-group-text">.00</span> -->
             </div>
           </div>
         </div>
