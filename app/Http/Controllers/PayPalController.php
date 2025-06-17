@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
+use Inertia\Inertia;
 
 class PayPalController extends Controller
 {
@@ -12,7 +13,8 @@ class PayPalController extends Controller
      */
     public function index()
     {
-        return view('checkout');
+        // return view('checkout');
+        return Inertia::render('checkout');
     }
 
     /**
@@ -26,8 +28,8 @@ class PayPalController extends Controller
         ];
 
         $response = Http::withHeaders($headers)
-                        ->withBody('grant_type=client_credentials')
-                        ->post(config('paypal.base_url') . '/v1/oauth2/token');
+            ->withBody('grant_type=client_credentials')
+            ->post(config('paypal.base_url') . '/v1/oauth2/token');
 
         return json_decode($response->body())->access_token;
     }
@@ -59,8 +61,8 @@ class PayPalController extends Controller
         ];
 
         $response = Http::withHeaders($headers)
-                        ->withBody(json_encode($body))
-                        ->post(config('paypal.base_url'). '/v2/checkout/orders');
+            ->withBody(json_encode($body))
+            ->post(config('paypal.base_url') . '/v2/checkout/orders');
 
         Session::put('request_id', $id);
         Session::put('order_id', json_decode($response->body())->id);
@@ -81,7 +83,7 @@ class PayPalController extends Controller
         ];
 
         $response = Http::withHeaders($headers)
-                        ->post($url, null);
+            ->post($url, null);
 
         return json_decode($response->body());
     }
