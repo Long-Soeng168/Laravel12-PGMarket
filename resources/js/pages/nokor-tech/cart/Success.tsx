@@ -13,7 +13,7 @@ const Success = () => {
                 <img src="/assets/icons/check.png" className="size-40" alt="" />
                 <h1 className="mt-4 text-3xl font-semibold">Thanks For Order!</h1>
                 <p className="mt-2">Your Order Has Been Successfully Placed.</p>
-                <p className="mt-2">We Will Get Back To You As Soon As Possible</p>
+                {/* <p className="mt-2">We Will Get Back To You As Soon As Possible</p> */}
 
                 <Link href="/">
                     <Button className="mt-6">

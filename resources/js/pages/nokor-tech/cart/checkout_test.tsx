@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import NokorTechLayout from './nokor-tech/layouts/nokor-tech-layout';
+import NokorTechLayout from '../layouts/nokor-tech-layout';
 
 const PayPalPayment = () => {
     const [amount, setAmount] = useState(1);

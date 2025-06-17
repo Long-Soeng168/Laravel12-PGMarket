@@ -372,7 +372,8 @@ class NokorTechController extends Controller
     }
     public function checkout()
     {
-        return Inertia::render("nokor-tech/cart/Checkout");
+        // return Inertia::render("nokor-tech/cart/Checkout");
+        return Inertia::render("nokor-tech/cart/checkout_with_payment");
     }
     public function success()
     {
