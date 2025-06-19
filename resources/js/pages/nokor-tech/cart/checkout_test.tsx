@@ -9,7 +9,7 @@ const PayPalPayment = () => {
     useEffect(() => {
         const script = document.createElement('script');
         script.src =
-            'https://www.paypal.com/sdk/js?client-id=AaMd6DJgL7L5WBdugs3t5Iv1XYI7oUrH_bSdd7zpfnyZQCXjwEBiHPiVY90gpWvUvH4-76-jBNff45Mq&currency=GBP&intent=capture';
+            'https://www.paypal.com/sdk/js?client-id=AaMd6DJgL7L5WBdugs3t5Iv1XYI7oUrH_bSdd7zpfnyZQCXjwEBiHPiVY90gpWvUvH4-76-jBNff45Mq&currency=USD&intent=capture';
         script.addEventListener('load', () => initPayPalButton());
         document.body.appendChild(script);
     }, [amount]);

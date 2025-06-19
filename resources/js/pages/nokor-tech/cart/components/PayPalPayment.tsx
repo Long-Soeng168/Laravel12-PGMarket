@@ -1,5 +1,4 @@
 import { useCart } from '@/contexts/cart-contexts';
-import { usePage } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 
 const PayPalPayment = () => {
@@ -7,7 +6,7 @@ const PayPalPayment = () => {
     const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.cartQuantity, 0);
 
     const [amount, setAmount] = useState(subtotal.toFixed(2));
-    const { auth } = usePage().props;
+    const [successVisible, setSuccessVisible] = useState(false);
 
     // Load PayPal SDK script dynamically
     useEffect(() => {
@@ -23,57 +22,23 @@ const PayPalPayment = () => {
 
         window.paypal
             .Buttons({
-                createOrder: () => {
-                    return fetch(`/api/create/${amount}`).then((res) => {
-                        if (!res.ok) throw new Error('Failed to create PayPal order');
-                        return res.text(); // Should be orderID
-                    });
-                },
+                createOrder: () =>
+                    fetch(`/create/${amount}`)
+                        .then((res) => res.text())
+                        .then((id) => id),
 
-                onApprove: () => {
-                    const orderItems = cartItems.map((item) => {
-                        const itemPrice = parseFloat(item.price);
-                        const itemDiscount = parseFloat(item.discount || 0);
-                        const discountAmount = item.discount_type === 'percentage' ? (itemPrice * itemDiscount) / 100 : itemDiscount;
-                        const total = (itemPrice - discountAmount) * item.cartQuantity;
-
-                        return {
-                            item_id: item.id,
-                            price: itemPrice,
-                            discount: itemDiscount,
-                            discount_type: item.discount_type,
-                            quantity: item.cartQuantity,
-                            total,
-                        };
-                    });
-
-                    const orderPayload = {
-                        total: orderItems.reduce((sum, item) => sum + item.total, 0),
-                        items: orderItems,
-                        name: auth?.user?.name || 'Guest',
-                        phone: auth?.user?.phone || '0000',
-                        note: 'N/A',
-                    };
-
-                    return fetch('/api/complete', {
+                onApprove: () =>
+                    fetch('/complete', {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/json',
+                            'X-CSRF-Token': import.meta.env.VITE_CSRF_TOKEN,
                         },
-                        body: JSON.stringify(orderPayload),
                     })
-                        .then((res) => {
-                            if (!res.ok) throw new Error('Failed to complete order');
-                            return res.json();
-                        })
+                        .then((res) => res.json())
                         .then(() => {
                             window.location.href = '/checkout_success';
                         })
-                        .catch((err) => {
-                            console.error(err);
-                            alert('Something went wrong: ' + err.message);
-                        });
-                },
+                        .catch((err) => console.error(err)),
 
                 onCancel: (data) => console.log('Payment cancelled:', data),
                 onError: (err) => console.error('PayPal error:', err),
