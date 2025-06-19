@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 
 class OrderController extends Controller implements HasMiddleware

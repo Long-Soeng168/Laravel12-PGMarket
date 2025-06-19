@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\OrderController;
 use App\Http\Controllers\StreamFileController;
 use Illuminate\Support\Facades\Route;
 
@@ -45,4 +44,4 @@ require __DIR__ . '/telegram.php';
 // ========= Pay Pal Route =========
 Route::get('/test_payment', '\App\Http\Controllers\PayPalController@index');
 Route::get('/create/{amount}', '\App\Http\Controllers\PayPalController@create');
-Route::post('/complete', [OrderController::class, 'store']);
+Route::post('/complete', '\App\Http\Controllers\PayPalController@complete');

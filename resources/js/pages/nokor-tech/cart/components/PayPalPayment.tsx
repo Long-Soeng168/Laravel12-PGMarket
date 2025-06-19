@@ -24,10 +24,12 @@ const PayPalPayment = () => {
 
         window.paypal
             .Buttons({
-                createOrder: () =>
-                    fetch(`/create/${amount}`)
-                        .then((res) => res.text())
-                        .then((id) => id),
+                createOrder: () => {
+                    return fetch(`/create/${amount}`).then((res) => {
+                        if (!res.ok) throw new Error('Failed to create PayPal order');
+                        return res.text(); // Should be orderID
+                    });
+                },
 
                 onApprove: () => {
                     const orderItems = cartItems.map((item) => {
@@ -49,8 +51,8 @@ const PayPalPayment = () => {
                     const orderPayload = {
                         total: orderItems.reduce((sum, item) => sum + item.total, 0),
                         items: orderItems,
-                        name: auth?.user?.name, // optionally get from user/auth
-                        phone: auth?.user?.phone || '0', // optionally get from user/auth
+                        name: auth?.user?.name || 'Guest',
+                        phone: auth?.user?.phone || '0000',
                         note: 'N/A',
                     };
 
@@ -62,12 +64,16 @@ const PayPalPayment = () => {
                         },
                         body: JSON.stringify(orderPayload),
                     })
-                        .then((res) => res.json())
+                        .then((res) => {
+                            if (!res.ok) throw new Error('Failed to complete order');
+                            return res.json();
+                        })
                         .then(() => {
                             window.location.href = '/checkout_success';
                         })
                         .catch((err) => {
                             console.error(err);
+                            alert('Something went wrong: ' + err.message);
                         });
                 },
 
