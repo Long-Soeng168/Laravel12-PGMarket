@@ -7,7 +7,6 @@ const PayPalPayment = () => {
     const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.cartQuantity, 0);
 
     const [amount, setAmount] = useState(subtotal.toFixed(2));
-    const [successVisible, setSuccessVisible] = useState(false);
     const { auth } = usePage().props;
 
     // Load PayPal SDK script dynamically
@@ -25,7 +24,7 @@ const PayPalPayment = () => {
         window.paypal
             .Buttons({
                 createOrder: () => {
-                    return fetch(`/create/${amount}`).then((res) => {
+                    return fetch(`/api/create/${amount}`).then((res) => {
                         if (!res.ok) throw new Error('Failed to create PayPal order');
                         return res.text(); // Should be orderID
                     });
@@ -56,11 +55,10 @@ const PayPalPayment = () => {
                         note: 'N/A',
                     };
 
-                    return fetch('/complete', {
+                    return fetch('/api/complete', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            'X-CSRF-Token': import.meta.env.VITE_CSRF_TOKEN,
                         },
                         body: JSON.stringify(orderPayload),
                     })
