@@ -20,19 +20,22 @@ const PayPalPayment = () => {
         window.paypal
             .Buttons({
                 createOrder: () =>
-                    fetch(`/create/${amount}`)
+                    fetch(`/api/create/${amount}`)
                         .then((res) => res.text())
                         .then((id) => id),
 
                 onApprove: () =>
-                    fetch('/complete', {
+                    fetch('/api/complete', {
                         method: 'POST',
                         headers: {
                             'X-CSRF-Token': import.meta.env.VITE_CSRF_TOKEN,
                         },
                     })
                         .then((res) => res.json())
-                        .then(() => setSuccessVisible(true))
+                        .then(() => {
+                            setSuccessVisible(true);
+                            console.log('success pay');
+                        })
                         .catch((err) => console.error(err)),
 
                 onCancel: (data) => console.log('Payment cancelled:', data),

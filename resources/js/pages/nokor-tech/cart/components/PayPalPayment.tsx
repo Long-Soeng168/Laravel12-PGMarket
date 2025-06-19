@@ -1,4 +1,5 @@
 import { useCart } from '@/contexts/cart-contexts';
+import { usePage } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 
 const PayPalPayment = () => {
@@ -7,6 +8,7 @@ const PayPalPayment = () => {
 
     const [amount, setAmount] = useState(subtotal.toFixed(2));
     const [successVisible, setSuccessVisible] = useState(false);
+    const { csrf_token } = usePage().props;
 
     // Load PayPal SDK script dynamically
     useEffect(() => {
@@ -31,7 +33,7 @@ const PayPalPayment = () => {
                     fetch('/complete', {
                         method: 'POST',
                         headers: {
-                            'X-CSRF-Token': import.meta.env.VITE_CSRF_TOKEN,
+                            'X-CSRF-Token': csrf_token,
                         },
                     })
                         .then((res) => res.json())

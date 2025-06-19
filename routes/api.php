@@ -82,3 +82,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 // Auth API Route
 require __DIR__ . '/api_auth.php';
+
+// Route::post('/complete', '\App\Http\Controllers\PayPalController@complete');
