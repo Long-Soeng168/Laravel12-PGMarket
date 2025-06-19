@@ -68,7 +68,7 @@ class OrderController extends Controller implements HasMiddleware
         // Validate request
         $validated = $request->validate([
             'name'       => 'nullable|string|max:255',
-            'phone'      => 'required|string|min:8|max:20',
+            'phone'      => 'required|string|max:20',
             'email'      => 'nullable|email|max:255',
             'address'    => 'nullable|string|max:255',
             'note'       => 'nullable|string',
