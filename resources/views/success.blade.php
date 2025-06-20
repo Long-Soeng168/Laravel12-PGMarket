@@ -6,8 +6,8 @@
         <p>
             We appreciate your business!
         </p>
-        <a href="/">
-            <button>Home Page</button>
+        <a href="/test_stripe">
+            <button>Test Payment with Stripe</button>
         </a>
     </div>
 </div>
