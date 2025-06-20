@@ -48,6 +48,6 @@ Route::post('/complete', '\App\Http\Controllers\PayPalController@complete');
 
 // Stripe Payment Route
 Route::get('/test_stripe', 'App\Http\Controllers\StripeController@checkout')->name('checkout');
-Route::post('/test', 'App\Http\Controllers\StripeController@test');
+Route::get('/test', 'App\Http\Controllers\StripeController@test');
 Route::post('/live', 'App\Http\Controllers\StripeController@live');
 Route::get('/success/{id}', 'App\Http\Controllers\StripeController@success')->name('success');
