@@ -44,7 +44,7 @@ class StripeController extends Controller
                 ],
             ],
             'mode'        => 'payment',
-            'success_url' => route('success'),
+            'success_url' => route('success/1'),
             'cancel_url'  => route('checkout'),
         ]);
 
