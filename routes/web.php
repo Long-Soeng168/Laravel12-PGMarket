@@ -45,3 +45,9 @@ require __DIR__ . '/telegram.php';
 Route::get('/test_payment', '\App\Http\Controllers\PayPalController@index');
 Route::get('/create/{amount}', '\App\Http\Controllers\PayPalController@create');
 Route::post('/complete', '\App\Http\Controllers\PayPalController@complete');
+
+// Stripe Payment Route
+Route::get('/test_stripe', 'App\Http\Controllers\StripeController@checkout')->name('checkout');
+Route::post('/test', 'App\Http\Controllers\StripeController@test');
+Route::post('/live', 'App\Http\Controllers\StripeController@live');
+Route::get('/success/{id}', 'App\Http\Controllers\StripeController@success')->name('success');
