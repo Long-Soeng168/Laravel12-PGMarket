@@ -106,7 +106,7 @@ const MyTableData = () => {
                                                 <ScanEyeIcon />
                                             </MyTooltipButton>
                                         </Link>
-                                        {hasPermission('message delete') && <DeleteButton deletePath="/admin/orders/" id={item.id} />}
+                                        {hasPermission('order delete') && <DeleteButton deletePath="/admin/orders/" id={item.id} />}
                                     </span>
                                 </TableCell>
 
