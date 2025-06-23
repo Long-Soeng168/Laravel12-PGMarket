@@ -200,6 +200,8 @@
                 "X-CSRF-Token": '{{csrf_token()}}'
               },
               body: JSON.stringify({
+                transaction_id: order_details.id,
+                payment_type: 'paypal',
                 items
               })
             })
