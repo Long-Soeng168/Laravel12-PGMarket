@@ -83,7 +83,7 @@ export default function Register() {
                             disabled={processing}
                             placeholder="Your Phone Number"
                         />
-                        <InputError message={errors.email} />
+                        <InputError message={errors.phone} />
                     </div>
 
                     <div className="grid gap-2">
