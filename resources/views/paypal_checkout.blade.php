@@ -12,12 +12,54 @@
   <script src="https://www.paypal.com/sdk/js?client-id={{config('paypal.client_id')}}&currency=GBP&intent=capture"></script>
 
   <!-- Title -->
-  <title>PayPal Laravel</title>
+  <title>PayPal Pay</title>
 </head>
 
-<body>
+<body style="
+  max-width: 1000px;
+  margin: auto;
+">
+  <a href="/shopping-cart"
+    style="
+    margin: 1rem;
+    display: inline-block;
+    padding: 0.1rem 1rem;
+    background-color: #74787d;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 0.375rem;
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+    transition: background-color 0.2s ease;
+  "
+    onmouseover="this.style.backgroundColor='#374151';"
+    onmouseout="this.style.backgroundColor='#74787d';">
+    &larr; Back
+  </a>
+
   <div class="container text-center">
-    <div class="row mt-3">
+
+    <div class="row mt-5">
+      <div class="col-12">
+
+        <div class="row mt-3" id="paypal-success" style="display: none;">
+          <div class="col-12 col-lg-6 offset-lg-3">
+            <div class="alert alert-success" role="alert">
+              You have successfully sent me money! Thank you!
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-3">
+          <div class="col-12 col-lg-6 offset-lg-3" id="payment_options"></div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-3"
+      style="
+      margin: 2px;
+    ">
       <div style="
   padding: 1.5rem;
   background-color: #f9fafb;
@@ -29,7 +71,7 @@
     font-weight: 700;
     margin-bottom: 1rem;
   ">
-          Cart Summary
+          Order Items
         </h2>
 
         <table style="
@@ -59,6 +101,7 @@
     padding-top: 1rem;
     font-size: 1.125rem;
     font-weight: 600;
+    color: red;
   ">
           <span>Total:</span>
           <span id="cart-total">$0.00</span>
@@ -104,31 +147,7 @@
 
 
     </div>
-    <div class="row mt-5">
-      <div class="col-12">
-        <!-- <div class="row">
-          <div class="col-12 col-lg-6 offset-lg-3">
-            <p class="text-danger">
-              WARNING!!!<br />
-              This is set to LIVE mode, so real money is used.<br />
-              No refunds, use at your own risk.
-            </p>
-          </div>
-        </div> -->
 
-        <div class="row mt-3" id="paypal-success" style="display: none;">
-          <div class="col-12 col-lg-6 offset-lg-3">
-            <div class="alert alert-success" role="alert">
-              You have successfully sent me money! Thank you!
-            </div>
-          </div>
-        </div>
-
-        <div class="row mt-3">
-          <div class="col-12 col-lg-6 offset-lg-3" id="payment_options"></div>
-        </div>
-      </div>
-    </div>
   </div>
 </body>
 <script>
@@ -173,6 +192,7 @@
           };
 
           // Map to your desired order item format
+          let total = 0;
           const items = cart.cartItems.map(item => {
             const itemPrice = parseFloat(item.price);
             const itemDiscount = parseFloat(item.discount || 0);
@@ -180,7 +200,8 @@
               (itemPrice * itemDiscount) / 100 :
               itemDiscount;
 
-            const itemTotal = (itemPrice - (itemDiscount ? discountAmount : 0)) * item.cartQuantity;
+            const itemTotal = (itemPrice - discountAmount) * item.cartQuantity;
+            total += itemTotal;
 
             return {
               item_id: item.id,
@@ -202,6 +223,7 @@
               body: JSON.stringify({
                 transaction_id: order_details.id,
                 payment_type: 'paypal',
+                total: total,
                 items
               })
             })

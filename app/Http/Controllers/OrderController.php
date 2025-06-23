@@ -92,6 +92,7 @@ class OrderController extends Controller implements HasMiddleware
             $order = Order::create([
                 'transaction_id'   => $validated['transaction_id'] ?? null,
                 'payment_type'   => $validated['payment_type'] ?? null,
+                'user_id'    => $request->user()?->id ?? null,
                 'name'    => $request->user()?->name ?? 'Guest',
                 'phone'   => $request->user()?->phone ?? null,
                 'email'   => $request->user()?->email ?? null,

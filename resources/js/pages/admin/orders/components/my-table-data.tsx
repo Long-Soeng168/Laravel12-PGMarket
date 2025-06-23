@@ -50,6 +50,21 @@ const MyTableData = () => {
                         <TableRow>
                             <TableHead className="w-[50px]">{t('No')}</TableHead>
                             <TableHead className="text-left">{t('Action')}</TableHead>
+                            <TableHead onClick={() => handleSort('transaction_id')}>
+                                <span className="flex cursor-pointer items-center">
+                                    <ArrowUpDown size={16} /> {t('Transaction ID')}
+                                </span>
+                            </TableHead>
+                            <TableHead onClick={() => handleSort('payment_type')}>
+                                <span className="flex cursor-pointer items-center">
+                                    <ArrowUpDown size={16} /> {t('Payment Type')}
+                                </span>
+                            </TableHead>
+                            <TableHead onClick={() => handleSort('user_id')}>
+                                <span className="flex cursor-pointer items-center">
+                                    <ArrowUpDown size={16} /> {t('User ID')}
+                                </span>
+                            </TableHead>
                             <TableHead onClick={() => handleSort('name')}>
                                 <span className="flex cursor-pointer items-center">
                                     <ArrowUpDown size={16} /> {t('Name')}
@@ -95,6 +110,11 @@ const MyTableData = () => {
                                     </span>
                                 </TableCell>
 
+                                <TableCell>{item.transaction_id || '---'}</TableCell>
+                                <TableCell>
+                                    <span className='capitalize'>{item.payment_type || '---'}</span>
+                                </TableCell>
+                                <TableCell>{item.user_id || '---'}</TableCell>
                                 <TableCell>{item.name || '---'}</TableCell>
                                 <TableCell>{item.phone || '---'}</TableCell>
                                 <TableCell>{item.note || '---'}</TableCell>

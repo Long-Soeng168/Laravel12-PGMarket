@@ -40,13 +40,13 @@ const CartItemList = () => {
                                     <td className="p-4">{formatCurrency(product?.price)}</td>
                                     <td className="p-4 text-center text-lg">
                                         <div className="flex items-center justify-center gap-2">
-                                            {/* <Button onClick={() => handleQuantityChange(product?.id, -1)} variant="outline" size="icon">
+                                            <Button onClick={() => handleQuantityChange(product?.id, -1)} variant="outline" size="icon">
                                                 <Minus />
-                                            </Button> */}
+                                            </Button>
                                             {product?.cartQuantity}
-                                            {/* <Button onClick={() => handleQuantityChange(product?.id, +1)} variant="outline" size="icon">
+                                            <Button onClick={() => handleQuantityChange(product?.id, +1)} variant="outline" size="icon">
                                                 <Plus />
-                                            </Button> */}
+                                            </Button>
                                         </div>
                                     </td>
                                     <td className="p-4">{formatCurrency(product?.price * product?.cartQuantity)}</td>
@@ -66,9 +66,9 @@ const CartItemList = () => {
                 <div className="mt-6 flex justify-between">
                     <ClearCartButton />
                     <div className="space-x-4">
-                        <Link href="/checkout" prefetch>
+                        <a href="/paypal_payment">
                             <Button>Checkout</Button>
-                        </Link>
+                        </a>
                     </div>
                 </div>
             ) : (
