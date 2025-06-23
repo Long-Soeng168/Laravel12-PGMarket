@@ -14,7 +14,7 @@ const PayPalPayment = () => {
     useEffect(() => {
         const script = document.createElement('script');
         script.src =
-            'https://www.paypal.com/sdk/js?client-id=AaMd6DJgL7L5WBdugs3t5Iv1XYI7oUrH_bSdd7zpfnyZQCXjwEBiHPiVY90gpWvUvH4-76-jBNff45Mq&currency=USD&intent=capture';
+            'https://www.paypal.com/sdk/js?client-id=ARHRfeC3xH9qHin0KU0zI_PpOKzaycuebtgJ0CN8bN3q0dz2CARU1yawGXtkPrXLnXaB82Ug1okBTzPG&currency=USD&intent=capture';
         script.addEventListener('load', () => initPayPalButton());
         document.body.appendChild(script);
     }, [amount]);

@@ -19,7 +19,7 @@ class StripeController extends Controller
      */
     public function checkout(): View|Factory|Application
     {
-        return view('checkout');
+        return view('stripe_checkout');
     }
 
     /**
