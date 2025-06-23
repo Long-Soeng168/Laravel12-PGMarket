@@ -14,7 +14,7 @@ class PayPalController extends Controller
     public function index()
     {
         // return view('checkout');
-        return Inertia::render("nokor-tech/cart/checkout_test");
+        return view("paypal_checkout");
     }
 
     /**
@@ -53,7 +53,7 @@ class PayPalController extends Controller
                 [
                     "reference_id" => $id,
                     "amount"       => [
-                        "currency_code" => "USD",
+                        "currency_code" => "GBP",
                         "value"         => number_format($amount, 2),
                     ]
                 ]

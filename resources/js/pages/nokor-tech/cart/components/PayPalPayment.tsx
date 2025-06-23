@@ -13,8 +13,10 @@ const PayPalPayment = () => {
     // Load PayPal SDK script dynamically
     useEffect(() => {
         const script = document.createElement('script');
+        // script.src =
+        //     'https://www.paypal.com/sdk/js?client-id=ARHRfeC3xH9qHin0KU0zI_PpOKzaycuebtgJ0CN8bN3q0dz2CARU1yawGXtkPrXLnXaB82Ug1okBTzPG&currency=USD&intent=capture';
         script.src =
-            'https://www.paypal.com/sdk/js?client-id=ARHRfeC3xH9qHin0KU0zI_PpOKzaycuebtgJ0CN8bN3q0dz2CARU1yawGXtkPrXLnXaB82Ug1okBTzPG&currency=USD&intent=capture';
+            'https://sandbox.paypal.com/sdk/js?client-id=AUJDdryoDRYkqRa5zSB0LlbG4fceIGPCCJFtZUTZtAzHfFRAHifd4VBtpKicOcrpYY9UTw0ELHUzoiHU&currency=USD&intent=capture';
         script.addEventListener('load', () => initPayPalButton());
         document.body.appendChild(script);
     }, [amount]);
