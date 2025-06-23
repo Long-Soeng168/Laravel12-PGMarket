@@ -237,7 +237,7 @@
               console.log("Order stored successfully:", data);
               // Optional: clear localStorage cart if needed
               localStorage.removeItem('cart');
-              window.location.href = '/checkout_success';
+              // window.location.href = '/checkout_success';
             })
             .catch(error => {
               console.error("Failed to store order:", error);
