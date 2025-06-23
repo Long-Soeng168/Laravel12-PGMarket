@@ -92,10 +92,10 @@ class OrderController extends Controller implements HasMiddleware
             $order = Order::create([
                 'transaction_id'   => $validated['transaction_id'] ?? null,
                 'payment_type'   => $validated['payment_type'] ?? null,
-                'name'    => $validated['name'] ?? 'Guest',
-                'phone'   => $validated['phone'] ?? null,
-                'email'   => $validated['email'] ?? null,
-                'address' => $validated['address'] ?? null,
+                'name'    => $request->user()?->name ?? 'Guest',
+                'phone'   => $request->user()?->phone ?? null,
+                'email'   => $request->user()?->email ?? null,
+                'address' => $request->user()?->address ?? null,
                 'note'    => $validated['note'] ?? null,
                 'total'   => $validated['total'] ?? 0,
             ]);
@@ -119,10 +119,24 @@ class OrderController extends Controller implements HasMiddleware
             // return back()->with('success', 'Order placed successfully!');
 
             $result = TelegramHelper::sendOrderItems($order);
+            // Normal Process
+            // if ($result['success']) {
+            //     return back()->with('success', 'Order placed successfully!');
+            // } else {
+            //     return back()->with('error', $result['message']);
+            // }
+
+            // Payment Process
             if ($result['success']) {
-                return back()->with('success', 'Order placed successfully!');
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Order placed successfully!'
+                ]);
             } else {
-                return back()->with('error', $result['message']);
+                return response()->json([
+                    'success' => false,
+                    'message' => $result['message']
+                ], 500);
             }
         } catch (\Exception $e) {
             DB::rollback();
