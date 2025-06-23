@@ -10,8 +10,8 @@ use Illuminate\Support\Facades\DB;
 
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Routing\Controllers\HasMiddleware;
-use Inertia\Inertia;
 use Illuminate\Support\Facades\Session;
+use Inertia\Inertia;
 
 class OrderController extends Controller implements HasMiddleware
 {
@@ -74,6 +74,7 @@ class OrderController extends Controller implements HasMiddleware
             'address'    => 'nullable|string|max:255',
             'note'       => 'nullable|string',
             'total'      => 'nullable|numeric',
+            'transaction_id'       => 'nullable|string',
             'payment_type'       => 'nullable|string',
             'items'      => 'required|array',
             'items.*.item_id' => 'required|exists:items,id',
@@ -89,7 +90,7 @@ class OrderController extends Controller implements HasMiddleware
 
             // Create order
             $order = Order::create([
-                'transaction_id'   => Session::get('order_id') ?? null,
+                'transaction_id'   => $validated['transaction_id'] ?? null,
                 'payment_type'   => $validated['payment_type'] ?? null,
                 'user_id'    => $request->user()?->id ?? null,
                 'name'    => $request->user()?->name ?? 'Guest',

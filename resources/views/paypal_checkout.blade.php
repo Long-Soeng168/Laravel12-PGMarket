@@ -46,9 +46,12 @@
         <div class="row mt-3" id="paypal-success" style="display: none;">
           <div class="col-12 col-lg-6 offset-lg-3">
             <div class="alert alert-success" role="alert">
-              You have successfully sent me money! Thank you!
+              You have successfully order! Thank you!
             </div>
           </div>
+        </div>
+        <div class="row mt-3" id="paypal-error" style="display: none; color: red;">
+          Order Unsuccessfully. Please contact admin page.
         </div>
 
         <div class="row mt-3">
@@ -184,7 +187,14 @@
         .then((response) => response.json())
         .then((order_details) => {
           console.log(order_details);
-          document.getElementById("paypal-success").style.display = 'block';
+          if (order_details.id) {
+            document.getElementById("paypal-success").style.display = 'block';
+          } else {
+            document.getElementById("paypal-error").style.display = 'block';
+            document.getElementById("paypal-error").innerHTML = order_details.message;
+            return;
+          }
+
 
           // Now: get cart items from localStorage
           const cart = JSON.parse(localStorage.getItem('cart')) || {
@@ -221,7 +231,7 @@
                 "X-CSRF-Token": '{{csrf_token()}}'
               },
               body: JSON.stringify({
-                // transaction_id: order_details.id,
+                transaction_id: order_details.id,
                 payment_type: 'paypal',
                 total: total,
                 items
