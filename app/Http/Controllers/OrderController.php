@@ -69,11 +69,11 @@ class OrderController extends Controller implements HasMiddleware
         // Validate request
         $validated = $request->validate([
             'name'       => 'nullable|string|max:255',
-            'phone'      => 'required|string|max:20',
+            'phone'      => 'nullable|string|max:20',
             'email'      => 'nullable|email|max:255',
             'address'    => 'nullable|string|max:255',
             'note'       => 'nullable|string',
-            'total'      => 'required|numeric',
+            'total'      => 'nullable|numeric',
             'items'      => 'required|array',
             'items.*.item_id' => 'required|exists:items,id',
             'items.*.price'   => 'required|numeric',
@@ -88,12 +88,12 @@ class OrderController extends Controller implements HasMiddleware
 
             // Create order
             $order = Order::create([
-                'name'    => $validated['name'] ?? null,
-                'phone'   => $validated['phone'],
+                'name'    => $validated['name'] ?? 'quest',
+                'phone'   => $validated['phone'] ?? '0000',
                 'email'   => $validated['email'] ?? null,
                 'address' => $validated['address'] ?? null,
                 'note'    => $validated['note'] ?? null,
-                'total'   => $validated['total'],
+                'total'   => $validated['total'] ?? 0,
             ]);
 
 
