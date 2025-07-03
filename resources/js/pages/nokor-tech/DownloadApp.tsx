@@ -13,8 +13,8 @@ const DownloadApp = () => {
                         <div className="flex flex-5 flex-col justify-start gap-4 p-4">
                             {/* Google Play Button */}
                             <a
-                                href="#"
-                                className="flex items-center gap-3 rounded-lg bg-black px-5 py-3 text-white transition hover:bg-gray-800"
+                                href="https://play.google.com/store/apps/details?id=com.longsoeng.pgmarket"
+                                className="flex rainbow-button items-center gap-3 rounded-lg bg-black px-5 py-3 text-white transition hover:bg-gray-800"
                             >
                                 <img src="/assets/icons/play-store.png" className="size-12" />
                                 <div className="flex flex-col items-start leading-tight">
@@ -23,7 +23,10 @@ const DownloadApp = () => {
                                 </div>
                             </a>
                             {/* App Store Button */}
-                            <a href="#" className="flex items-center gap-3 rounded-lg bg-black px-5 py-3 text-white transition hover:bg-gray-800">
+                            <a
+                                href="https://apps.apple.com/us/app/pg-market/id6499093044"
+                                className="flex rainbow-button items-center gap-3 rounded-lg bg-black px-5 py-3 text-white transition hover:bg-gray-800"
+                            >
                                 <img src="/assets/icons/app-store.png" className="size-12" />
                                 <div className="flex flex-col items-start leading-tight">
                                     <span className="text-xs">Download on the</span>

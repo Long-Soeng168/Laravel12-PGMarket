@@ -373,7 +373,7 @@ class NokorTechController extends Controller
     public function checkout()
     {
         // return Inertia::render("nokor-tech/cart/Checkout");
-        return Inertia::render("nokor-tech/cart/checkout_with_payment");
+        return Inertia::render("nokor-tech/cart/Checkout");
     }
     public function success()
     {
@@ -393,7 +393,7 @@ class NokorTechController extends Controller
     }
     public function about()
     {
-        $about = Page::with('children')->where('code', 'ABOUT-ATA-AUTO')->where('status', 'active')->orderBy('order_index')->first();
+        $about = Page::with('children')->where('code', 'ABOUT')->where('status', 'active')->orderBy('order_index')->first();
         $whyChooseUs = Page::with('children')->where('code', 'WHY-CHOOSE-US')->where('status', 'active')->orderBy('order_index')->first();
         $buildForEveryone = Page::with('children')->where('code', 'BUILD-FOR-EVERYONE')->where('status', 'active')->orderBy('order_index')->first();
         $getInTouch = Page::with('children')->where('code', 'GET-IN-TOUCH')->where('status', 'active')->orderBy('order_index')->first();

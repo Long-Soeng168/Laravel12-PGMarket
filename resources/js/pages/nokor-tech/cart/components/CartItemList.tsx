@@ -66,7 +66,7 @@ const CartItemList = () => {
                 <div className="mt-6 flex justify-between">
                     <ClearCartButton />
                     <div className="space-x-4">
-                        <a href="/paypal_payment">
+                        <a href="/checkout">
                             <Button>Checkout</Button>
                         </a>
                     </div>

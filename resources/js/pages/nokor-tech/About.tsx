@@ -1,7 +1,5 @@
-import { Button } from '@/components/ui/button';
 import useTranslation from '@/hooks/use-translation';
-import { Link, usePage } from '@inertiajs/react';
-import { ArrowUpRightIcon } from 'lucide-react';
+import { usePage } from '@inertiajs/react';
 import NokorTechLayout from './layouts/nokor-tech-layout';
 
 const About = () => {
@@ -14,15 +12,17 @@ const About = () => {
                 <main className="mx-auto max-w-7xl px-4 py-20">
                     {/* About */}
                     <section>
-                        <div className="text-center">
-                            <h2 className="text-foreground mb-6 text-4xl font-bold">{currentLocale == 'kh' ? about.title_kh : about.title}</h2>
-                            <p
-                                className="mx-auto mb-8 max-w-3xl text-lg text-gray-400"
-                                dangerouslySetInnerHTML={{ __html: currentLocale == 'kh' ? about.short_description_kh : about.short_description }}
-                            ></p>
+                        <div>
+                            {/* <h1 className="text-foreground text-4xl font-bold">{currentLocale == 'kh' ? privacies.title_kh : privacies.title}</h1> */}
+                            <div
+                                className="text-foreground prose prose-strong:text-foreground prose-headings:text-foreground max-w-none"
+                                dangerouslySetInnerHTML={{
+                                    __html: currentLocale == 'kh' ? about.long_description_kh : about.long_description,
+                                }}
+                            ></div>
                         </div>
 
-                        {about?.children?.length > 0 && (
+                        {/* {about?.children?.length > 0 && (
                             <div className="mt-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
                                 {about?.children?.map((item) => (
                                     <div className="bg-card rounded-3xl p-8 shadow-xl">
@@ -45,10 +45,10 @@ const About = () => {
                                 className="mx-auto max-w-3xl text-lg text-gray-400"
                                 dangerouslySetInnerHTML={{ __html: currentLocale == 'kh' ? about.long_description_kh : about.long_description }}
                             ></p>
-                        </div>
+                        </div> */}
                     </section>
 
-                    <section className="mt-20">
+                    {/* <section className="mt-20">
                         <div className="text-center">
                             <h2 className="text-foreground mb-6 text-4xl font-bold">
                                 {currentLocale == 'kh' ? whyChooseUs.title_kh : whyChooseUs.title}
@@ -215,7 +215,7 @@ const About = () => {
                         </div>
                     </section>
 
-                    {/* Download Call-to-Action */}
+                  
                     <section className="text-center">
                         <h2 className="text-foreground mb-6 text-center text-4xl font-bold">
                             {currentLocale == 'kh' ? getStartedNow.title_kh : getStartedNow.title}
@@ -233,7 +233,7 @@ const About = () => {
                         >
                             Download the App
                         </Link>
-                    </section>
+                    </section> */}
                 </main>
             </div>
         </NokorTechLayout>

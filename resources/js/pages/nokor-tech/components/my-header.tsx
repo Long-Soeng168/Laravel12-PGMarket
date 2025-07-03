@@ -15,7 +15,9 @@ import { MySearchProducts } from './my-search-products';
 
 const MyHeader = () => {
     const { application_info, post_counts, item_categories } = usePage().props;
-    const { t } = useTranslation();
+
+    const { t, currentLocale } = useTranslation();
+
     const navItems1 = [{ label: t('Products'), href: '/products' }];
 
     const navItems2 = [
@@ -50,7 +52,7 @@ const MyHeader = () => {
         <>
             {/* Top Bar */}
             <nav className="bg-true-primary text-white">
-                <div className="mx-auto flex min-h-10 max-w-screen-xl flex-wrap items-center justify-between py-2 pl-4 lg:pl-0 text-sm">
+                <div className="mx-auto flex min-h-10 max-w-screen-xl flex-wrap items-center justify-between py-2 pl-4 text-sm lg:pl-0">
                     {application_info?.image && (
                         <Link prefetch href="/" className="flex items-center gap-2">
                             <img
@@ -61,7 +63,7 @@ const MyHeader = () => {
                                 className="rounded-md"
                             />
                             <div>
-                                <p className="text-xl font-bold font-siemreap-regular">{application_info.name_kh}</p>
+                                <p className="font-siemreap-regular text-xl font-bold">{application_info.name_kh}</p>
                                 <p className="text-xl font-bold">{application_info.name}</p>
                             </div>
                         </Link>
@@ -69,13 +71,13 @@ const MyHeader = () => {
                     <div className="hidden md:block lg:justify-self-center">
                         <ul className="flex flex-col gap-1 text-white">
                             <li className="flex">
-                                <span className="mr-2 font-semibold">Phone:</span>
+                                <span className="mr-2 font-semibold">{t('Phone')}:</span>
                                 <a className="hover:underline" href={`tel:${application_info?.phone}`}>
                                     {application_info?.phone}
                                 </a>
                             </li>
                             <li className="flex">
-                                <span className="mr-2 font-semibold">Email:</span>
+                                <span className="mr-2 font-semibold">{currentLocale == 'kh' ? 'អ៊ីម៉ែល' : 'Email'}:</span>
                                 <a className="hover:underline" href={`mailto:${application_info?.email}`}>
                                     {application_info?.email}
                                 </a>

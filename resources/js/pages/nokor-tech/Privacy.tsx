@@ -9,21 +9,20 @@ const Privacy = () => {
     const { privacies } = usePage().props;
     return (
         <NokorTechLayout>
-            <div className="mx-auto max-w-4xl space-y-8 p-8">
+            <div className="mx-auto max-w-7xl space-y-8 p-8">
                 {/* Header */}
-                <header className="space-y-2 text-center">
-                    <h1 className="text-foreground text-4xl font-bold">{currentLocale == 'kh' ? privacies.title_kh : privacies.title}</h1>
-                    <p
-                        className="text-muted-foreground text-lg"
-                        dangerouslySetInnerHTML={{ __html: currentLocale == 'kh' ? privacies.short_description_kh : privacies.short_description }}
-                    ></p>
-                </header>
+                <div>
+                    {/* <h1 className="text-foreground text-4xl font-bold">{currentLocale == 'kh' ? privacies.title_kh : privacies.title}</h1> */}
+                    <div
+                        className="text-foreground prose max-w-none prose-strong:text-foreground prose-headings:text-foreground"
+                        dangerouslySetInnerHTML={{ __html: currentLocale == 'kh' ? privacies.long_description_kh : privacies.long_description }}
+                    ></div>
+                </div>
 
-                <Separator className="my-6" />
+                {/* <Separator className="my-6" /> */}
 
-                {privacies.children.length && (
+                {/* {privacies.children.length && (
                     <main className="space-y-6">
-                        {/* Introduction */}
                         {privacies.children?.map((privacy) => (
                             <Card>
                                 <CardHeader>
@@ -41,7 +40,7 @@ const Privacy = () => {
                             </Card>
                         ))}
                     </main>
-                )}
+                )} */}
             </div>
         </NokorTechLayout>
     );
