@@ -121,24 +121,24 @@ class OrderController extends Controller implements HasMiddleware
 
             $result = TelegramHelper::sendOrderItems($order);
             // Normal Process
-            // if ($result['success']) {
-            //     return back()->with('success', 'Order placed successfully!');
-            // } else {
-            //     return back()->with('error', $result['message']);
-            // }
+            if ($result['success']) {
+                return back()->with('success', 'Order placed successfully!');
+            } else {
+                return back()->with('error', $result['message']);
+            }
 
             // Payment Process
-            if ($result['success']) {
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Order placed successfully!'
-                ]);
-            } else {
-                return response()->json([
-                    'success' => false,
-                    'message' => $result['message']
-                ], 500);
-            }
+            // if ($result['success']) {
+            //     return response()->json([
+            //         'success' => true,
+            //         'message' => 'Order placed successfully!'
+            //     ]);
+            // } else {
+            //     return response()->json([
+            //         'success' => false,
+            //         'message' => $result['message']
+            //     ], 500);
+            // }
         } catch (\Exception $e) {
             DB::rollback();
 
