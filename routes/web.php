@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\ABAPaymentController;
 use App\Http\Controllers\StreamFileController;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 // Default Homepage
 Route::get('/', function () {
@@ -51,3 +53,11 @@ Route::get('/test_stripe', 'App\Http\Controllers\StripeController@checkout')->na
 Route::get('/test', 'App\Http\Controllers\StripeController@test');
 Route::post('/live', 'App\Http\Controllers\StripeController@live');
 Route::get('/success/{id}', 'App\Http\Controllers\StripeController@success')->name('success');
+
+// ABA Payemnt Route
+Route::get('/payment', function () {
+   return Inertia::render('ABAPaymentPage');
+});
+
+Route::get('/checkout_aba', [ABAPaymentController::class, 'checkout'])->name('payment.purchase');
+Route::post('/checkout_aba', [ABAPaymentController::class, 'checkout'])->name('payment.purchase');

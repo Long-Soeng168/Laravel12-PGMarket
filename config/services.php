@@ -38,4 +38,9 @@ return [
         ],
     ],
 
+    'aba' => [
+        'api_key' => env('ABA_API_KEY'),
+        'merchant_id' => env('PAYWAY_MERCHANT_ID'),
+    ],
+
 ];

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ABAPaymentController;
 use App\Http\Controllers\Api\BannerController;
 use App\Http\Controllers\Api\BodyTypeController;
 use App\Http\Controllers\Api\BrandController;
@@ -84,3 +85,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
 require __DIR__ . '/api_auth.php';
 
 // Route::post('/complete', '\App\Http\Controllers\PayPalController@complete');
+
+
+Route::post('/payway/purchase', [ABAPaymentController::class, 'purchase']);
