@@ -1,8 +1,16 @@
+import { Head } from '@inertiajs/react';
 import NokorTechLayout from './layouts/nokor-tech-layout';
 
 const DownloadApp = () => {
     return (
         <NokorTechLayout>
+            <Head>
+                <title>Download PG Market App | Available on App Store & Google Play</title>
+                <meta
+                    name="description"
+                    content="Download the PG Market app today from the App Store or Google Play. Buy and sell products easily through Cambodia’s trusted digital marketplace."
+                />
+            </Head>
             <div className="my-10">
                 <div className="relative mx-auto h-[600px] w-[300px] rounded-[2.5rem] border-[14px] border-gray-800 bg-gray-800 dark:border-gray-800">
                     <div className="flex h-[572px] w-[272px] flex-col overflow-hidden rounded-[2rem] bg-white dark:bg-gray-800">
@@ -14,7 +22,7 @@ const DownloadApp = () => {
                             {/* Google Play Button */}
                             <a
                                 href="https://play.google.com/store/apps/details?id=com.longsoeng.pgmarket"
-                                className="flex rainbow-button items-center gap-3 rounded-lg bg-black px-5 py-3 text-white transition hover:bg-gray-800"
+                                className="rainbow-button flex items-center gap-3 rounded-lg bg-black px-5 py-3 text-white transition hover:bg-gray-800"
                             >
                                 <img src="/assets/icons/play-store.png" className="size-12" />
                                 <div className="flex flex-col items-start leading-tight">
@@ -25,7 +33,7 @@ const DownloadApp = () => {
                             {/* App Store Button */}
                             <a
                                 href="https://apps.apple.com/us/app/pg-market/id6499093044"
-                                className="flex rainbow-button items-center gap-3 rounded-lg bg-black px-5 py-3 text-white transition hover:bg-gray-800"
+                                className="rainbow-button flex items-center gap-3 rounded-lg bg-black px-5 py-3 text-white transition hover:bg-gray-800"
                             >
                                 <img src="/assets/icons/app-store.png" className="size-12" />
                                 <div className="flex flex-col items-start leading-tight">

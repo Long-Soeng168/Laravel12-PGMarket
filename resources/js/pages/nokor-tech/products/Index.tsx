@@ -4,7 +4,7 @@ import { MyRefreshButton } from '@/components/my-refresh-button';
 import { MySearchTableData } from '@/components/my-search-table-data';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { Link, usePage } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import { FilterIcon } from 'lucide-react';
 import SortBy from '../components/sort-by';
 import MyProductCard from '../components/ui/my-product-card';
@@ -15,6 +15,14 @@ const Index = () => {
     const { tableData, productListBanners } = usePage().props;
     return (
         <NokorTechLayout>
+            <Head>
+                <title>Products | PG Market - Cambodia's Digital Marketplace</title>
+                <meta
+                    name="description"
+                    content="Explore a wide range of products on PG Market, Cambodia's trusted digital marketplace. Buy and sell goods easily and securely online."
+                />
+            </Head>
+
             <div className="mx-auto mb-8 max-w-screen-xl">
                 <div className="flex">
                     {/* start left side */}

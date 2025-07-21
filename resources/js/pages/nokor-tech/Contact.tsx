@@ -1,4 +1,4 @@
-import { usePage } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import { Globe2Icon, MailIcon, MapPinIcon, PhoneIcon } from 'lucide-react';
 import ContactFormSubmit from './components/contact-form-submit';
 import NokorTechLayout from './layouts/nokor-tech-layout';
@@ -8,6 +8,13 @@ const ContactCamActivePage = () => {
 
     return (
         <NokorTechLayout>
+            <Head>
+                <title>Contact Us</title>
+                <meta
+                    name="description"
+                    content="Get in touch with PG Online. Contact our team for inquiries about real estate, digital marketplace services, or partnership opportunities in Cambodia."
+                />
+            </Head>
             <div className="flex min-h-screen items-start justify-center">
                 <div className="mx-auto w-full max-w-screen-xl px-4">
                     {/* <div className="text-center">

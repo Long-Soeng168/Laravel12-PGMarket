@@ -1,12 +1,19 @@
 import useTranslation from '@/hooks/use-translation';
-import { usePage } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import NokorTechLayout from './layouts/nokor-tech-layout';
 
 const About = () => {
-    const { about, whyChooseUs, buildForEveryone, getInTouch, privacyPolicy, getStartedNow } = usePage().props;
+    const { about } = usePage().props;
     const { t, currentLocale } = useTranslation();
     return (
         <NokorTechLayout>
+            <Head>
+                <title>About Us</title>
+                <meta
+                    name="description"
+                    content="Discover the story of PG Online, a fast-growing real estate and digital marketplace company in Cambodia founded by Mr. Samret Sophat. Learn about our vision, mission, and commitment to building trust with customers."
+                />
+            </Head>
             <div className="text-foreground bg-background">
                 {/* Main Content */}
                 <main className="mx-auto max-w-7xl px-4 py-20">

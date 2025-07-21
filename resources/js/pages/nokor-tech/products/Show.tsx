@@ -1,4 +1,4 @@
-import { Link, usePage } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import AddToCart from '../components/add-to-cart';
 import CarouselWithThumbs from '../components/CarouselWithThumbs';
 import MyProductList from '../components/my-product-list';
@@ -8,6 +8,11 @@ const ProductDetailPage = () => {
     const { itemShow, relatedItems } = usePage().props;
     return (
         <NokorTechLayout>
+            <Head>
+                <title>{itemShow?.name}</title>
+                <meta name="description" content={itemShow?.short_description} />
+            </Head>
+
             <div>
                 <div className="mx-auto max-w-screen-xl overflow-hidden">
                     <div className="flex flex-col md:flex-row">

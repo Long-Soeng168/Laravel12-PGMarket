@@ -9,6 +9,7 @@ Route::get('/', [NokorTechController::class, 'index']);
 Route::get('/shops', [NokorTechController::class, 'shops']);
 Route::get('/about-us', [NokorTechController::class, 'about']);
 Route::get('/download-app', [NokorTechController::class, 'download_app']);
+Route::get('/download_app', [NokorTechController::class, 'download_app']);
 Route::get('/privacy', [NokorTechController::class, 'privacy']);
 
 Route::get('/contact-us', [NokorTechController::class, 'contact']);
@@ -31,4 +32,4 @@ Route::middleware('auth')->group(function () {
 });
 Route::get('/checkout_success', [NokorTechController::class, 'success']);
 
-Route::get('/documents', [NokorTechController::class, 'documents']);
+// Route::get('/documents', [NokorTechController::class, 'documents']);

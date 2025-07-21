@@ -1,7 +1,5 @@
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
 import useTranslation from '@/hooks/use-translation';
-import { usePage } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import NokorTechLayout from './layouts/nokor-tech-layout';
 
 const Privacy = () => {
@@ -9,12 +7,19 @@ const Privacy = () => {
     const { privacies } = usePage().props;
     return (
         <NokorTechLayout>
+            <Head>
+                <title>Privacy Policy | Your Data Protection Commitment</title>
+                <meta
+                    name="description"
+                    content="Read PG Online's Privacy Policy to understand how we collect, use, and protect your personal information when using our digital marketplace and real estate services."
+                />
+            </Head>
             <div className="mx-auto max-w-7xl space-y-8 p-8">
                 {/* Header */}
                 <div>
                     {/* <h1 className="text-foreground text-4xl font-bold">{currentLocale == 'kh' ? privacies.title_kh : privacies.title}</h1> */}
                     <div
-                        className="text-foreground prose max-w-none prose-strong:text-foreground prose-headings:text-foreground"
+                        className="text-foreground prose prose-strong:text-foreground prose-headings:text-foreground max-w-none"
                         dangerouslySetInnerHTML={{ __html: currentLocale == 'kh' ? privacies.long_description_kh : privacies.long_description }}
                     ></div>
                 </div>

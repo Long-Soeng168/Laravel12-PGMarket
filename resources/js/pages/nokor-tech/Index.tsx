@@ -1,5 +1,5 @@
 import MyNoData from '@/components/my-no-data';
-import { usePage } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import MyBlogList from './components/my-blogs-list';
 import MyCategoryList from './components/my-category-list';
 import MyMiddleSlide from './components/my-middle-slide';
@@ -12,6 +12,14 @@ const Index = () => {
     const { topBanners, middleBanners, posts, newArrivals, categoriesWithItems } = usePage<any>().props;
     return (
         <NokorTechLayout>
+            <Head>
+                <title>PG Market | Cambodia's Digital Marketplace</title>
+                <meta
+                    name="description"
+                    content="PG Market is Cambodia's trusted digital marketplace platform, connecting buyers and sellers nationwide with ease, speed, and transparency."
+                />
+            </Head>
+
             <main className="px-2">
                 <>
                     <div className="mx-auto mb-10 max-w-screen-xl">
