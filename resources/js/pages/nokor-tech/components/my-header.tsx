@@ -32,7 +32,7 @@ const MyHeader = () => {
     const getInitials = useInitials();
 
     const renderNavLink = ({ label, href }) => {
-        const isActive = window.location.pathname === href;
+        const isActive = typeof window !== 'undefined' ? window.location.pathname === href : false;
 
         return (
             <Link
