@@ -85,7 +85,7 @@ class ItemCategoryController extends Controller implements HasMiddleware
             'short_description' => 'nullable|string|max:255',
             'short_description_kh' => 'nullable|string|max:255',
             'parent_code' => 'nullable|string|max:255',
-            'order_index' => 'nullable|numeric|max:255',
+            'order_index' => 'nullable|numeric',
             'status' => 'nullable|string|in:active,inactive',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg,webp|max:2048',
             'banner' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg,webp|max:2048',
@@ -100,10 +100,10 @@ class ItemCategoryController extends Controller implements HasMiddleware
         unset($validated['banner']);
 
         foreach ($validated as $key => $value) {
-    if ($value === '') {
-        $validated[$key] = null;
-    }
-}
+            if ($value === '') {
+                $validated[$key] = null;
+            }
+        }
 
 
         if ($image_file) {
@@ -140,7 +140,7 @@ class ItemCategoryController extends Controller implements HasMiddleware
             'short_description' => 'nullable|string|max:255',
             'short_description_kh' => 'nullable|string|max:255',
             'parent_code' => 'nullable|string|max:255',
-            'order_index' => 'nullable|numeric|max:255',
+            'order_index' => 'nullable|numeric',
             'status' => 'nullable|string|in:active,inactive',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg,webp|max:2048',
             'banner' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg,webp|max:2048',
@@ -154,10 +154,10 @@ class ItemCategoryController extends Controller implements HasMiddleware
         unset($validated['banner']);
 
         foreach ($validated as $key => $value) {
-    if ($value === '') {
-        $validated[$key] = null;
-    }
-}
+            if ($value === '') {
+                $validated[$key] = null;
+            }
+        }
 
         if ($image_file) {
             try {

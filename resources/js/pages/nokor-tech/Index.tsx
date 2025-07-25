@@ -13,7 +13,7 @@ const Index = () => {
     return (
         <NokorTechLayout>
             <Head>
-                <title>PG Market | Cambodia's Digital Marketplace</title>
+                <title>Cambodia's Digital Marketplace</title>
                 <meta
                     name="description"
                     content="PG Market is Cambodia's trusted digital marketplace platform, connecting buyers and sellers nationwide with ease, speed, and transparency."
