@@ -32,6 +32,7 @@ import {
     SignalIcon,
     SquareUserIcon,
     StoreIcon,
+    TagsIcon,
     Tally5Icon,
     TvMinimalPlayIcon,
     UserCogIcon,
@@ -70,12 +71,12 @@ export function AppSidebar() {
                     icon: Layers2Icon,
                     url: '/admin/item_categories',
                 },
-                // {
-                //     title: t('Brands'),
-                //     permission: 'item view',
-                //     icon: TagsIcon,
-                //     url: '/admin/item_brands',
-                // },
+                {
+                    title: t('Brands'),
+                    permission: 'item view',
+                    icon: TagsIcon,
+                    url: '/admin/item_brands',
+                },
                 // {
                 //     title: t('Models'),
                 //     permission: 'item view',

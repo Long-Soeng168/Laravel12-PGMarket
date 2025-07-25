@@ -55,6 +55,9 @@ Route::post('/live', 'App\Http\Controllers\StripeController@live');
 Route::get('/success/{id}', 'App\Http\Controllers\StripeController@success')->name('success');
 
 // ABA Payemnt Route
+Route::get('/pdf_viewer', function () {
+   return view('pdf_viewer');
+});
 Route::get('/payment', function () {
    return Inertia::render('ABAPaymentPage');
 });
