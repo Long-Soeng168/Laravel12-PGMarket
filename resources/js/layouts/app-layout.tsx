@@ -13,7 +13,7 @@ const AppLayout = ({ children, breadcrumbs, ...props }: AppLayoutProps) => {
     const { currentLocale } = useTranslation();
     return (
         <AppLayoutTemplate breadcrumbs={breadcrumbs} {...props}>
-            <div className={`p-2 ${currentLocale == 'kh' ? 'font-siemreap-regular' : 'font-poppins-regular'}`}>{children}</div>
+            <div className={`p-2`}>{children}</div>
             <Toaster />
         </AppLayoutTemplate>
     );

@@ -1,18 +1,19 @@
 import MyNoData from '@/components/my-no-data';
 import { MyPagination } from '@/components/my-pagination';
-import { MyRefreshButton } from '@/components/my-refresh-button';
-import { MySearchTableData } from '@/components/my-search-table-data';
-import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { Head, Link, usePage } from '@inertiajs/react';
-import { FilterIcon } from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
+import useTranslation from '@/hooks/use-translation';
+import { Head, usePage } from '@inertiajs/react';
+import MyCategoryList from '../components/my-category-list';
 import SortBy from '../components/sort-by';
 import MyProductCard from '../components/ui/my-product-card';
 import NokorTechLayout from '../layouts/nokor-tech-layout';
-import Filters from './filters';
+import BrandList from './components/BrandList';
+import { BreadcrumbComponent } from './components/BreadcrumbComponent';
+import SubCategoryList from './components/SubCategoryList';
 
 const Index = () => {
-    const { tableData, productListBanners } = usePage().props;
+    const { tableData, selected_category, item_categories, sub_categories, category_brands } = usePage().props;
+    const { t, currentLocale } = useTranslation();
     return (
         <NokorTechLayout>
             <Head>
@@ -23,78 +24,64 @@ const Index = () => {
                 />
             </Head>
 
-            <div className="mx-auto mb-8 max-w-screen-xl">
-                <div className="flex">
-                    {/* start left side */}
-                    <div className="hidden w-64 lg:block">
-                        <Filters />
-                        {/* end brand */}
-                        <div className="mt-8 flex w-full flex-col gap-0.5">
-                            {productListBanners?.length > 0 &&
-                                productListBanners?.map((banner) => (
-                                    <Link href={banner?.link ? banner.link : '#'} prefetch>
-                                        <img
-                                            className="h-auto w-full transition-all duration-300 hover:scale-95"
-                                            src={`/assets/images/banners/thumb/${banner?.image}`}
-                                            alt=""
-                                            width={600}
-                                            height={600}
-                                        />
-                                    </Link>
-                                ))}
-                        </div>
-                    </div>
-                    {/* end left side */}
-
-                    {/* start right side */}
-                    {/* start fillter products section */}
-                    <div className="flex-1">
-                        <div className="mb-4 flex flex-wrap items-center justify-end gap-4 px-4">
-                            <div className="w-full md:flex-1">
-                                <MySearchTableData className="max-w-full" />
-                            </div>
+            <div className="bg-secondary py-4">
+                <div className="mx-auto mb-8 max-w-screen-xl">
+                    <BreadcrumbComponent />
+                    <div className="bg-background mt-4 rounded-lg border p-4">
+                        {/* Top Category Header */}
+                        <div className="flex flex-wrap items-center justify-between gap-4">
+                            <h1 className="text-foreground text-lg font-bold tracking-tight sm:text-xl md:text-2xl">
+                                {selected_category?.name ? (
+                                    <>{currentLocale == 'kh' ? selected_category?.name_kh || selected_category?.name : selected_category?.name}</>
+                                ) : (
+                                    t('All Categories')
+                                )}
+                            </h1>
                             <div className="flex flex-wrap items-center gap-2 md:ml-4">
-                                <MyRefreshButton />
                                 <SortBy />
-                                <div className="lg:hidden">
-                                    <Sheet>
-                                        <SheetTrigger asChild>
-                                            <div className="rounded-xl border p-1">
-                                                <Button type="submit" variant="outline" size="icon" className="relative p-5">
-                                                    <FilterIcon />
-                                                </Button>
-                                            </div>
-                                        </SheetTrigger>
-                                        <SheetContent side="left">
-                                            <SheetHeader className="hidden">
-                                                <SheetTitle></SheetTitle>
-                                                <SheetDescription></SheetDescription>
-                                            </SheetHeader>
-                                            <Filters />
-                                        </SheetContent>
-                                    </Sheet>
-                                </div>
                             </div>
                         </div>
-                        {/* end fillter products section */}
-                        <div className="flex-1 px-4">
-                            {/* start list products */}
-                            <div>{tableData?.data?.length == 0 && <MyNoData />}</div>
-                            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-                                {tableData?.data?.map((product) => <MyProductCard key={product.id} product={product} />)}
-                            </div>
-                            {/* end list products */}
-                            {/* start pagination */}
-                            <div className="my-16 flex justify-center">
-                                <MyPagination />
-                            </div>
-                            {/* end pagination */}
-                        </div>
-                        {/* end right side */}
-                    </div>
-                </div>
+                        {/* Sub Categories */}
+                        {selected_category?.name ? (
+                            <>
+                                {sub_categories?.length > 0 && (
+                                    <>
+                                        <SubCategoryList items={sub_categories} />
+                                        <Separator className="my-4" />
+                                    </>
+                                )}
 
-                {/* end list products */}
+                                {category_brands?.length > 0 && <BrandList items={category_brands} />}
+                            </>
+                        ) : (
+                            <MyCategoryList items={item_categories} />
+                        )}
+                    </div>
+
+                    <div className="mt-10 flex">
+                        {/* start right side */}
+                        {/* start fillter products section */}
+                        <div className="flex-1">
+                            {/* end fillter products section */}
+                            <div className="flex-1 px-4 min-xl:px-0">
+                                {/* start list products */}
+                                <div>{tableData?.data?.length == 0 && <MyNoData />}</div>
+                                <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+                                    {tableData?.data?.map((product) => <MyProductCard key={product.id} product={product} />)}
+                                </div>
+                                {/* end list products */}
+                                {/* start pagination */}
+                                <div className="my-16 flex justify-center">
+                                    <MyPagination />
+                                </div>
+                                {/* end pagination */}
+                            </div>
+                            {/* end right side */}
+                        </div>
+                    </div>
+
+                    {/* end list products */}
+                </div>
             </div>
         </NokorTechLayout>
     );

@@ -9,7 +9,7 @@ import MySlide from './components/my-slide';
 import NokorTechLayout from './layouts/nokor-tech-layout';
 
 const Index = () => {
-    const { topBanners, middleBanners, posts, newArrivals, categoriesWithItems } = usePage<any>().props;
+    const { topBanners, middleBanners, posts, newArrivals, categoriesWithItems, item_categories } = usePage<any>().props;
     return (
         <NokorTechLayout>
             <Head>
@@ -20,14 +20,14 @@ const Index = () => {
                 />
             </Head>
 
+            <div className="mx-auto mb-10 max-w-[2000px]">
+                {topBanners?.length > 0 && <MySlide slides={topBanners} path="/assets/images/banners/thumb/" />}
+            </div>
             <main className="px-2">
                 <>
                     <div className="mx-auto mb-10 max-w-screen-xl">
-                        {topBanners?.length > 0 && <MySlide slides={topBanners} path="/assets/images/banners/thumb/" />}
                         {/* end slide */}
-                        <div className="mt-10 mb-4 space-y-4">
-                            {categoriesWithItems?.length > 0 && <MyCategoryList items={categoriesWithItems} />}
-                        </div>
+                        <div className="mt-10 mb-4 space-y-4">{item_categories?.length > 0 && <MyCategoryList items={item_categories} />}</div>
 
                         {newArrivals?.length > 0 ? (
                             <>

@@ -36,4 +36,15 @@ class ItemCategory extends Model
     {
         return $this->hasManyThrough(Item::class, ItemCategory::class, 'parent_code', 'category_code', 'code', 'code');
     }
+
+    public function getAllCategoryCodes(): array
+    {
+        $codes = [$this->code];
+
+        foreach ($this->children as $child) {
+            $codes = array_merge($codes, $child->getAllCategoryCodes());
+        }
+
+        return $codes;
+    }
 }

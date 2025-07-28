@@ -4,6 +4,7 @@ import useTranslation from '@/hooks/use-translation';
 import { type ReactNode } from 'react';
 import MyFooter from '../components/my-footer';
 import MyHeader from '../components/my-header';
+import ScrollToTopButton from '@/components/ScrollToTopButton';
 
 interface NokorTechLayoutProps {
     children: ReactNode;
@@ -16,9 +17,10 @@ const NokorTechLayout = ({ children }: NokorTechLayoutProps) => {
             <CartProvider>
                 <MyHeader />
 
-                <div className={`${currentLocale == 'kh' ? 'font-siemreap-regular' : 'font-poppins-regular'} min-h-[50vh]`}>{children}</div>
+                <div className={`min-h-[50vh]`}>{children}</div>
                 <Toaster />
                 <MyFooter />
+                <ScrollToTopButton />
             </CartProvider>
         </>
     );

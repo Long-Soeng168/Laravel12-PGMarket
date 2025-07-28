@@ -67,6 +67,10 @@ html {
 }
 /* Start Long Soeng Font */
 @font-face {
+    font-family: KantumruyPro;
+    src: url('/assets/fonts/KantumruyPro/KantumruyPro.ttf') format('truetype');
+}
+@font-face {
     font-family: PoppinsRegular;
     src: url('/assets/fonts/Poppins/Poppins-Regular.ttf') format('truetype');
 }
@@ -81,9 +85,12 @@ html {
 /* End Long Soeng Font */
 
 /*End Western font */
- 
+
 @theme {
     /* Start Long Soeng */
+    --font-KantumruyPro:
+        'KantumruyPro', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
     --font-poppins-regular:
         'PoppinsRegular', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
     --font-koulen-regular:
@@ -94,8 +101,8 @@ html {
     /* End Long Soeng */
 
     --font-sans:
-        'PoppinsRegular', 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
-        'Noto Color Emoji';
+        'KantumruyPro', 'PoppinsRegular', 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
     --font-moul-regular: MoulRegular;
     --font-now-black: NowBlack, 'Poppins';
     --font-now-bold: NowBold, 'Poppins';
@@ -201,7 +208,7 @@ html {
         border-color: var(--color-gray-200, currentColor);
     }
 }
-  
+
 /* Custom scrollbar for WebKit browsers */
 .scroll-container::-webkit-scrollbar {
     height: 5px;

@@ -69,7 +69,7 @@ class HandleInertiaRequests extends Middleware
 
             'application_info' => ApplicationInfo::first(),
             'links' => Link::where('status', 'active')->orderBy('order_index')->get(),
-            'item_categories' => ItemCategory::with('children')->withCount('items')->where('status', 'active')->where('parent_code', null)->orderBy('order_index')->orderBy('name')->get() ?? [],
+            'item_categories' => ItemCategory::where('status', 'active')->where('parent_code', null)->orderBy('name')->get() ?? [],
             'post_counts' => Post::where('status', 'active')->count(),
 
             'flash' => [

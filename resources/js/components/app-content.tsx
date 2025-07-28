@@ -14,7 +14,7 @@ export function AppContent({ variant = 'header', children, ...props }: AppConten
 
     return (
         <main
-            className={`mx-auto flex h-full w-full max-w-7xl flex-1 flex-col gap-4 rounded-xl ${currentLocale == 'kh' ? 'font-siemreap-regular' : 'font-poppins-regular'}`}
+            className={`mx-auto flex h-full w-full max-w-7xl flex-1 flex-col gap-4 rounded-xl`}
             {...props}
         >
             {children}

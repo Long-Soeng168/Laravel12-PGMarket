@@ -15,7 +15,7 @@ const Index = () => {
     return (
         <NokorTechLayout>
             <div className="mx-auto mb-8 max-w-screen-xl">
-                <div className="mb-4 flex flex-wrap items-center justify-end gap-4 px-4">
+                <div className="my-4 flex flex-wrap items-center justify-end gap-4 px-4">
                     <div className="w-full md:flex-1">
                         <MySearchTableData className="max-w-full" />
                     </div>

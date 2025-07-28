@@ -169,13 +169,13 @@ class NokorTechController extends Controller
         $query->with('created_by', 'updated_by', 'images', 'category', 'shop');
 
         if ($category_code) {
-            // get category and its children codes
             $category = ItemCategory::with('children')->where('code', $category_code)->first();
 
             if ($category) {
-                $categoryCodes = collect([$category->code])
-                    ->merge($category->children->pluck('code'))
-                    ->toArray();
+                // make sure all children are loaded recursively
+                $category->load('children.children.children'); // or go deeper as needed
+
+                $categoryCodes = $category->getAllCategoryCodes();
 
                 $query->whereIn('category_code', $categoryCodes);
             }
@@ -200,10 +200,22 @@ class NokorTechController extends Controller
 
         $tableData = $query->paginate(perPage: $perPage)->onEachSide(1);
 
-        $item_brands = ItemBrand::orderBy('order_index')->orderBy('name')
-            ->withCount('items')
-            ->where('status', 'active') // Specify 'item_categories' table for status
+        $selected_category = ItemCategory::with('parent.parent')->where('status', 'active')->where('code', $category_code)->orderBy('name')->first() ?? [];
+
+        $sub_categories_query = ItemCategory::query();
+        if ($category_code) {
+            $sub_categories_query->where('parent_code', $category_code);
+        } else {
+            $sub_categories_query->where('parent_code', null);
+        }
+
+        $sub_categories = $sub_categories_query->where('status', 'active')->orderBy('name')->get() ?? [];
+
+        $category_brands = ItemBrand::orderBy('order_index')->orderBy('name')
+            // ->where('category_code', $category_code)
+            ->where('status', 'active')
             ->get();
+
         $item_body_types = ItemBodyType::orderBy('order_index')->orderBy('name')
             ->withCount('items')
             ->where('status', 'active') // Specify 'item_categories' table for status
@@ -212,9 +224,11 @@ class NokorTechController extends Controller
 
         return Inertia::render('nokor-tech/products/Index', [
             'tableData' => $tableData,
-            'item_brands' => $item_brands,
+            'category_brands' => $category_brands,
             'item_body_types' => $item_body_types,
             'productListBanners' => $productListBanners,
+            'sub_categories' => $sub_categories,
+            'selected_category' => $selected_category,
         ]);
     }
 
