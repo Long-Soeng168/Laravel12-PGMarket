@@ -1,8 +1,7 @@
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import useTranslation from '@/hooks/use-translation';
-import { cn } from '@/lib/utils';
 import { Link } from '@inertiajs/react';
-import React from 'react';
+import { ChevronDownIcon, ChevronUpIcon, LayoutGrid } from 'lucide-react';
+import React, { useState } from 'react';
 
 interface MyCategoryListProps {
     items: any[];
@@ -10,55 +9,49 @@ interface MyCategoryListProps {
 
 const MyCategoryList: React.FC<MyCategoryListProps> = ({ items }) => {
     const { t, currentLocale } = useTranslation();
+    const [showAll, setShowAll] = useState(false);
 
-    // Group every 3 items into one "slide"
-    const groupItemsInPairs = (array: any[]) => {
-        const result = [];
-        for (let i = 0; i < array.length; i += 3) {
-            result.push(array.slice(i, i + 3));
-        }
-        return result;
-    };
-
-    const groupedItems = groupItemsInPairs(items);
+    const visibleItems = showAll ? items : items.slice(0, items?.length > 18 ? 17 : 18);
 
     return (
-        <ScrollArea className="w-full overflow-x-auto px-2 whitespace-nowrap">
-            <div className="flex w-max gap-4 py-2">
-                {groupedItems?.map((group, index) => (
-                    <div
-                        key={index}
-                        className={cn(
-                            'flex min-w-[94px] flex-col gap-4',
-                            'sm:min-w-[124px]',
-                            'md:min-w-[144px]',
-                            'lg:min-w-[164px]',
-                        )}
+        <div className="w-full max-w-[100vw] overflow-x-scroll py-4">
+            <div className="grid w-[1246px] grid-cols-6 gap-4 min-[1280px]:px-0">
+                {visibleItems.map((item) => (
+                    <Link
+                        prefetch
+                        href={`/products?category_code=${item?.code}`}
+                        key={item?.id}
+                        className="group bg-background hover:border-primary flex flex-col h-full shrink-0 items-center justify-start gap-2 rounded-xl border px-2 py-2 transition-all duration-300 hover:shadow-sm"
                     >
-                        {group.map((item) => (
-                            <Link
-                                prefetch
-                                href={`/products?category_code=${item?.code}`}
-                                key={item?.id}
-                                className="hover:border-primary bg-background border-background flex cursor-pointer flex-col items-center justify-start gap-2 rounded border px-2 py-3 transition-all duration-300 hover:border-solid"
-                            >
-                                {item?.image && (
-                                    <img
-                                        src={`/assets/images/item_categories/thumb/${item?.image}`}
-                                        alt={`Category ${item?.name}`}
-                                        className="size-14 object-contain sm:size-16 md:size-16"
-                                    />
-                                )}
-                                <p className="text-center text-xs font-semibold text-gray-600 sm:text-sm md:text-base dark:text-white">
-                                    {currentLocale === 'kh' ? item?.name_kh : item?.name}
-                                </p>
-                            </Link>
-                        ))}
-                    </div>
+                        {item?.image && (
+                            <img
+                                src={`/assets/images/item_categories/thumb/${item?.image}`}
+                                alt={`Category ${item?.name}`}
+                                className="size-13 object-contain transition-transform duration-300 group-hover:scale-115"
+                            />
+                        )}
+                        <p className="text-muted-foreground group-hover:text-primary text-center text-sm font-medium dark:text-white">
+                            {currentLocale === 'kh' ? item?.name_kh : item?.name}
+                        </p>
+                    </Link>
                 ))}
+
+                {items.length > 18 && (
+                    <button
+                        onClick={() => setShowAll(!showAll)}
+                        className="group bg-background hover:border-primary flex h-full shrink-0 items-center justify-start gap-2 rounded-xl border px-4 py-2 transition-all duration-300 hover:shadow-sm"
+                    >
+                        <div className="text-primary flex size-10 items-center justify-center transition-transform duration-300 group-hover:scale-115">
+                            <LayoutGrid />
+                        </div>
+                        <p className="text-muted-foreground group-hover:text-primary flex items-center gap-2 text-center text-sm font-medium dark:text-white">
+                            {showAll ? t('See Less') : t('See More')}
+                            {showAll ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                        </p>
+                    </button>
+                )}
             </div>
-            <ScrollBar orientation="horizontal" />
-        </ScrollArea>
+        </div>
     );
 };
 

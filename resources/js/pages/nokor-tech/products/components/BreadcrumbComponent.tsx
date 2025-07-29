@@ -5,13 +5,19 @@ import React from 'react';
 
 export function BreadcrumbComponent() {
     const { t, currentLocale } = useTranslation();
-    const { selected_category } = usePage().props;
+    const { selected_category, selected_brand } = usePage().props;
 
     const breadcrumbs = [
         { label: t('Home'), href: '/' },
         { label: t('Products'), href: '/products', active: selected_category?.name ? false : true },
     ];
 
+    if (selected_category?.parent?.parent?.parent) {
+        breadcrumbs.push({
+            label: '...',
+            href: `#`,
+        });
+    }
     if (selected_category?.parent?.parent) {
         breadcrumbs.push({
             label:
@@ -33,12 +39,20 @@ export function BreadcrumbComponent() {
         breadcrumbs.push({
             label: currentLocale === 'kh' ? selected_category.name_kh || selected_category.name : selected_category.name,
             href: `/products?category_code=${selected_category.code}`,
+            active: selected_brand?.code ? false : true,
+        });
+    }
+
+    if (selected_brand?.code) {
+        breadcrumbs.push({
+            label: currentLocale === 'kh' ? selected_brand.name_kh || selected_brand.name : selected_brand.name,
+            href: `#`,
             active: true,
         });
     }
 
     return (
-        <Breadcrumb className='px-4 min-xl:px-0'>
+        <Breadcrumb className="px-4 min-xl:px-0">
             <BreadcrumbList>
                 {breadcrumbs.map((item, index) => (
                     <React.Fragment key={item.href}>

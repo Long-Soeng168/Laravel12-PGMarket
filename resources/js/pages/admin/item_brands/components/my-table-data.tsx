@@ -1,3 +1,4 @@
+import CategoriesHoverCard from '@/components/CategoriesHoverCard';
 import DeleteButton from '@/components/delete-button';
 import MyImageGallery from '@/components/my-image-gallery';
 import MyNoData from '@/components/my-no-data';
@@ -67,6 +68,9 @@ const MyTableData = () => {
                                     <ArrowUpDown size={16} /> {t('Name Khmer')}
                                 </span>
                             </TableHead>
+                            <TableHead onClick={() => {}}>
+                                <span className="flex cursor-pointer items-center">{t('Categories')}</span>
+                            </TableHead>
                             <TableHead onClick={() => handleSort('order_index')}>
                                 <span className="flex cursor-pointer items-center">
                                     <ArrowUpDown size={16} /> {t('Order Index')}
@@ -125,6 +129,9 @@ const MyTableData = () => {
                                     <TableCell>{item.code || '---'}</TableCell>
                                     <TableCell>{item.name || '---'}</TableCell>
                                     <TableCell>{item.name_kh || '---'}</TableCell>
+                                    <TableCell>
+                                        <CategoriesHoverCard categories={item.categories} />
+                                    </TableCell>
                                     <TableCell>{item.order_index || '---'}</TableCell>
                                     {/* <TableCell>{item.image || '---'}</TableCell> */}
                                     <TableCell>

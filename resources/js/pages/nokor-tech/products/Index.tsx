@@ -1,8 +1,8 @@
 import MyNoData from '@/components/my-no-data';
-import { MyPagination } from '@/components/my-pagination';
 import { Separator } from '@/components/ui/separator';
 import useTranslation from '@/hooks/use-translation';
-import { Head, usePage } from '@inertiajs/react';
+import { Head, usePage, WhenVisible } from '@inertiajs/react';
+import { ChevronUpIcon } from 'lucide-react';
 import MyCategoryList from '../components/my-category-list';
 import SortBy from '../components/sort-by';
 import MyProductCard from '../components/ui/my-product-card';
@@ -12,7 +12,20 @@ import { BreadcrumbComponent } from './components/BreadcrumbComponent';
 import SubCategoryList from './components/SubCategoryList';
 
 const Index = () => {
-    const { tableData, selected_category, item_categories, sub_categories, category_brands } = usePage().props;
+    const { tableData, selected_category, item_categories, sub_categories, category_brands, page, next_page_url } = usePage().props;
+    const { url } = usePage();
+
+    const urlCleanPage = (() => {
+        const [path, query] = url.split('?');
+        if (!query) return url;
+
+        const params = new URLSearchParams(query);
+        params.delete('page');
+
+        const newQuery = params.toString();
+        return newQuery ? `${path}?${newQuery}` : path;
+    })();
+
     const { t, currentLocale } = useTranslation();
     return (
         <NokorTechLayout>
@@ -44,12 +57,9 @@ const Index = () => {
                         {/* Sub Categories */}
                         {selected_category?.name ? (
                             <>
-                                {sub_categories?.length > 0 && (
-                                    <>
-                                        <SubCategoryList items={sub_categories} />
-                                        <Separator className="my-4" />
-                                    </>
-                                )}
+                                {sub_categories?.length > 0 && <SubCategoryList items={sub_categories} />}
+
+                                {sub_categories?.length > 0 && category_brands.length > 0 && <Separator className="my-4" />}
 
                                 {category_brands?.length > 0 && <BrandList items={category_brands} />}
                             </>
@@ -65,15 +75,43 @@ const Index = () => {
                             {/* end fillter products section */}
                             <div className="flex-1 px-4 min-xl:px-0">
                                 {/* start list products */}
-                                <div>{tableData?.data?.length == 0 && <MyNoData />}</div>
+                                <div>{tableData?.length == 0 && <MyNoData />}</div>
                                 <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-                                    {tableData?.data?.map((product) => <MyProductCard key={product.id} product={product} />)}
+                                    {tableData?.map((product) => <MyProductCard key={product.id} product={product} />)}
                                 </div>
+
+                                <>
+                                    {next_page_url ? (
+                                        <WhenVisible
+                                            always
+                                            params={{
+                                                data: {
+                                                    page: +page + 1,
+                                                },
+                                                only: ['tableData', 'page', 'next_page_url'],
+                                            }}
+                                            fallback={<div className='w-full text-center text-2xl py-4'>Loading...</div>}
+                                        >
+                                            <p className="text-3xl">Loading...</p>
+                                        </WhenVisible>
+                                    ) : (
+                                        tableData?.length > 0 && (
+                                            <div className="text-muted-foreground flex flex-col items-center justify-center gap-2 py-10">
+                                                <p className="text-lg font-medium">You have reached the end.</p>
+                                                <a
+                                                    href={`${urlCleanPage}`}
+                                                    className="bg-primary hover:bg-primary/90 inline-flex items-center gap-2 rounded-md px-4 py-2 text-white transition-all"
+                                                >
+                                                    <ChevronUpIcon /> Start Scroll Again
+                                                </a>
+                                            </div>
+                                        )
+                                    )}
+                                </>
+
                                 {/* end list products */}
                                 {/* start pagination */}
-                                <div className="my-16 flex justify-center">
-                                    <MyPagination />
-                                </div>
+                                <div className="my-16 flex justify-center">{/* <MyPagination /> */}</div>
                                 {/* end pagination */}
                             </div>
                             {/* end right side */}

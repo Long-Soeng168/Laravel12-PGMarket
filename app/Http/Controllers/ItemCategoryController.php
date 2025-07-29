@@ -9,6 +9,7 @@ use Inertia\Inertia;
 
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Support\Facades\DB;
 
 class ItemCategoryController extends Controller implements HasMiddleware
 {
@@ -136,7 +137,7 @@ class ItemCategoryController extends Controller implements HasMiddleware
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'name_kh' => 'nullable|string|max:255',
-            'code' => 'required|string|max:255|unique:item_categories,code,' . $item_category->id,
+            'code' => 'required|string|max:255|unique:item_categories,code,' . $item_category->code . ',code',
             'short_description' => 'nullable|string|max:255',
             'short_description_kh' => 'nullable|string|max:255',
             'parent_code' => 'nullable|string|max:255',
@@ -184,7 +185,15 @@ class ItemCategoryController extends Controller implements HasMiddleware
             }
         }
 
-        $item_category->update($validated);
+        $old_code = $item_category->code; // current code before update
+        $item_category->update($validated); // update parent
+
+        // Now update children with old parent_code to new code
+        if (isset($validated['code'])) {
+            DB::table('item_categories')
+                ->where('parent_code', $old_code)
+                ->update(['parent_code' => $validated['code']]);
+        }
 
 
         return redirect()->back()->with('success', 'Category updated successfully!');

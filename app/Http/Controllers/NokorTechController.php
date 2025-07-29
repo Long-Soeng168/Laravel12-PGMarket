@@ -159,11 +159,13 @@ class NokorTechController extends Controller
     {
         $search = $request->input('search', '');
         $brand_code = $request->input('brand_code', '');
-        $perPage = $request->input('perPage', 25);
+        $perPage = $request->input('perPage', 1);
         $sortBy = $request->input('sortBy', 'id');
         $sortDirection = $request->input('sortDirection', 'desc');
         $category_code = $request->input('category_code', '');
         $body_type_code = $request->input('body_type_code', '');
+
+        $page = $request->query('page', 1);
 
         $query = Item::query();
         $query->with('created_by', 'updated_by', 'images', 'category', 'shop');
@@ -200,7 +202,11 @@ class NokorTechController extends Controller
 
         $tableData = $query->paginate(perPage: $perPage)->onEachSide(1);
 
-        $selected_category = ItemCategory::with('parent.parent')->where('status', 'active')->where('code', $category_code)->orderBy('name')->first() ?? [];
+        $selected_category = ItemCategory::with('parent.parent.parent')->where('status', 'active')->where('code', $category_code)->orderBy('name')->first() ?? [];
+        $selected_brand = ItemBrand::where('status', 'active')->where('code', $brand_code)->orderBy('name')->first() ?? [];
+
+        $allBrands = $selected_category ? $selected_category->getAllBrandsAttribute() : [];
+        // return $allBrands;
 
         $sub_categories_query = ItemCategory::query();
         if ($category_code) {
@@ -211,24 +217,27 @@ class NokorTechController extends Controller
 
         $sub_categories = $sub_categories_query->where('status', 'active')->orderBy('name')->get() ?? [];
 
-        $category_brands = ItemBrand::orderBy('order_index')->orderBy('name')
-            // ->where('category_code', $category_code)
-            ->where('status', 'active')
-            ->get();
-
         $item_body_types = ItemBodyType::orderBy('order_index')->orderBy('name')
             ->withCount('items')
             ->where('status', 'active') // Specify 'item_categories' table for status
             ->get();
         $productListBanners = Banner::where('position_code', 'PRODUCT_SEARCH')->orderBy('order_index')->where('status', 'active')->get();
 
+        $PaginateProp = $tableData->toArray(); // To access paginate property
+        // return $PaginateProp['next_page_url'];
+
         return Inertia::render('nokor-tech/products/Index', [
-            'tableData' => $tableData,
-            'category_brands' => $category_brands,
+            'tableData' => Inertia::merge($tableData->items()),
+            'page' => $page,
+            'next_page_url' => $PaginateProp['next_page_url'],
+
+            'category_brands' => $allBrands,
             'item_body_types' => $item_body_types,
             'productListBanners' => $productListBanners,
             'sub_categories' => $sub_categories,
             'selected_category' => $selected_category,
+            'selected_brand' => $selected_brand,
+            'q_category_code' => $category_code,
         ]);
     }
 

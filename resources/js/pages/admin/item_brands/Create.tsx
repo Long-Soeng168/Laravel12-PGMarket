@@ -8,10 +8,27 @@ import useTranslation from '@/hooks/use-translation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm as inertiaUseForm, usePage } from '@inertiajs/react';
 import { CloudUpload, Loader } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import * as z from 'zod';
+
+import MultipleSelector, { Option } from '@/components/ui/multiple-selector';
+
+// const GROUP_OPTIONS: Option[] = [
+//     { label: 'nextjs', value: 'nextjs', group: 'React' },
+//     { label: 'React', value: 'react', group: 'React' },
+//     { label: 'Remix', value: 'remix', group: 'React' },
+//     { label: 'shadcn-ui', value: 'shadcn-ui', group: 'React' },
+//     { label: 'mui', value: 'mui', group: 'React' },
+//     { label: 'Vite', value: 'vite', group: 'Vue' },
+//     { label: 'Nuxt', value: 'nuxt', group: 'Vue' },
+//     { label: 'Vue', value: 'vue', group: 'Vue' },
+//     { label: 'Quasar', value: 'quasar', group: 'Vue' },
+//     { label: 'Angular', value: 'angular', group: 'Angular' },
+//     { label: 'Material UI', value: 'material-ui', group: 'Angular' },
+//     { label: 'Ng-zorro', value: 'ng-zorro', group: 'Angular' },
+// ];
 
 const formSchema = z.object({
     code: z.string().min(1).max(255),
@@ -33,6 +50,8 @@ export default function Create({
     // ===== Start Our Code =====
     const { t } = useTranslation();
     const [files, setFiles] = useState<File[] | null>(null);
+
+    const [selectedValues, setSelectedValues] = useState<Option[]>([]);
 
     const dropZoneConfig = {
         maxFiles: 100,
@@ -57,7 +76,26 @@ export default function Create({
     });
 
     const { post, progress, processing, transform, errors } = inertiaUseForm();
-    const { types } = usePage().props;
+    const { item_categories } = usePage().props;
+
+    useEffect(() => {
+        if (editData?.categories?.length) {
+            const selected = editData.categories.map((child: any) => ({
+                label: child.name,
+                value: child.code,
+                group: null, // or use a default string if needed
+            }));
+            setSelectedValues(selected);
+        }
+    }, [editData]);
+
+    const GROUP_OPTIONS = item_categories?.flatMap((parent) =>
+        (parent.children || []).map((child) => ({
+            label: parent.name + ' | ' + child.name,
+            value: child.code,
+            group: parent.name,
+        })),
+    );
 
     function onSubmit(values: z.infer<typeof formSchema>) {
         // toast(
@@ -68,6 +106,7 @@ export default function Create({
         try {
             transform(() => ({
                 ...values,
+                category_codes: selectedValues || [],
                 image: files ? files[0] : null,
             }));
             if (editData?.id) {
@@ -75,6 +114,7 @@ export default function Create({
                     preserveScroll: true,
                     onSuccess: (page) => {
                         setFiles(null);
+                        setSelectedValues([]);
                         if (page.props.flash?.success) {
                             toast.success('Success', {
                                 description: page.props.flash.success,
@@ -93,6 +133,8 @@ export default function Create({
                     onSuccess: (page) => {
                         form.reset();
                         setFiles(null);
+                        setSelectedValues([]);
+
                         if (page.props.flash?.success) {
                             toast.success('Success', {
                                 description: page.props.flash.success,
@@ -118,7 +160,7 @@ export default function Create({
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 pt-10">
-                <div className="grid md:grid-cols-12 gap-4">
+                <div className="grid gap-4 md:grid-cols-12">
                     <div className="col-span-6">
                         <FormField
                             control={form.control}
@@ -179,6 +221,20 @@ export default function Create({
                                 </FormItem>
                             )}
                         />
+                    </div>
+                    <div className="col-span-12">
+                        <FormLabel>{t('Categories')}</FormLabel>
+                        <MultipleSelector
+                            className="my-1"
+                            groupBy="group"
+                            value={selectedValues}
+                            onChange={setSelectedValues}
+                            defaultOptions={GROUP_OPTIONS}
+                            placeholder="Select categories..."
+                            emptyIndicator={<p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">no results found.</p>}
+                        />
+                        <FormMessage>{errors.category_codes && <div>{errors.category_codes}</div>}</FormMessage>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">Select the categories this brand belongs to.</p>
                     </div>
                 </div>
                 <FormField

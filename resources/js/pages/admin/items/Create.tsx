@@ -461,7 +461,7 @@ export default function Create() {
                             />
                         </div>
 
-                        {/* <div className="col-span-6">
+                        <div className="col-span-6">
                             <FormField
                                 control={form.control}
                                 name="brand_code"
@@ -538,7 +538,7 @@ export default function Create() {
                                     </FormItem>
                                 )}
                             />
-                        </div> */}
+                        </div>
 
                         {/* <div className="col-span-6">
                             <FormField

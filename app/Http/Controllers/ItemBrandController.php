@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Helpers\ImageHelper;
 use App\Models\ItemBrand;
+use App\Models\ItemCategory;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Support\Facades\DB;
 
 class ItemBrandController extends Controller implements HasMiddleware
 {
@@ -35,18 +37,28 @@ class ItemBrandController extends Controller implements HasMiddleware
         if ($search) {
             $query->where(function ($subQuery) use ($search) {
                 $subQuery->where('name', 'LIKE', "%{$search}%")
-                         ->orWhere('code', 'LIKE', "%{$search}%")
-                         ->orWhere('name_kh', 'LIKE', "%{$search}%");
+                    ->orWhere('code', 'LIKE', "%{$search}%")
+                    ->orWhere('name_kh', 'LIKE', "%{$search}%");
             });
         }
 
 
         $query->orderBy($sortBy, $sortDirection);
+        $query->with('categories');
 
         $tableData = $query->paginate(perPage: 10)->onEachSide(1);
 
+        $item_categories = ItemCategory::orderBy('order_index')->orderBy('name')
+            ->where('parent_code', null)
+            ->where('status', 'active')
+            ->with('children')
+            ->get();
+
+        // return ($tableData);
+
         return Inertia::render('admin/item_brands/Index', [
             'tableData' => $tableData,
+            'item_categories' => $item_categories,
         ]);
     }
 
@@ -63,12 +75,20 @@ class ItemBrandController extends Controller implements HasMiddleware
      */
     public function store(Request $request)
     {
+        // dd($request->all());
+        $categoryCodes = collect($request->input('category_codes'))
+            ->pluck('value')
+            ->filter()
+            ->toArray();
+
         $validated = $request->validate([
             'code' => 'required|string|max:255|unique:item_brands,code',
             'name' => 'nullable|string|max:255',
             'name_kh' => 'nullable|string|max:255',
             'order_index' => 'nullable|integer',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'category_codes' => 'required|array',
+            'category_codes.*.value' => 'required|exists:item_categories,code',
         ]);
 
         $validated['created_by'] = $request->user()->id;
@@ -76,12 +96,13 @@ class ItemBrandController extends Controller implements HasMiddleware
 
         $image_file = $request->file('image');
         unset($validated['image']);
+        unset($validated['category_codes']);
 
         foreach ($validated as $key => $value) {
-    if ($value === '') {
-        $validated[$key] = null;
-    }
-}
+            if ($value === '') {
+                $validated[$key] = null;
+            }
+        }
 
         if ($image_file) {
             try {
@@ -92,7 +113,19 @@ class ItemBrandController extends Controller implements HasMiddleware
             }
         }
 
-        ItemBrand::create($validated);
+        $brand = ItemBrand::create($validated);
+
+        // Save pivot
+        $pivotRows = array_map(function ($code) use ($brand) {
+            return [
+                'brand_code' => $brand->code,
+                'category_code' => $code,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }, $categoryCodes);
+
+        DB::table('brand_category')->insert($pivotRows);
 
         return redirect()->route('item_brands.index')->with('success', 'Item Brand created successfully!');
     }
@@ -113,7 +146,7 @@ class ItemBrandController extends Controller implements HasMiddleware
     public function edit(ItemBrand $item_brand)
     {
         return Inertia::render('admin/item_brands/Edit', [
-            'itemBrand' => $item_brand
+            'itemBrand' => $item_brand->load('categories')
         ]);
     }
 
@@ -122,23 +155,32 @@ class ItemBrandController extends Controller implements HasMiddleware
      */
     public function update(Request $request, ItemBrand $item_brand)
     {
+        $categoryCodes = collect($request->input('category_codes'))
+            ->pluck('value')
+            ->filter()
+            ->values()
+            ->toArray();
+
         $validated = $request->validate([
             'code' => 'required|string|max:255|unique:item_brands,code,' . $item_brand->id,
             'name' => 'required|string|max:255',
             'name_kh' => 'nullable|string|max:255',
             'order_index' => 'nullable|integer',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'category_codes' => 'required|array',
+            'category_codes.*.value' => 'required|exists:item_categories,code',
         ]);
         $validated['updated_by'] = $request->user()->id;
 
         $image_file = $request->file('image');
         unset($validated['image']);
+        unset($validated['category_codes']);
 
         foreach ($validated as $key => $value) {
-    if ($value === '') {
-        $validated[$key] = null;
-    }
-}
+            if ($value === '') {
+                $validated[$key] = null;
+            }
+        }
 
         if ($image_file) {
             try {
@@ -154,6 +196,22 @@ class ItemBrandController extends Controller implements HasMiddleware
         }
 
         $item_brand->update($validated);
+
+        // 🔁 Sync categories
+        DB::table('brand_category')
+            ->where('brand_code', $item_brand->code)
+            ->delete();
+
+        $pivotRows = array_map(function ($code) use ($item_brand) {
+            return [
+                'brand_code' => $item_brand->code,
+                'category_code' => $code,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }, $categoryCodes);
+
+        DB::table('brand_category')->insert($pivotRows);
 
         return redirect()->route('item_brands.index')->with('success', 'Item Brand updated successfully!');
     }
@@ -182,6 +240,6 @@ class ItemBrandController extends Controller implements HasMiddleware
 
         $item_brand->delete();
 
-        return redirect()->route('item_brands.index')->with('success', 'Item Brand deleted successfully!');//
+        return redirect()->route('item_brands.index')->with('success', 'Item Brand deleted successfully!'); //
     }
 }

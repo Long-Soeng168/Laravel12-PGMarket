@@ -37,6 +37,37 @@ class ItemCategory extends Model
         return $this->hasManyThrough(Item::class, ItemCategory::class, 'parent_code', 'category_code', 'code', 'code');
     }
 
+    // In Category.php
+    public function brands()
+    {
+        return $this->belongsToMany(ItemBrand::class, 'brand_category', 'category_code', 'brand_code', 'code', 'code');
+    }
+    public function getAllBrandsAttribute()
+    {
+        $allBrands = $this->brands ?? collect();
+        $parent = $this->parent;
+
+        // Recursively collect brands from all ancestors
+        while ($parent) {
+            $allBrands = $allBrands->merge($parent->brands ?? collect());
+            $parent = $parent->parent;
+        }
+
+        // Clean up relations to free memory if needed
+        unset($this->relations['brands']);
+        if ($this->relationLoaded('parent')) {
+            $p = $this->parent;
+            while ($p) {
+                unset($p->relations['brands']);
+                $p = $p->parent;
+            }
+        }
+
+        return $allBrands->unique('code')->sortBy('name')->values();
+    }
+
+
+
     public function getAllCategoryCodes(): array
     {
         $codes = [$this->code];

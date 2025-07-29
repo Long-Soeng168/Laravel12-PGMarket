@@ -39,7 +39,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
         onSearch(query.trim());
       }}
       className={`relative mx-auto border flex items-center rounded-full p-1
-        ${isFocused ? "bg-gradient-to-r from-pink-400 via-purple-500 to-indigo-500" : "bg-transparent"}
+        ${isFocused ? "bg-gradient-to-r from-pink-400 via-purple-500 to-indigo-500" : "bg-white/50"}
       `}
     >
       <input
@@ -52,7 +52,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
         aria-label="Search products"
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
-        className="flex-grow border rounded-full bg-white px-4 py-2.5 text-base font-semibold text-gray-900 placeholder-gray-400 outline-none transition focus:ring-4 focus:ring-purple-400 focus:ring-opacity-70"
+        className="flex-grow border rounded-full bg-background px-4 py-2.5 text-base font-semibold text-foreground placeholder-gray-400 outline-none transition focus:ring-4 focus:ring-purple-400/50 focus:ring-opacity-70"
       />
 
       {query && !loading && (
