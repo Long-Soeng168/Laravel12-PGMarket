@@ -19,6 +19,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import * as z from 'zod';
+import CategorySelect from './components/category-select';
 
 const formSchema = z.object({
     name: z.string().min(1).max(255),
@@ -59,6 +60,8 @@ export default function Create() {
     const [long_description, setLong_description] = useState(editData?.long_description || '');
     const [editorKey, setEditorKey] = useState(0);
 
+    const [finalSelect, setFinalSelect] = useState(null);
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -89,6 +92,7 @@ export default function Create() {
             transform(() => ({
                 ...values,
                 long_description: long_description,
+                category_code: finalSelect?.code || null,
                 images: files || null,
             }));
 
@@ -97,6 +101,7 @@ export default function Create() {
                     preserveScroll: true,
                     onSuccess: (page) => {
                         setFiles(null);
+                        setFinalSelect(null);
                         if (page.props.flash?.success) {
                             toast.success('Success', {
                                 description: page.props.flash.success,
@@ -122,6 +127,7 @@ export default function Create() {
                         setLong_description('');
                         setEditorKey((prev) => prev + 1);
                         setFiles(null);
+                        setFinalSelect(null);
                         if (page.props.flash?.success) {
                             toast.success('Success', {
                                 description: page.props.flash.success,
@@ -362,7 +368,7 @@ export default function Create() {
                     />
 
                     <div className="grid grid-cols-6 gap-4 lg:grid-cols-12">
-                        <div className="col-span-6 flex space-x-2">
+                        {/* <div className="col-span-6 flex space-x-2">
                             <span className="flex-1">
                                 <FormField
                                     control={form.control}
@@ -379,86 +385,13 @@ export default function Create() {
                                     )}
                                 />
                             </span>
-                        </div>
+                        </div> */}
 
-                        <div className="col-span-6">
-                            <FormField
-                                control={form.control}
-                                name="category_code"
-                                render={({ field }) => (
-                                    <FormItem className="flex flex-col" key={field.value}>
-                                        <FormLabel>{t('Category')}</FormLabel>
-                                        <Popover>
-                                            <PopoverTrigger asChild>
-                                                <FormControl>
-                                                    <Button
-                                                        variant="outline"
-                                                        role="combobox"
-                                                        className={cn('w-full justify-between', !field.value && 'text-muted-foreground')}
-                                                    >
-                                                        {field.value
-                                                            ? (() => {
-                                                                  const category = itemCategories?.find((category) => category.code === field.value);
-                                                                  return category ? `${category.name} (${category.name_kh})` : '';
-                                                              })()
-                                                            : t('Select category')}
-
-                                                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                                                    </Button>
-                                                </FormControl>
-                                            </PopoverTrigger>
-                                            <PopoverContent className="p-0">
-                                                <Command>
-                                                    <CommandInput placeholder="Search category..." />
-                                                    <CommandList>
-                                                        <CommandEmpty>{t('No data')}</CommandEmpty>
-                                                        <CommandGroup>
-                                                            <CommandItem
-                                                                value=""
-                                                                onSelect={() => {
-                                                                    form.setValue('category_code', '');
-                                                                }}
-                                                            >
-                                                                <Check
-                                                                    className={cn('mr-2 h-4 w-4', '' == field.value ? 'opacity-100' : 'opacity-0')}
-                                                                />
-                                                                {t('Select category')}
-                                                            </CommandItem>
-                                                            {itemCategories?.map((category) => (
-                                                                <CommandItem
-                                                                    value={category.name}
-                                                                    key={category.code}
-                                                                    onSelect={() => {
-                                                                        form.setValue('category_code', category.code);
-                                                                    }}
-                                                                >
-                                                                    <Check
-                                                                        className={cn(
-                                                                            'mr-2 h-4 w-4',
-                                                                            category.code === field.value ? 'opacity-100' : 'opacity-0',
-                                                                        )}
-                                                                    />
-                                                                    {category.image && (
-                                                                        <img
-                                                                            className="size-6 object-contain"
-                                                                            src={`/assets/images/item_categories/thumb/${category.image}`}
-                                                                        />
-                                                                    )}
-                                                                    {category.parent_code && '--'}
-                                                                    {category.name}
-                                                                    {/* {category.name_kh && `(${category.name_kh})`} */}
-                                                                </CommandItem>
-                                                            ))}
-                                                        </CommandGroup>
-                                                    </CommandList>
-                                                </Command>
-                                            </PopoverContent>
-                                        </Popover>
-                                        <FormDescription>{t('Select the category where this item belong to.')}</FormDescription>
-                                        <FormMessage>{errors.category_code && <div>{errors.category_code}</div>}</FormMessage>
-                                    </FormItem>
-                                )}
-                            />
+                        <div className="col-span-6 flex flex-col justify-start gap-2">
+                            <FormLabel className="p-0">{t('Category')}</FormLabel>
+                            <CategorySelect finalSelect={finalSelect} setFinalSelect={setFinalSelect} />
+                            <FormDescription>{t('Select the category where this item belong to.')}</FormDescription>
+                            <FormMessage>{errors.category_code && <div>{errors.category_code}</div>}</FormMessage>
                         </div>
 
                         <div className="col-span-6">

@@ -43,6 +43,8 @@ require __DIR__ . '/order.php';
 require __DIR__ . '/telegram.php';
 
 
+
+
 // ========= Pay Pal Route =========
 Route::get('/paypal_payment', '\App\Http\Controllers\PayPalController@index')->middleware('auth');
 Route::get('/create/{amount}', '\App\Http\Controllers\PayPalController@create');
@@ -55,6 +57,10 @@ Route::post('/live', 'App\Http\Controllers\StripeController@live');
 Route::get('/success/{id}', 'App\Http\Controllers\StripeController@success')->name('success');
 
 // ABA Payemnt Route
+Route::get('/normal_blade', function () {
+   return view('normalblade');
+});
+
 Route::get('/pdf_viewer', function () {
    return view('pdf_viewer');
 });
@@ -62,5 +68,7 @@ Route::get('/payment', function () {
    return Inertia::render('ABAPaymentPage');
 });
 
-Route::get('/checkout_aba', [ABAPaymentController::class, 'checkout'])->name('payment.purchase');
-Route::post('/checkout_aba', [ABAPaymentController::class, 'checkout'])->name('payment.purchase');
+// ========= ABA Payway =========
+require __DIR__ . '/aba_payway.php';
+// Route::get('/checkout_aba', [ABAPaymentController::class, 'checkout'])->name('payment.purchase');
+// Route::post('/checkout_aba', [ABAPaymentController::class, 'checkout'])->name('payment.purchase');
