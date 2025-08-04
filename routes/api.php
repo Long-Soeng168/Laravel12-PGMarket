@@ -88,3 +88,17 @@ require __DIR__ . '/api_auth.php';
 
 
 Route::post('/payway/purchase', [ABAPaymentController::class, 'purchase']);
+
+
+use Illuminate\Support\Facades\Http;
+
+Route::post('/bakong/check', function (\Illuminate\Http\Request $request) {
+    $token = env('BAKONG_API_TOKEN'); // store securely in .env
+    $md5 = $request->input('md5');
+
+    $response = Http::withToken($token)->post('https://api-bakong.nbc.gov.kh/v1/check_transaction_by_md5', [
+        'md5' => $md5,
+    ]);
+
+    return response()->json($response->json(), $response->status());
+});

@@ -67,6 +67,14 @@ Route::get('/pdf_viewer', function () {
 Route::get('/payment', function () {
    return Inertia::render('ABAPaymentPage');
 });
+Route::get('/bakong', function () {
+   return view('bakong', [
+      'order_number' => '7777', // dynamic or from session/cart
+   ]);
+});
+Route::get('/paymentBakong/success', function () {
+   return view('bakong_success');
+});
 
 // ========= ABA Payway =========
 require __DIR__ . '/aba_payway.php';
