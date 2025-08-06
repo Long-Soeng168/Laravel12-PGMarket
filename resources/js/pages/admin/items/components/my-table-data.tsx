@@ -59,21 +59,22 @@ const MyTableData = () => {
                                     <ArrowUpDown size={16} /> {t('Shop')}
                                 </span>
                             </TableHead>
+                            <TableHead onClick={() => handleSort('price')}>
+                                <span className="flex cursor-pointer items-center">
+                                    <ArrowUpDown size={16} /> {t('Price')}
+                                </span>
+                            </TableHead>
                             <TableHead onClick={() => handleSort('code')}>
                                 <span className="flex cursor-pointer items-center">
                                     <ArrowUpDown size={16} /> {t('Code')}
                                 </span>
                             </TableHead>
                             <TableHead onClick={() => handleSort('name')}>
-                                <span className="flex cursor-pointer items-center w-sm">
+                                <span className="flex w-sm cursor-pointer items-center">
                                     <ArrowUpDown size={16} /> {t('Product Name')}
                                 </span>
                             </TableHead>
-                            <TableHead onClick={() => handleSort('price')}>
-                                <span className="flex cursor-pointer items-center">
-                                    <ArrowUpDown size={16} /> {t('Price')}
-                                </span>
-                            </TableHead>
+
                             {/* <TableHead onClick={() => handleSort('short_description')}>
                                 <span className="flex cursor-pointer items-center">
                                     <ArrowUpDown size={16} /> {t('Short Description')}
@@ -195,12 +196,14 @@ const MyTableData = () => {
                                 </TableCell> */}
                                 <TableCell>
                                     <Link className="hover:underline" href={`/admin/shops/${item.shop_id}`}>
-                                        <Badge variant='outline' className='hover:underline'>{item.shop?.name || '---'}</Badge>
+                                        <Badge variant="outline" className="hover:underline">
+                                            {item.shop?.name || '---'}
+                                        </Badge>
                                     </Link>
                                 </TableCell>
+                                <TableCell><p className='whitespace-nowrap'>$ {item.price || '---'}</p></TableCell>
                                 <TableCell>{item.code || '---'}</TableCell>
                                 <TableCell>{item.name || '---'}</TableCell>
-                                <TableCell>{item.price || '---'}</TableCell>
                                 {/* <TableCell>{item.short_description || '---'}</TableCell> */}
                                 <TableCell>
                                     {hasPermission('item update') ? (

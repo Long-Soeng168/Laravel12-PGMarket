@@ -54,6 +54,11 @@ const MyTableData = () => {
                             <TableHead className="text-left">{t('Action')}</TableHead>
                             <TableHead>{t('Image')}</TableHead>
                             <TableHead>{t('Banner')}</TableHead>
+                            <TableHead onClick={() => handleSort('category_code')}>
+                                <span className="flex cursor-pointer items-center">
+                                    <ArrowUpDown size={16} /> {t('Category Code')}
+                                </span>
+                            </TableHead>
                             <TableHead onClick={() => handleSort('name')}>
                                 <span className="flex cursor-pointer items-center">
                                     <ArrowUpDown size={16} /> {t('Name')}
@@ -198,6 +203,7 @@ const MyTableData = () => {
                                         />
                                     )}
                                 </TableCell>
+                                <TableCell>{item.category_code || '---'}</TableCell>
                                 <TableCell>{item.name || '---'}</TableCell>
                                 <TableCell>{item.phone || '---'}</TableCell>
                                 <TableCell>{item.address || '---'}</TableCell>

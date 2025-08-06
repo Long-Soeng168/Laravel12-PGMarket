@@ -22,4 +22,8 @@ class Shop extends Model
     {
         return $this->belongsTo(User::class, 'owner_user_id', 'id');
     }
+    public function category()
+    {
+        return $this->belongsTo(ItemCategory::class, 'category_code', 'code');
+    }
 }

@@ -11,11 +11,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import useTranslation from '@/hooks/use-translation';
 import AppLayout from '@/layouts/app-layout';
 import { cn } from '@/lib/utils';
+import CategorySelect from '@/pages/user-dashboard/shops/components/category-select';
 import { BreadcrumbItem } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm as inertiaUseForm, usePage } from '@inertiajs/react';
 import { Check, ChevronsUpDown, CloudUpload, Loader, Paperclip } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import * as z from 'zod';
@@ -74,10 +75,14 @@ export default function Create({
         },
     });
 
-    const [error, setError] = useState(null);
     const { all_users } = usePage().props;
+    
+    const [finalCategorySelect, setFinalCategorySelect] = useState<any>(null);
+    useEffect(() => {
+        setFinalCategorySelect(editData?.category);
+    }, [editData]);
 
-    const { post, data, progress, processing, transform, errors } = inertiaUseForm();
+    const { post, progress, processing, transform, errors } = inertiaUseForm();
 
     function onSubmit(values: z.infer<typeof formSchema>) {
         // toast(
@@ -90,6 +95,7 @@ export default function Create({
                 ...values,
                 logo: files ? files[0] : null,
                 banner: filesBanner ? filesBanner[0] : null,
+                category_code: finalCategorySelect?.code || null,
             }));
             if (editData?.id) {
                 post('/admin/shops/' + editData?.id + '/update', {
@@ -97,6 +103,7 @@ export default function Create({
                     onSuccess: (page) => {
                         setFiles(null);
                         setFilesBanner(null);
+                        setFinalCategorySelect(null);
                         if (page.props.flash?.success) {
                             toast.success('Success', {
                                 description: page.props.flash.success,
@@ -116,6 +123,7 @@ export default function Create({
                         form.reset();
                         setFiles(null);
                         setFilesBanner(null);
+                        setFinalCategorySelect(null);
                         if (page.props.flash?.success) {
                             toast.success('Success', {
                                 description: page.props.flash.success,
@@ -327,6 +335,13 @@ export default function Create({
                             </FormItem>
                         )}
                     />
+
+                    <div className="col-span-6 flex flex-col justify-start gap-2">
+                        <FormLabel className="p-0">{t('Category')}</FormLabel>
+                        <CategorySelect finalCategorySelect={finalCategorySelect} setFinalCategorySelect={setFinalCategorySelect} />
+                        <FormDescription>{t('Select the shop category.')}</FormDescription>
+                        <FormMessage>{errors.category_code && <div>{errors.category_code}</div>}</FormMessage>
+                    </div>
 
                     {/* <FormField
                         control={form.control}

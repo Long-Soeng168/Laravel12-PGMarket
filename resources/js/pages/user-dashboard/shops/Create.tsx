@@ -13,11 +13,12 @@ import { BreadcrumbItem } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm as inertiaUseForm, usePage } from '@inertiajs/react';
 import { CloudUpload, Loader, Paperclip } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import * as z from 'zod';
 import ContactUsButton from '../components/contact-us-button';
+import CategorySelect from './components/category-select';
 import UserSuspended from './components/user-suspended';
 
 const formSchema = z.object({
@@ -58,7 +59,13 @@ export default function Create({
             'image/webp': ['.webp'],
         },
     };
-    const { all_users, auth } = usePage().props;
+    const { auth } = usePage().props;
+
+    const [finalCategorySelect, setFinalCategorySelect] = useState<any>(null);
+
+    useEffect(() => {
+        setFinalCategorySelect(editData?.category);
+    }, [editData]);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -91,6 +98,7 @@ export default function Create({
                 ...values,
                 logo: files ? files[0] : null,
                 banner: filesBanner ? filesBanner[0] : null,
+                category_code: finalCategorySelect?.code || null,
             }));
 
             if (editData?.id) {
@@ -99,6 +107,7 @@ export default function Create({
                     onSuccess: (page) => {
                         setFiles(null);
                         setFilesBanner(null);
+                        setFinalCategorySelect(null);
                         if (page.props.flash?.success) {
                             toast.success('Success', {
                                 description: page.props.flash.success,
@@ -118,6 +127,7 @@ export default function Create({
                         form.reset();
                         setFiles(null);
                         setFilesBanner(null);
+                        setFinalCategorySelect(null);
                         if (page.props.flash?.success) {
                             toast.success('Success', {
                                 description: page.props.flash.success,
@@ -260,59 +270,14 @@ export default function Create({
                                             <PopoverTrigger asChild>
                                                 <FormControl>
                                                     <Button
-                                                        variant="outline"
+                                                        variant="secondary"
                                                         role="combobox"
-                                                        className={cn('w-full justify-between', !field.value && 'text-muted-foreground')}
+                                                        className={cn('w-full cursor-auto justify-between', !field.value && 'text-muted-foreground')}
                                                     >
                                                         {editData?.owner && editData?.owner.name}
-                                                        {editData && editData?.owner_user_id != field.value && ', -> '}
-                                                        {field.value && all_users.find((item) => item.id == field.value)?.name}
-                                                        {!editData && !field.value && t('Select')}
-                                                        {/* <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" /> */}
                                                     </Button>
                                                 </FormControl>
                                             </PopoverTrigger>
-
-                                            {/* <PopoverContent className="w-[350px] p-0">
-                                                <Command>
-                                                    <CommandInput placeholder={t('Search')} />
-                                                    <CommandList>
-                                                        <CommandEmpty>{t('No data')}</CommandEmpty>
-                                                        <CommandGroup>
-                                                            <CommandItem
-                                                                value=""
-                                                                onSelect={() => {
-                                                                    form.setValue('owner_user_id', '');
-                                                                }}
-                                                            >
-                                                                <Check
-                                                                    className={cn('mr-2 h-4 w-4', '' == field.value ? 'opacity-100' : 'opacity-0')}
-                                                                />
-                                                                {t('Select')}
-                                                            </CommandItem>
-                                                            {all_users?.map((item) => {
-                                                                return (
-                                                                    <CommandItem
-                                                                        value={item.name + item.id + item.email}
-                                                                        key={item.id}
-                                                                        onSelect={() => {
-                                                                            form.setValue('owner_user_id', item.id.toString());
-                                                                        }}
-                                                                    >
-                                                                        <Check
-                                                                            className={cn(
-                                                                                'mr-2 h-4 w-4',
-                                                                                item.id == field.value ? 'opacity-100' : 'opacity-0',
-                                                                            )}
-                                                                        />
-                                                                        {item.name} ({item.email})
-                                                                    </CommandItem>
-                                                                );
-                                                            })}
-                                                        </CommandGroup>
-                                                    </CommandList>
-                                                </Command>
-                                            </PopoverContent> */}
                                         </Popover>
                                         <FormMessage>{errors.owner_user_id && <div>{errors.owner_user_id}</div>}</FormMessage>
                                     </FormItem>
@@ -334,6 +299,13 @@ export default function Create({
                             </FormItem>
                         )}
                     />
+
+                    <div className="col-span-6 flex flex-col justify-start gap-2">
+                        <FormLabel className="p-0">{t('Category')}</FormLabel>
+                        <CategorySelect finalCategorySelect={finalCategorySelect} setFinalCategorySelect={setFinalCategorySelect} />
+                        <FormDescription>{t('Select the shop category.')}</FormDescription>
+                        <FormMessage>{errors.category_code && <div>{errors.category_code}</div>}</FormMessage>
+                    </div>
 
                     {/* <FormField
                         control={form.control}

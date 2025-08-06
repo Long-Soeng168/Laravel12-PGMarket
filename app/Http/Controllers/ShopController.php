@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\ImageHelper;
+use App\Models\ItemCategory;
 use App\Models\Shop;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -75,12 +76,16 @@ class ShopController extends Controller implements HasMiddleware
         $all_users = User::orderBy('id', 'desc')
             ->where('shop_id', null)
             ->get();
+
+        $itemCategories = ItemCategory::where('parent_code', null)->where('status', 'active')->orderBy('name')->orderBy('name')->get();
+
         // return ($all_users);
         // return $shop->load('owner');
         return Inertia::render('admin/shops/Create', [
             'editData' => $shop->load('owner'),
             'all_users' => $all_users,
             'readOnly' => true,
+            'itemCategories' => $itemCategories,
         ]);
     }
     public function edit(Shop $shop)
@@ -88,10 +93,13 @@ class ShopController extends Controller implements HasMiddleware
         $all_users = User::orderBy('id', 'desc')
             ->where('shop_id', null)
             ->get();
+
+        $itemCategories = ItemCategory::where('parent_code', null)->where('status', 'active')->orderBy('name')->orderBy('name')->get();
         // return ($all_users);
         return Inertia::render('admin/shops/Create', [
-            'editData' => $shop->load('owner'),
+            'editData' => $shop->load('owner', 'category'),
             'all_users' => $all_users,
+            'itemCategories' => $itemCategories,
         ]);
     }
 
@@ -100,9 +108,12 @@ class ShopController extends Controller implements HasMiddleware
         $all_users = User::orderBy('id', 'desc')
             ->where('shop_id', null)
             ->get();
+        $itemCategories = ItemCategory::where('parent_code', null)->where('status', 'active')->orderBy('name')->orderBy('name')->get();
+        
         // return ($all_users);
         return Inertia::render('admin/shops/Create', [
             'all_users' => $all_users,
+            'itemCategories' => $itemCategories,
         ]);
     }
 
@@ -113,6 +124,7 @@ class ShopController extends Controller implements HasMiddleware
     {
         // dd($request->all());
         $validated = $request->validate([
+            'category_code' => 'required|string|exists:item_categories,code',
             'owner_user_id' => 'required|exists:users,id',
             'name' => 'required|string|max:255',
             'address' => 'nullable|string|max:255',
@@ -177,6 +189,7 @@ class ShopController extends Controller implements HasMiddleware
     public function update(Request $request, Shop $shop)
     {
         $validated = $request->validate([
+            'category_code' => 'required|string|exists:item_categories,code',
             'owner_user_id' => 'required|exists:users,id',
             'name' => 'required|string|max:255',
             'address' => 'nullable|string|max:255',

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\UserDashboard;
 
 use App\Helpers\ImageHelper;
 use App\Http\Controllers\Controller;
+use App\Models\ItemCategory;
 use App\Models\Shop;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -26,31 +27,30 @@ class UserShopController extends Controller implements HasMiddleware
      */
     public function edit()
     {
-        $all_users = User::orderBy('id', 'desc')
-            ->where('shop_id', null)
-            ->get();
         $user_shop = Shop::findOrFail(Auth::user()->shop_id);
         if ($user_shop->id != Auth::user()->shop_id) {
             abort(404);
         }
+        $itemCategories = ItemCategory::where('parent_code', null)->where('status', 'active')->orderBy('name')->orderBy('name')->get();
+
         // return ($all_users);
         return Inertia::render('user-dashboard/shops/Create', [
-            'editData' => $user_shop->load('owner'),
-            'all_users' => $all_users,
+            'editData' => $user_shop->load('owner', 'category'),
+            'itemCategories' => $itemCategories,
         ]);
     }
     public function create()
     {
-        $all_users = User::orderBy('id', 'desc')
-            ->where('shop_id', null)
-            ->get();
         $user_shop = Shop::find(Auth::user()->shop_id);
         if ($user_shop) {
             abort(403);
         }
+
+        $itemCategories = ItemCategory::where('parent_code', null)->where('status', 'active')->orderBy('name')->orderBy('name')->get();
+
         // return ($all_users);
         return Inertia::render('user-dashboard/shops/Create', [
-            'all_users' => $all_users,
+            'itemCategories' => $itemCategories,
         ]);
     }
 
@@ -58,6 +58,7 @@ class UserShopController extends Controller implements HasMiddleware
     {
         // dd($request->all());
         $validated = $request->validate([
+            'category_code' => 'required|string|exists:item_categories,code',
             'name' => 'required|string|max:255',
             'address' => 'nullable|string|max:255',
             'phone' => 'nullable|string',
@@ -132,7 +133,7 @@ class UserShopController extends Controller implements HasMiddleware
         }
 
         $validated = $request->validate([
-            'owner_user_id' => 'required|exists:users,id',
+            'category_code' => 'required|string|exists:item_categories,code',
             'name' => 'required|string|max:255',
             'address' => 'nullable|string|max:255',
             'phone' => 'nullable|string',
@@ -146,12 +147,6 @@ class UserShopController extends Controller implements HasMiddleware
         ]);
 
         $validated['updated_by'] = $request->user()->id;
-
-        if ($validated['owner_user_id'] != $user_shop->owner_user_id) {
-            User::where('id', $user_shop->owner_user_id)->update([
-                'shop_id' => null,
-            ]);
-        }
 
         $image_file = $request->file('logo');
         $banner_file = $request->file('banner');
@@ -191,15 +186,6 @@ class UserShopController extends Controller implements HasMiddleware
 
         $updated_success = $user_shop->update($validated);
 
-        if ($updated_success) {
-            $user = User::where('id', $validated['owner_user_id'])->where('shop_id', null)->first();
-            if ($user)
-                $user->update([
-                    'shop_id' => $user_shop->id,
-                ]);
-        }
-
-
         return redirect()->back()->with('success', 'Shop updated successfully!');
     }
 
@@ -221,13 +207,13 @@ class UserShopController extends Controller implements HasMiddleware
      */
     public function destroy(Shop $user_shop)
     {
-        if ($user_shop->logo) {
-            ImageHelper::deleteImage($user_shop->logo, 'assets/images/shops');
-        }
-        if ($user_shop->banner) {
-            ImageHelper::deleteImage($user_shop->banner, 'assets/images/shops');
-        }
-        $user_shop->delete();
+        // if ($user_shop->logo) {
+        //     ImageHelper::deleteImage($user_shop->logo, 'assets/images/shops');
+        // }
+        // if ($user_shop->banner) {
+        //     ImageHelper::deleteImage($user_shop->banner, 'assets/images/shops');
+        // }
+        // $user_shop->delete();
         return redirect()->back()->with('success', 'Shop deleted successfully.');
     }
 }
