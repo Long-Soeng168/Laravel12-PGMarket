@@ -56,27 +56,21 @@ const MyTableData = () => {
                                 </>
                             )}
                             <TableHead>{t('Image')}</TableHead>
-                            {/* <TableHead>{t('Link')}</TableHead> */}
+                            <TableHead onClick={() => handleSort('price')}>
+                                <span className="flex cursor-pointer items-center">
+                                    <ArrowUpDown size={16} /> {t('Price')}
+                                </span>
+                            </TableHead>
                             <TableHead onClick={() => handleSort('code')}>
                                 <span className="flex cursor-pointer items-center">
                                     <ArrowUpDown size={16} /> {t('Code')}
                                 </span>
                             </TableHead>
                             <TableHead onClick={() => handleSort('name')}>
-                                <span className="flex cursor-pointer items-center">
+                                <span className="flex w-sm cursor-pointer items-center">
                                     <ArrowUpDown size={16} /> {t('Name')}
                                 </span>
                             </TableHead>
-                            <TableHead onClick={() => handleSort('price')}>
-                                <span className="flex cursor-pointer items-center">
-                                    <ArrowUpDown size={16} /> {t('Price')}
-                                </span>
-                            </TableHead>
-                            {/* <TableHead onClick={() => handleSort('short_description')}>
-                                <span className="flex cursor-pointer items-center">
-                                    <ArrowUpDown size={16} /> {t('Short Description')}
-                                </span>
-                            </TableHead> */}
                             <TableHead onClick={() => handleSort('status')}>
                                 <span className="flex cursor-pointer items-center">
                                     <ArrowUpDown size={16} /> {t('Status')}
@@ -87,21 +81,12 @@ const MyTableData = () => {
                                     <ArrowUpDown size={16} /> {t('Category Code')}
                                 </span>
                             </TableHead>
-                            {/* <TableHead onClick={() => handleSort('brand_code')}>
+                            <TableHead onClick={() => handleSort('brand_code')}>
                                 <span className="flex cursor-pointer items-center">
                                     <ArrowUpDown size={16} /> {t('Brand Code')}
                                 </span>
                             </TableHead>
-                            <TableHead onClick={() => handleSort('model_code')}>
-                                <span className="flex cursor-pointer items-center">
-                                    <ArrowUpDown size={16} /> {t('Model Code')}
-                                </span>
-                            </TableHead>
-                            <TableHead onClick={() => handleSort('body_type_code')}>
-                                <span className="flex cursor-pointer items-center">
-                                    <ArrowUpDown size={16} /> {t('Body Type Code')}
-                                </span>
-                            </TableHead> */}
+
                             <TableHead onClick={() => handleSort('total_view_counts')}>
                                 <span className="flex cursor-pointer items-center">
                                     <ArrowUpDown size={16} /> {t('Total View')}
@@ -206,9 +191,9 @@ const MyTableData = () => {
                                         '---'
                                     )}
                                 </TableCell> */}
+                                <TableCell><p className='whitespace-nowrap'>$ {item.price || '---'}</p></TableCell>
                                 <TableCell>{item.code || '---'}</TableCell>
                                 <TableCell>{item.name || '---'}</TableCell>
-                                <TableCell>{item.price || '---'}</TableCell>
                                 {/* <TableCell>{item.short_description || '---'}</TableCell> */}
                                 <TableCell>
                                     {hasRole('Shop') ? (
@@ -223,9 +208,7 @@ const MyTableData = () => {
                                     )}
                                 </TableCell>
                                 <TableCell>{item.category_code || '---'}</TableCell>
-                                {/* <TableCell>{item.brand_code || '---'}</TableCell>
-                                <TableCell>{item.model_code || '---'}</TableCell>
-                                <TableCell>{item.body_type_code || '---'}</TableCell> */}
+                                <TableCell>{item.brand_code || '---'}</TableCell>
                                 <TableCell>
                                     {item.total_view_counts ? <span className="flex items-center gap-1">{item.total_view_counts}</span> : '---'}
                                 </TableCell>

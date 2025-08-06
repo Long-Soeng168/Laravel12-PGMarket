@@ -70,14 +70,24 @@ class ItemController extends Controller implements HasMiddleware
      */
     public function create(Request $request)
     {
-        $itemCategories = ItemCategory::where('parent_code', null)->with('children.children')->where('status', 'active')->orderBy('order_index')->orderBy('name')->get();
-        // return $itemCategories;
+        $itemCategories = ItemCategory::where('parent_code', null)->with('children.children')->where('status', 'active')->orderBy('name')->orderBy('name')->get();
 
+        $itemBrands = ItemBrand::with(['categories'])->where('status', 'active')->orderBy('name')->get();
+        $itemBrands = $itemBrands->map(function ($brand) {
+            return [
+                'id' => $brand->id,
+                'code' => $brand->code,
+                'image' => $brand->image,
+                'name' => $brand->name,
+                'name_kh' => $brand->name_kh,
+                'categories' => $brand->categories->pluck('code')->values(), // values() to reset keys
+            ];
+        });
+
+        // return $itemBrands;
         return Inertia::render('admin/items/Create', [
             'itemCategories' => $itemCategories,
-            'itemBrands' => ItemBrand::where('status', 'active')->orderBy('name')->get(),
-            'itemModels' => ItemModel::where('status', 'active')->orderBy('name')->get(),
-            'itemBodyTypes' => ItemBodyType::where('status', 'active')->orderBy('name')->get(),
+            'itemBrands' => $itemBrands,
             'shops' => Shop::orderBy('name')->get(),
         ]);
     }
@@ -153,13 +163,26 @@ class ItemController extends Controller implements HasMiddleware
      */
     public function show(Item $item)
     {
+        $editData = $item->load('images', 'category', 'brand');
+        $itemCategories = ItemCategory::where('parent_code', null)->with('children.children')->where('status', 'active')->orderBy('name')->orderBy('name')->get();
+
+        $itemBrands = ItemBrand::with(['categories'])->where('status', 'active')->orderBy('name')->get();
+        $itemBrands = $itemBrands->map(function ($brand) {
+            return [
+                'id' => $brand->id,
+                'code' => $brand->code,
+                'image' => $brand->image,
+                'name' => $brand->name,
+                'name_kh' => $brand->name_kh,
+                'categories' => $brand->categories->pluck('code')->values(), // values() to reset keys
+            ];
+        });
+
         return Inertia::render('admin/items/Create', [
-            'editData' => $item->load('images'),
+            'editData' => $editData,
             'readOnly' => true,
-            'itemCategories' => ItemCategory::where('status', 'active')->orderBy('order_index')->get(),
-            'itemBrands' => ItemBrand::where('status', 'active')->orderBy('name')->get(),
-            'itemModels' => ItemModel::where('status', 'active')->orderBy('name')->get(),
-            'itemBodyTypes' => ItemBodyType::where('status', 'active')->orderBy('name')->get(),
+            'itemCategories' => $itemCategories,
+            'itemBrands' => $itemBrands,
             'shops' => Shop::orderBy('name')->get(),
         ]);
     }
@@ -170,12 +193,26 @@ class ItemController extends Controller implements HasMiddleware
 
     public function edit(Item $item)
     {
+        $editData = $item->load('images', 'category', 'brand');
+        $itemCategories = ItemCategory::where('parent_code', null)->with('children.children')->where('status', 'active')->orderBy('name')->orderBy('name')->get();
+
+        $itemBrands = ItemBrand::with(['categories'])->where('status', 'active')->orderBy('name')->get();
+        $itemBrands = $itemBrands->map(function ($brand) {
+            return [
+                'id' => $brand->id,
+                'code' => $brand->code,
+                'image' => $brand->image,
+                'name' => $brand->name,
+                'name_kh' => $brand->name_kh,
+                'categories' => $brand->categories->pluck('code')->values(), // values() to reset keys
+            ];
+        });
+
+        // return $editData;
         return Inertia::render('admin/items/Create', [
-            'editData' => $item->load('images'),
-            'itemCategories' => ItemCategory::where('status', 'active')->orderBy('order_index')->get(),
-            'itemBrands' => ItemBrand::where('status', 'active')->orderBy('name')->get(),
-            'itemModels' => ItemModel::where('status', 'active')->orderBy('name')->get(),
-            'itemBodyTypes' => ItemBodyType::where('status', 'active')->orderBy('name')->get(),
+            'editData' => $editData,
+            'itemCategories' => $itemCategories,
+            'itemBrands' => $itemBrands,
             'shops' => Shop::orderBy('name')->get(),
         ]);
     }

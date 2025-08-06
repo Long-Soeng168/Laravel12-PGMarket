@@ -2,16 +2,28 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbP
 import { Button } from '@/components/ui/button';
 import { GripIcon } from 'lucide-react';
 
-export function CategorySelectBreadcrumb({ selectedCategory, selectedSubCategory, setSelectedCategory, setSelectedSubCategory, setFinalSelect }) {
+export function CategorySelectBreadcrumb({
+    selectedCategory,
+    selectedSubCategory,
+    setSelectedCategory,
+    setSelectedSubCategory,
+    setFinalCategorySelect,
+}: {
+    selectedCategory: any;
+    selectedSubCategory: any;
+    setSelectedCategory: any;
+    setSelectedSubCategory: any;
+    setFinalCategorySelect: any;
+}) {
     const handleBackToRoot = () => {
         setSelectedCategory(null);
         setSelectedSubCategory(null);
-        setFinalSelect(null);
+        setFinalCategorySelect(null);
     };
 
     const handleBackToCategory = () => {
         setSelectedSubCategory(null);
-        setFinalSelect(selectedCategory);
+        setFinalCategorySelect(selectedCategory);
     };
 
     const handleBack = () => {

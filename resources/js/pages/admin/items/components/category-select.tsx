@@ -3,17 +3,53 @@ import { Dialog, DialogContent, DialogHeader, DialogTrigger } from '@/components
 import { Separator } from '@/components/ui/separator';
 import useTranslation from '@/hooks/use-translation';
 import { usePage } from '@inertiajs/react';
-import { useState } from 'react';
+import { LayoutGridIcon } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { CategorySelectBreadcrumb } from './category-select-breadcrumb';
 
-const CategorySelect = ({ finalSelect, setFinalSelect }) => {
-    const { itemCategories } = usePage().props;
+const CategorySelect = ({ finalCategorySelect, setFinalCategorySelect }: { finalCategorySelect: any; setFinalCategorySelect: any }) => {
+    const { itemCategories, editData } = usePage<any>().props;
     const { currentLocale } = useTranslation(); // Replace with actual i18n logic
 
     const [openDialog, setOpenDialog] = useState(false);
 
-    const [selectedCategory, setSelectedCategory] = useState(null);
-    const [selectedSubCategory, setSelectedSubCategory] = useState(null);
+    const [selectedCategory, setSelectedCategory] = useState<any>(null);
+    const [selectedSubCategory, setSelectedSubCategory] = useState<any>(null);
+
+    useEffect(() => {
+        if (!editData?.category || finalCategorySelect) return;
+
+        const findCategoryPath = (categories: any, targetCode: any, path: any = []): any => {
+            for (const cat of categories) {
+                const currentPath = [...path, cat];
+                if (cat.code === targetCode) return currentPath;
+                if (cat.children?.length) {
+                    const found = findCategoryPath(cat.children, targetCode, currentPath);
+                    if (found) return found;
+                }
+            }
+            return null;
+        };
+
+        const path = findCategoryPath(itemCategories, editData.category.code);
+
+        if (path) {
+            // Always the last one is the final selected category
+            const last = path[path.length - 1];
+            setFinalCategorySelect(last);
+
+            // Optional: set breadcrumb levels based on path length
+            if (path.length === 3) {
+                setSelectedCategory(path[0]);
+                setSelectedSubCategory(path[1]);
+            } else if (path.length === 2) {
+                setSelectedCategory(path[0]);
+                setSelectedSubCategory(path[1]);
+            } else if (path.length === 1) {
+                setSelectedCategory(path[0]);
+            }
+        }
+    }, [editData, itemCategories]);
 
     const getCategoriesToRender = () => {
         if (selectedSubCategory?.children?.length) return selectedSubCategory.children;
@@ -21,8 +57,8 @@ const CategorySelect = ({ finalSelect, setFinalSelect }) => {
         return itemCategories;
     };
 
-    const handleCategoryClick = (category) => {
-        setFinalSelect(category);
+    const handleCategoryClick = (category: any) => {
+        setFinalCategorySelect(category);
         if (!selectedCategory) {
             setSelectedCategory(category);
         } else if (!selectedSubCategory) {
@@ -34,12 +70,12 @@ const CategorySelect = ({ finalSelect, setFinalSelect }) => {
         }
     };
 
-    const renderCategoryCard = (item) => (
+    const renderCategoryCard = (item: any) => (
         <button
             key={item.id}
             type="button"
             onClick={() => handleCategoryClick(item)}
-            className={`${finalSelect?.code == item?.code && 'border-primary'} group bg-background hover:border-primary flex h-full flex-col items-center justify-center gap-2 rounded-xl border px-2 py-2 transition-all duration-300 hover:shadow-sm`}
+            className={`${finalCategorySelect?.code == item?.code && 'border-primary'} group bg-background hover:border-primary flex h-full flex-col items-center justify-center gap-2 rounded-xl border px-2 py-2 transition-all duration-300 hover:shadow-sm`}
         >
             {item.image && (
                 <img
@@ -59,18 +95,18 @@ const CategorySelect = ({ finalSelect, setFinalSelect }) => {
             <Dialog open={openDialog} onOpenChange={setOpenDialog}>
                 <DialogTrigger asChild>
                     <Button variant="outline" className="h-[37px] w-full">
-                        {finalSelect ? (
+                        {finalCategorySelect ? (
                             <div className="flex items-center gap-2">
                                 <>
-                                    {finalSelect?.image && (
+                                    {finalCategorySelect?.image && (
                                         <img
-                                            src={`/assets/images/item_categories/thumb/${finalSelect?.image}`}
-                                            alt={`Category ${finalSelect?.name}`}
+                                            src={`/assets/images/item_categories/thumb/${finalCategorySelect?.image}`}
+                                            alt={`Category ${finalCategorySelect?.name}`}
                                             className="size-7 object-contain transition-transform duration-300 group-hover:scale-115"
                                         />
                                     )}
-                                    <p className="text-muted-foreground group-hover:text-primary text-center text-sm font-bold dark:text-white">
-                                        {currentLocale === 'kh' ? finalSelect?.name_kh : finalSelect?.name}
+                                    <p className="text-primary group-hover:text-primary text-center text-sm font-bold">
+                                        {currentLocale === 'kh' ? finalCategorySelect?.name_kh : finalCategorySelect?.name}
                                     </p>
                                 </>
                             </div>
@@ -86,14 +122,32 @@ const CategorySelect = ({ finalSelect, setFinalSelect }) => {
                             selectedSubCategory={selectedSubCategory}
                             setSelectedCategory={setSelectedCategory}
                             setSelectedSubCategory={setSelectedSubCategory}
-                            setFinalSelect={setFinalSelect}
+                            setFinalCategorySelect={setFinalCategorySelect}
                         />
                         <Separator />
                         <p>
-                            Selected : <strong>{finalSelect?.name}</strong>
+                            Selected : <strong>{finalCategorySelect?.name}</strong>
                         </p>
                         <div className="grid w-full grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5">
                             {getCategoriesToRender().map(renderCategoryCard)}
+                            {selectedCategory && (
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        if (selectedSubCategory) {
+                                            setFinalCategorySelect(selectedSubCategory);
+                                        }else if (selectedCategory) {
+                                            setFinalCategorySelect(selectedCategory);
+                                        }
+                                        setOpenDialog(false);
+                                    }}
+                                    className={`'border-primary'} group bg-background hover:border-primary flex h-full flex-col items-center justify-center gap-2 rounded-xl border px-2 py-2 transition-all duration-300 hover:shadow-sm`}
+                                >
+                                    <p className="text-primary flex gap-2 items-center group-hover:text-primary text-center text-sm font-medium dark:text-white">
+                                          <LayoutGridIcon size={18} /> Other
+                                    </p>
+                                </button>
+                            )}
                         </div>
                     </DialogHeader>
                 </DialogContent>

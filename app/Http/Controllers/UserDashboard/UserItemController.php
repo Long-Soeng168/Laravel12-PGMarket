@@ -64,6 +64,7 @@ class UserItemController extends Controller implements HasMiddleware
 
         $tableData = $query->paginate(perPage: 10)->onEachSide(1);
 
+        // return $tableData;
         return Inertia::render('user-dashboard/items/Index', [
             'tableData' => $tableData,
         ]);
@@ -74,11 +75,22 @@ class UserItemController extends Controller implements HasMiddleware
      */
     public function create(Request $request)
     {
+        $itemCategories = ItemCategory::where('parent_code', null)->with('children.children')->where('status', 'active')->orderBy('name')->orderBy('name')->get();
+
+        $itemBrands = ItemBrand::with(['categories'])->where('status', 'active')->orderBy('name')->get();
+        $itemBrands = $itemBrands->map(function ($brand) {
+            return [
+                'id' => $brand->id,
+                'code' => $brand->code,
+                'image' => $brand->image,
+                'name' => $brand->name,
+                'name_kh' => $brand->name_kh,
+                'categories' => $brand->categories->pluck('code')->values(), // values() to reset keys
+            ];
+        });
         return Inertia::render('user-dashboard/items/Create', [
-            'itemCategories' => ItemCategory::where('status', 'active')->orderBy('name')->get(),
-            'itemBrands' => ItemBrand::where('status', 'active')->orderBy('name')->get(),
-            'itemModels' => ItemModel::where('status', 'active')->orderBy('name')->get(),
-            'itemBodyTypes' => ItemBodyType::where('status', 'active')->orderBy('name')->get(),
+            'itemCategories' => $itemCategories,
+            'itemBrands' => $itemBrands,
             'shops' => Shop::orderBy('name')->get(),
         ]);
     }
@@ -156,13 +168,25 @@ class UserItemController extends Controller implements HasMiddleware
         if ($user_item->shop_id != Auth::user()->shop_id) {
             abort(404);
         }
+        $editData = $user_item->load('images', 'category', 'brand');
+        $itemCategories = ItemCategory::where('parent_code', null)->with('children.children')->where('status', 'active')->orderBy('name')->orderBy('name')->get();
+
+        $itemBrands = ItemBrand::with(['categories'])->where('status', 'active')->orderBy('name')->get();
+        $itemBrands = $itemBrands->map(function ($brand) {
+            return [
+                'id' => $brand->id,
+                'code' => $brand->code,
+                'image' => $brand->image,
+                'name' => $brand->name,
+                'name_kh' => $brand->name_kh,
+                'categories' => $brand->categories->pluck('code')->values(), // values() to reset keys
+            ];
+        });
         return Inertia::render('user-dashboard/items/Create', [
-            'editData' => $user_item->load('images'),
+            'editData' => $editData,
             'readOnly' => true,
-            'itemCategories' => ItemCategory::where('status', 'active')->orderBy('name')->get(),
-            'itemBrands' => ItemBrand::where('status', 'active')->orderBy('name')->get(),
-            'itemModels' => ItemModel::where('status', 'active')->orderBy('name')->get(),
-            'itemBodyTypes' => ItemBodyType::where('status', 'active')->orderBy('name')->get(),
+            'itemCategories' => $itemCategories,
+            'itemBrands' => $itemBrands,
             'shops' => Shop::orderBy('name')->get(),
         ]);
     }
@@ -176,12 +200,26 @@ class UserItemController extends Controller implements HasMiddleware
         if ($user_item->shop_id != Auth::user()->shop_id) {
             abort(404);
         }
+
+        $editData = $user_item->load('images', 'category', 'brand');
+        $itemCategories = ItemCategory::where('parent_code', null)->with('children.children')->where('status', 'active')->orderBy('name')->orderBy('name')->get();
+
+        $itemBrands = ItemBrand::with(['categories'])->where('status', 'active')->orderBy('name')->get();
+        $itemBrands = $itemBrands->map(function ($brand) {
+            return [
+                'id' => $brand->id,
+                'code' => $brand->code,
+                'image' => $brand->image,
+                'name' => $brand->name,
+                'name_kh' => $brand->name_kh,
+                'categories' => $brand->categories->pluck('code')->values(), // values() to reset keys
+            ];
+        });
+
         return Inertia::render('user-dashboard/items/Create', [
-            'editData' => $user_item->load('images'),
-            'itemCategories' => ItemCategory::where('status', 'active')->orderBy('name')->get(),
-            'itemBrands' => ItemBrand::where('status', 'active')->orderBy('name')->get(),
-            'itemModels' => ItemModel::where('status', 'active')->orderBy('name')->get(),
-            'itemBodyTypes' => ItemBodyType::where('status', 'active')->orderBy('name')->get(),
+            'editData' => $editData,
+            'itemCategories' => $itemCategories,
+            'itemBrands' => $itemBrands,
             'shops' => Shop::orderBy('name')->get(),
         ]);
     }
