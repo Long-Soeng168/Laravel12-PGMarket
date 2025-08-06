@@ -7,34 +7,42 @@ import { useEffect, useState } from 'react';
 export function BottomMobileNav({ className }: { className?: any }) {
     const [activeTab, setActiveTab] = useState('');
     const [isMobile, setIsMobile] = useState(false);
+    const [pathname, setPathname] = useState('');
+    const [search, setSearch] = useState('');
 
     const items = [
         { name: 'Home', url: '/', icon: HomeIcon },
         { name: 'Products', url: '/products', icon: MonitorSmartphone },
         { name: 'Special Offer', url: '/products?specialOffer=1', icon: TagsIcon },
-        { name: 'Contact', url: '/contact', icon: PhoneCallIcon },
+        { name: 'Contact', url: '/contact-us', icon: PhoneCallIcon },
     ];
 
     useEffect(() => {
-        setActiveTab(window.location.pathname + window.location.search);
-        const handleResize = () => setIsMobile(window.innerWidth < 768);
-        handleResize();
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
+        if (typeof window !== 'undefined') {
+            setPathname(window.location.pathname);
+            setSearch(window.location.search);
+            setActiveTab(window.location.pathname + window.location.search);
+
+            const handleResize = () => setIsMobile(window.innerWidth < 768);
+            handleResize();
+            window.addEventListener('resize', handleResize);
+            return () => window.removeEventListener('resize', handleResize);
+        }
     }, []);
 
     const isCurrent = (item) => {
-        const currentPath = window.location.pathname;
-        const currentSearch = new URLSearchParams(window.location.search);
+        if (!pathname) return false;
+
+        const currentSearch = new URLSearchParams(search);
 
         if (item.url.startsWith('/products')) {
             if (item.name === 'Products') {
-                return currentPath === '/products' && !currentSearch.has('specialOffer');
+                return pathname === '/products' && !currentSearch.has('specialOffer');
             } else if (item.name === 'Special Offer') {
-                return currentPath === '/products' && currentSearch.get('specialOffer') === '1';
+                return pathname === '/products' && currentSearch.get('specialOffer') === '1';
             }
         }
-        return currentPath === item.url;
+        return pathname === item.url;
     };
 
     return (

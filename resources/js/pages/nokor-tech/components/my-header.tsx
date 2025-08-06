@@ -11,7 +11,6 @@ import useRole from '@/hooks/use-role';
 import useTranslation from '@/hooks/use-translation';
 import { Link, usePage } from '@inertiajs/react';
 import { LogInIcon, Menu, Search, UserPlusIcon } from 'lucide-react';
-import { useEffect, useState } from 'react';
 import CartButton from './cart-button';
 import { MySearchProducts } from './my-search-products';
 import SearchInput from './SearchInput';
@@ -34,14 +33,8 @@ const MyHeader = () => {
     const getInitials = useInitials();
 
     const renderNavLink = ({ label, href }) => {
-        const [isActive, setIsActive] = useState(false);
+        const isActive = typeof window !== 'undefined' ? window.location.pathname === href : false;
 
-        useEffect(() => {
-            if (typeof window !== 'undefined') {
-                setIsActive(window.location.pathname === href);
-            }
-        }, []);
-        
         return (
             <Link
                 prefetch
@@ -76,10 +69,10 @@ const MyHeader = () => {
                             </div>
                         </Link>
                     )}
-                    <div className="mx-10 hidden max-w-full flex-1 md:block lg:mx-20 lg:justify-self-center">
+                    <div className="mx-10 lg:mx-20 hidden max-w-full flex-1 md:block lg:justify-self-center">
                         <SearchInput onSearch={() => {}} />
                     </div>
-                    <div className="text-muted-foreground flex items-center gap-4 text-base font-semibold max-xl:pr-4">
+                    <div className="text-muted-foreground flex items-center gap-4 max-xl:pr-4 text-base font-semibold">
                         <a href="/login" className="hover:text-primary flex items-center gap-1 transition-colors">
                             <LogInIcon size={18} />
                             <span className="underline-offset-4 hover:underline">Login</span>
