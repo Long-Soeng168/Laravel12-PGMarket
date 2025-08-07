@@ -6,10 +6,11 @@ import MyMiddleSlide from './components/my-middle-slide';
 import MyProductList from './components/my-product-list';
 import MyProductListHeader from './components/my-product-list-header';
 import MySlide from './components/my-slide';
+import { SeeMoreProducts } from './components/see-more-products';
 import NokorTechLayout from './layouts/nokor-tech-layout';
 
 const Index = () => {
-    const { topBanners, middleBanners, posts, newArrivals, categoriesWithItems, item_categories } = usePage<any>().props;
+    const { topBanners, middleBanners, posts, newArrivalsProducts, products, item_categories } = usePage<any>().props;
     return (
         <NokorTechLayout>
             <Head>
@@ -29,10 +30,10 @@ const Index = () => {
                         {/* end slide */}
                         <div className="mt-10 mb-4 space-y-4">{item_categories?.length > 0 && <MyCategoryList items={item_categories} />}</div>
 
-                        {newArrivals?.length > 0 ? (
+                        {products?.length > 0 ? (
                             <>
-                                <MyProductListHeader title="New Arrivals" link="/products" />
-                                <MyProductList items={newArrivals} />
+                                <MyProductListHeader title="Products" link="/products" />
+                                <MyProductList items={products} />
                             </>
                         ) : (
                             <MyNoData />
@@ -40,7 +41,20 @@ const Index = () => {
 
                         {middleBanners?.length > 0 && <MyMiddleSlide slides={middleBanners} path="/assets/images/banners/thumb/" />}
 
-                        {categoriesWithItems
+                        {newArrivalsProducts?.length > 0 ? (
+                            <>
+                                <MyProductListHeader title="Latest Products" link="/products" />
+                                <MyProductList items={newArrivalsProducts} />
+                            </>
+                        ) : (
+                            <MyNoData />
+                        )}
+
+                        <div className='flex justify-center my-10'>
+                            <SeeMoreProducts />
+                        </div>
+
+                        {/* {categoriesWithItems
                             .filter((category: any) => category.all_items.length > 0)
                             .map((category: any) => (
                                 <div key={category.id}>
@@ -51,7 +65,7 @@ const Index = () => {
                                     />
                                     <MyProductList items={category.all_items} />
                                 </div>
-                            ))}
+                            ))} */}
 
                         {posts?.length > 0 && (
                             <>
@@ -59,6 +73,8 @@ const Index = () => {
                                 <MyBlogList posts={posts} />
                             </>
                         )}
+
+                        <div className='h-20'></div>
                     </div>
                     {/* <MyService /> */}
                 </>

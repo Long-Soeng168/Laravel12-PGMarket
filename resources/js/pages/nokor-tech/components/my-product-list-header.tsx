@@ -1,22 +1,29 @@
 import { Link } from '@inertiajs/react';
 import { ChevronRight } from 'lucide-react';
 
-const MyProductListHeader = ({ title, image, link = '#' }: { title: string; image?: string; link?: string }) => {
+const MyProductListHeader = ({
+    title,
+    image,
+    link = '#',
+}: {
+    title: string;
+    image?: string;
+    link?: string;
+}) => {
     return (
-        <div className="border-primary mx-2 mb-2 flex items-center justify-between border-b pt-6">
-            <div className="bg-primary flex items-center gap-2 rounded-md rounded-bl-none p-1">
+        <div className="mx-2 mb-4 flex items-center justify-between border-b border-muted pb-2">
+            <div className="flex items-center gap-3">
                 {image && (
-                    <span className="rounded-sm rounded-bl-none bg-white p-1">
-                        <img className="size-8 object-contain" src={image} alt="" />
-                    </span>
+                    <div className="flex h-10 w-10 items-center justify-center rounded bg-muted">
+                        <img src={image} alt={title} className="h-6 w-6 object-contain" />
+                    </div>
                 )}
-
-                <p className="text-primary-foreground px-2 text-lg font-bold">{title}</p>
+                <h2 className="text-xl font-semibold text-foreground">{title}</h2>
             </div>
-            <Link href={link}>
-                <p className="text-md text-primary flex items-center gap-2 underline-offset-2 transition-all duration-300 hover:translate-x-2 hover:underline">
-                    See More <ChevronRight size={24} />
-                </p>
+
+            <Link href={link} className="group flex items-center gap-1 text-sm text-muted-foreground hover:text-primary transition-all">
+                See More
+                <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
         </div>
     );

@@ -28,48 +28,54 @@ class NokorTechController extends Controller
         $posts = Post::where('status', 'active')->with('images', 'category')->orderBy('id', 'desc')->limit(3)->get();
 
 
-        $newArrivals = Item::with('images', 'shop')->where('status', 'active')->orderBy('id', 'desc')->take(12)->get();
-
-
-        $categoriesWithItems = ItemCategory::with([
-            'items' => function ($query) {
-                $query->with('images', 'shop')
-                    ->where('items.status', 'active') // Specify 'items' table for status
-                    ->orderBy('id', 'desc')
-                    ->take(12); // Limit to 12 items
-            },
-            'children_items' => function ($query) {
-                $query->with('images',  'shop')
-                    ->where('items.status', 'active') // Specify 'items' table for status
-                    ->orderBy('id', 'desc')
-                    ->take(12); // Limit to 12 child items
-            }
-        ])
-            ->orderBy('order_index')->orderBy('name')
-            ->where('item_categories.status', 'active') // Specify 'item_categories' table for status
-            ->whereNull('parent_code') // Only main categories (no parent)
+        $products = Item::with('images', 'shop')
+            ->where('status', 'active')
+            ->inRandomOrder()
+            ->take(12)
             ->get();
+        $newArrivalsProducts = Item::with('images', 'shop')->where('status', 'active')->orderBy('id', 'desc')->take(12)->get();
 
-        // Merge 'items' and 'children_items'
-        $categoriesWithItems->each(function ($category) {
-            // Merge and flatten the collections, then reset the keys
-            $category->all_items = $category->items->merge($category->children_items)
-                ->sortByDesc('id') // Sort by item ID
-                ->take(12) // Limit to 12 items
-                ->values(); // Reset the keys to be sequential
 
-            // Optionally, remove the individual 'children_items' and 'items' keys
-            unset($category->children_items);
-            unset($category->items);
-        });
+        // $categoriesWithItems = ItemCategory::with([
+        //     'items' => function ($query) {
+        //         $query->with('images', 'shop')
+        //             ->where('items.status', 'active') // Specify 'items' table for status
+        //             ->orderBy('id', 'desc')
+        //             ->take(12); // Limit to 12 items
+        //     },
+        //     'children_items' => function ($query) {
+        //         $query->with('images',  'shop')
+        //             ->where('items.status', 'active') // Specify 'items' table for status
+        //             ->orderBy('id', 'desc')
+        //             ->take(12); // Limit to 12 child items
+        //     }
+        // ])
+        //     ->orderBy('order_index')->orderBy('name')
+        //     ->where('item_categories.status', 'active') // Specify 'item_categories' table for status
+        //     ->whereNull('parent_code') // Only main categories (no parent)
+        //     ->get();
+
+        // // Merge 'items' and 'children_items'
+        // $categoriesWithItems->each(function ($category) {
+        //     // Merge and flatten the collections, then reset the keys
+        //     $category->all_items = $category->items->merge($category->children_items)
+        //         ->sortByDesc('id') // Sort by item ID
+        //         ->take(12) // Limit to 12 items
+        //         ->values(); // Reset the keys to be sequential
+
+        //     // Optionally, remove the individual 'children_items' and 'items' keys
+        //     unset($category->children_items);
+        //     unset($category->items);
+        // });
 
         // return $brandsWithItems;
         return Inertia::render("nokor-tech/Index", [
             'topBanners' => $topBanners,
             'middleBanners' => $middleBanners,
             'posts' => $posts,
-            'newArrivals' => $newArrivals,
-            'categoriesWithItems' => $categoriesWithItems,
+            'newArrivalsProducts' => $newArrivalsProducts,
+            'products' => $products,
+            // 'categoriesWithItems' => $categoriesWithItems,
         ]);
     }
     public function shops(Request $request)
@@ -78,6 +84,7 @@ class NokorTechController extends Controller
         $perPage = $request->input('perPage', 24);
         $sortBy = $request->input('sortBy', 'order_index');
         $sortDirection = $request->input('sortDirection', 'desc');
+        $categoryCode = $request->input('category_code');
 
         $query = Shop::query();
         $query->with('created_by', 'updated_by');
@@ -88,6 +95,9 @@ class NokorTechController extends Controller
                     ->orWhere('phone', 'LIKE', "%{$search}%")
                     ->orWhere('address', 'LIKE', "%{$search}%");
             });
+        }
+        if ($categoryCode) {
+            $query->where('category_code', $categoryCode);
         }
 
         $query->orderBy($sortBy, $sortDirection);
@@ -159,7 +169,7 @@ class NokorTechController extends Controller
     {
         $search = $request->input('search', '');
         $brand_code = $request->input('brand_code', '');
-        $perPage = $request->input('perPage', 5);
+        $perPage = $request->input('perPage', 25);
         $sortBy = $request->input('sortBy', 'id');
         $sortDirection = $request->input('sortDirection', 'desc');
         $category_code = $request->input('category_code', '');

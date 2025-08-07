@@ -1,17 +1,16 @@
-import { UserIconAnimated } from '@/components/animated-icons/User';
 import { BottomMobileNav } from '@/components/BottomMobileNav';
 import MySelectLanguageSwitch from '@/components/my-select-language-switch';
 import ToggleModeSwitch from '@/components/toggle-mode-switch';
 import { TopDesktopNav } from '@/components/TopDesktopNav';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { useInitials } from '@/hooks/use-initials';
-import useRole from '@/hooks/use-role';
 import useTranslation from '@/hooks/use-translation';
+import { cn } from '@/lib/utils';
 import { Link, usePage } from '@inertiajs/react';
 import { LogInIcon, Menu, Search, UserPlusIcon } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 import CartButton from './cart-button';
+import { HomeUserButton } from './home-user-button';
 import { MySearchProducts } from './my-search-products';
 import SearchInput from './SearchInput';
 
@@ -29,8 +28,6 @@ const MyHeader = () => {
         // { label: t('Contact'), href: '/contact-us' },
     ];
     const { auth } = usePage().props;
-    const hasRole = useRole();
-    const getInitials = useInitials();
 
     const renderNavLink = ({ label, href }) => {
         const isActive = typeof window !== 'undefined' ? window.location.pathname === href : false;
@@ -48,6 +45,26 @@ const MyHeader = () => {
             </Link>
         );
     };
+
+    const stickyRef = useRef(null);
+    const [isStuck, setIsStuck] = useState(false);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                setIsStuck(!entry.isIntersecting);
+            },
+            {
+                threshold: 1.0,
+            },
+        );
+
+        if (stickyRef.current) observer.observe(stickyRef.current);
+
+        return () => {
+            if (stickyRef.current) observer.unobserve(stickyRef.current);
+        };
+    }, []);
 
     return (
         <>
@@ -69,19 +86,44 @@ const MyHeader = () => {
                             </div>
                         </Link>
                     )}
-                    <div className="mx-10 lg:mx-20 hidden max-w-full flex-1 md:block lg:justify-self-center">
-                        <SearchInput onSearch={() => {}} />
-                    </div>
-                    <div className="text-muted-foreground flex items-center gap-4 max-xl:pr-4 text-base font-semibold">
-                        <a href="/login" className="hover:text-primary flex items-center gap-1 transition-colors">
-                            <LogInIcon size={18} />
-                            <span className="underline-offset-4 hover:underline">Login</span>
-                        </a>
-                        <span className="text-border">|</span>
-                        <a href="/register" className="hover:text-primary flex items-center gap-1 transition-colors">
-                            <UserPlusIcon size={18} />
-                            <span className="underline-offset-4 hover:underline">Register</span>
-                        </a>
+                    <div className="flex max-w-full flex-1 items-center justify-end lg:justify-self-center">
+                        <div className="mx-10 hidden flex-1 md:block lg:mx-20">
+                            <SearchInput onSearch={() => {}} />
+                        </div>
+                        <div className="mx-2 text-purple-600 md:hidden">
+                            <Sheet>
+                                <SheetTrigger asChild>
+                                    <button
+                                        className={`mr-1 ml-3 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-white shadow-md transition-all duration-300 hover:scale-115`}
+                                    >
+                                        <Search className="size-6" />
+                                    </button>
+                                </SheetTrigger>
+                                <SheetContent side="top" className="w-full p-6 shadow-md">
+                                    <SheetHeader>
+                                        <SheetTitle>Search Products</SheetTitle>
+                                    </SheetHeader>
+                                    <MySearchProducts className="border-primary mx-auto max-w-full" />
+                                </SheetContent>
+                            </Sheet>
+                        </div>
+                        {auth?.user ? (
+                            <div className="max-md:hidden">
+                                <HomeUserButton />
+                            </div>
+                        ) : (
+                            <div className="text-muted-foreground flex items-center gap-4 text-base font-semibold max-xl:pr-4">
+                                <a href="/login" className="hover:text-primary flex items-center gap-1 transition-colors">
+                                    <LogInIcon size={18} />
+                                    <span className="underline-offset-4 hover:underline">Login</span>
+                                </a>
+                                <span className="text-border">|</span>
+                                <a href="/register" className="hover:text-primary flex items-center gap-1 transition-colors">
+                                    <UserPlusIcon size={18} />
+                                    <span className="underline-offset-4 hover:underline">Register</span>
+                                </a>
+                            </div>
+                        )}
                     </div>
 
                     {/* <div className="flex items-center gap-4 px-4 font-semibold">
@@ -94,8 +136,9 @@ const MyHeader = () => {
             </nav>
 
             {/* Main Header */}
+            <div ref={stickyRef} className="h-1" />
             <div className="bg-background sticky top-0 z-50 border-b border-white shadow-sm backdrop-blur-md">
-                <div className="mx-auto flex max-w-screen-xl items-center justify-between py-2 lg:py-4">
+                <div className="mx-auto flex max-w-screen-xl items-center justify-between py-3 lg:py-4">
                     {/* Mobile Menu */}
                     <div className="flex items-center">
                         <Sheet>
@@ -110,6 +153,11 @@ const MyHeader = () => {
                                     <hr />
                                     {navItems2.map(renderNavLink)}
                                 </ul>
+                                <Separator className="mt-8" />
+                                <div className="flex gap-4 min-md:hidden">
+                                    <MySelectLanguageSwitch />
+                                    <ToggleModeSwitch />
+                                </div>
                             </SheetContent>
                         </Sheet>
                     </div>
@@ -120,24 +168,32 @@ const MyHeader = () => {
                     </div>
 
                     {/* Actions */}
-                    <div className="flex shrink-0 items-center gap-4 px-4">
-                        <Sheet>
-                            <SheetTrigger asChild>
-                                <Button size="icon" variant="ghost" className="text-primary">
-                                    <Search className="size-6" />
-                                </Button>
-                            </SheetTrigger>
-                            <SheetContent side="top" className="w-full p-6 shadow-md">
-                                <SheetHeader>
-                                    <SheetTitle>Search Products</SheetTitle>
-                                </SheetHeader>
-                                <MySearchProducts className="border-primary mx-auto max-w-full" />
-                            </SheetContent>
-                        </Sheet>
+                    <div className="flex shrink-0 items-center gap-4">
+                        <div className={cn(!isStuck && 'hidden', 'text-purple-600')}>
+                            <Sheet>
+                                <SheetTrigger asChild>
+                                    <button
+                                        className={`mr-1 ml-3 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-white shadow-md transition-all duration-300 hover:scale-115`}
+                                    >
+                                        <Search className="size-6" />
+                                    </button>
+                                </SheetTrigger>
+                                <SheetContent side="top" className="w-full p-6 shadow-md">
+                                    <SheetHeader>
+                                        <SheetTitle>Search Products</SheetTitle>
+                                    </SheetHeader>
+                                    <MySearchProducts className="border-primary mx-auto max-w-full" />
+                                </SheetContent>
+                            </Sheet>
+                        </div>
+
                         <Link prefetch href="/shopping-cart">
                             <CartButton />
                         </Link>
-                        {auth?.user ? (
+                        <div className="min-md:hidden">
+                            <HomeUserButton />
+                        </div>
+                        {/* {auth?.user ? (
                             <Link prefetch href={hasRole('User') || hasRole('Garage') || hasRole('Shop') ? '/user-dashboard' : '/dashboard'}>
                                 <Avatar className="h-8 w-8 overflow-hidden rounded-full">
                                     <AvatarImage src={`/assets/images/users/thumb/${auth?.user?.image}`} alt={auth?.user?.name} />
@@ -150,13 +206,14 @@ const MyHeader = () => {
                         ) : (
                             <Link prefetch href="/login">
                                 <Button size="icon" variant="outline" className="text-primary">
-                                    {/* <User2Icon /> */}
                                     <UserIconAnimated stroke="#0471c1" />
                                 </Button>
                             </Link>
-                        )}
-                        <MySelectLanguageSwitch />
-                        <ToggleModeSwitch />
+                        )} */}
+                        <div className="max-md:hidden flex gap-4 mr-2">
+                            <MySelectLanguageSwitch />
+                            <ToggleModeSwitch />
+                        </div>
                     </div>
                 </div>
             </div>
