@@ -18,7 +18,7 @@ const ProductDetailPage = () => {
                     <div className="flex flex-col md:flex-row">
                         {/* Product Image */}
                         {itemShow?.images?.length > 0 && (
-                            <div className="flex flex-col items-center p-4 md:w-[40%]">
+                            <div className="flex flex-col items-center py-4 px-4 md:w-[40%]">
                                 <CarouselWithThumbs images={itemShow?.images || []} />
                             </div>
                         )}
@@ -103,7 +103,7 @@ const ProductDetailPage = () => {
                     )} */}
 
                     {relatedItems?.length > 0 && (
-                        <div>
+                        <div className='my-20'>
                             <MyProductListHeader title="Related" link={`/products?category_code=${itemShow?.category_code}`} />
                             <MyProductList items={relatedItems} />
                         </div>

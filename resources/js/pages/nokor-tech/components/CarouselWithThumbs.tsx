@@ -38,8 +38,8 @@ export default function CarouselWithThumbs({ images }: { images: any }) {
                 <CarouselContent>
                     {images?.map((item, index) => (
                         <CarouselItem key={index}>
-                            <Card className="p-0 overflow-hidden">
-                                <CardContent className="flex aspect-square overflow-hidden items-center justify-center p-0">
+                            <Card className="overflow-hidden p-0">
+                                <CardContent className="flex aspect-square items-center justify-center overflow-hidden p-0">
                                     <img
                                         onClick={() => {
                                             setCurrentIndex(index);
@@ -63,16 +63,20 @@ export default function CarouselWithThumbs({ images }: { images: any }) {
                             className={cn('basis-1/5 cursor-pointer', current === index + 1 ? 'opacity-100' : 'opacity-50')}
                             onClick={() => handleThumbClick(index)}
                         >
-                            <Card className="p-0 overflow-hidden">
-                                <CardContent className="flex aspect-square overflow-hidden items-center justify-center p-0">
+                            <Card className="overflow-hidden p-0">
+                                <CardContent className="flex aspect-square items-center justify-center overflow-hidden p-0">
                                     <img src={`/assets/images/items/thumb/${item?.image}`} className="h-full w-full object-contain" alt="" />
                                 </CardContent>
                             </Card>
                         </CarouselItem>
                     ))}
                 </CarouselContent>
-                <CarouselPrevious className="absolute top-1/2 -left-4 z-10 -translate-y-1/2 transform" />
-                <CarouselNext className="absolute top-1/2 -right-4 z-10 -translate-y-1/2 transform" />
+                {images?.length > 5 && (
+                    <>
+                        <CarouselPrevious className="absolute top-1/2 -left-4 z-10 -translate-y-1/2 transform" />
+                        <CarouselNext className="absolute top-1/2 -right-4 z-10 -translate-y-1/2 transform" />
+                    </>
+                )}
             </Carousel>
 
             <Lightbox open={open} close={() => setOpen(false)} slides={slides} index={currentIndex} plugins={[Thumbnails, Zoom]} />

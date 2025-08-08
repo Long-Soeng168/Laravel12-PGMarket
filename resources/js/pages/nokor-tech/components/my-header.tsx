@@ -7,7 +7,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/co
 import useTranslation from '@/hooks/use-translation';
 import { cn } from '@/lib/utils';
 import { Link, usePage } from '@inertiajs/react';
-import { LogInIcon, Menu, Search, UserPlusIcon } from 'lucide-react';
+import { Menu, Search } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import CartButton from './cart-button';
 import { HomeUserButton } from './home-user-button';
@@ -107,23 +107,9 @@ const MyHeader = () => {
                                 </SheetContent>
                             </Sheet>
                         </div>
-                        {auth?.user ? (
-                            <div className="max-md:hidden">
-                                <HomeUserButton />
-                            </div>
-                        ) : (
-                            <div className="text-muted-foreground flex items-center gap-4 text-base font-semibold max-xl:pr-4">
-                                <a href="/login" className="hover:text-primary flex items-center gap-1 transition-colors">
-                                    <LogInIcon size={18} />
-                                    <span className="underline-offset-4 hover:underline">Login</span>
-                                </a>
-                                <span className="text-border">|</span>
-                                <a href="/register" className="hover:text-primary flex items-center gap-1 transition-colors">
-                                    <UserPlusIcon size={18} />
-                                    <span className="underline-offset-4 hover:underline">Register</span>
-                                </a>
-                            </div>
-                        )}
+                        <div className="max-md:hidden">
+                            <HomeUserButton />
+                        </div>
                     </div>
 
                     {/* <div className="flex items-center gap-4 px-4 font-semibold">
@@ -193,24 +179,7 @@ const MyHeader = () => {
                         <div className="min-md:hidden">
                             <HomeUserButton />
                         </div>
-                        {/* {auth?.user ? (
-                            <Link prefetch href={hasRole('User') || hasRole('Garage') || hasRole('Shop') ? '/user-dashboard' : '/dashboard'}>
-                                <Avatar className="h-8 w-8 overflow-hidden rounded-full">
-                                    <AvatarImage src={`/assets/images/users/thumb/${auth?.user?.image}`} alt={auth?.user?.name} />
-
-                                    <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
-                                        {getInitials(auth?.user?.name)}
-                                    </AvatarFallback>
-                                </Avatar>
-                            </Link>
-                        ) : (
-                            <Link prefetch href="/login">
-                                <Button size="icon" variant="outline" className="text-primary">
-                                    <UserIconAnimated stroke="#0471c1" />
-                                </Button>
-                            </Link>
-                        )} */}
-                        <div className="max-md:hidden flex gap-4 mr-2">
+                        <div className="mr-2 flex gap-4 max-md:hidden">
                             <MySelectLanguageSwitch />
                             <ToggleModeSwitch />
                         </div>
