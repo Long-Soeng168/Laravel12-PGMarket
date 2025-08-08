@@ -131,7 +131,7 @@ class BannerController extends Controller implements HasMiddleware
         if ($image_files && $validated['type'] == 'multi_images') {
             try {
                 foreach ($image_files as $image) {
-                    $created_image_name = ImageHelper::uploadAndResizeImageWebp($image, 'assets/images/banners', 900);
+                    $created_image_name = ImageHelper::uploadAndResizeImageWebp($image, 'assets/images/banners', 1400);
                     BannerImage::create([
                         'image' => $created_image_name,
                         'banner_id' => $created_banner->id,
@@ -143,7 +143,7 @@ class BannerController extends Controller implements HasMiddleware
         } // For single image
         elseif ($image_files && !empty($image_files)) {
             try {
-                $created_image_name = ImageHelper::uploadAndResizeImageWebp($image_files[0], 'assets/images/banners', 900);
+                $created_image_name = ImageHelper::uploadAndResizeImageWebp($image_files[0], 'assets/images/banners', 1400);
                 $created_banner->update([
                     'image' => $created_image_name,
                 ]);
@@ -248,7 +248,7 @@ class BannerController extends Controller implements HasMiddleware
         if ($image_files && $validated['type'] == 'multi_images') {
             try {
                 foreach ($image_files as $image) {
-                    $created_image_name = ImageHelper::uploadAndResizeImageWebp($image, 'assets/images/banners', 900);
+                    $created_image_name = ImageHelper::uploadAndResizeImageWebp($image, 'assets/images/banners', 1400);
                     BannerImage::create([
                         'image' => $created_image_name,
                         'banner_id' => $banner->id,
@@ -260,7 +260,7 @@ class BannerController extends Controller implements HasMiddleware
         } // For single image
         elseif ($image_files && !empty($image_files)) {
             try {
-                $created_image_name = ImageHelper::uploadAndResizeImageWebp($image_files[0], 'assets/images/banners', 900);
+                $created_image_name = ImageHelper::uploadAndResizeImageWebp($image_files[0], 'assets/images/banners', 1400);
                 if ($created_image_name && $banner->image) {
                     ImageHelper::deleteImage($banner->image, 'assets/images/banners');
                 }

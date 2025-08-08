@@ -50,7 +50,7 @@ const Index = () => {
                             <MyNoData />
                         )}
 
-                        <div className='flex justify-center my-10'>
+                        <div className="my-10 flex justify-center">
                             <SeeMoreProducts />
                         </div>
 
@@ -74,7 +74,7 @@ const Index = () => {
                             </>
                         )}
 
-                        <div className='h-20'></div>
+                        <div className="h-20"></div>
                     </div>
                     {/* <MyService /> */}
                 </>

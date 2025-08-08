@@ -387,17 +387,17 @@ html {
 }
 
 .rainbow-button {
-    border: calc(0.04 * var(--m)) solid transparent;
+    /* border: calc(0.04 * var(--m)) solid transparent; */
     position: relative;
     color: var(--primary);
-    border-radius: calc(0.2 * var(--m));
+    /* border-radius: calc(0.2 * var(--m)); */
     /* padding: calc(0.1 * var(--m)) calc(1 * var(--m)); */
     display: flex;
     justify-content: center;
     cursor: pointer;
 
     background:
-        linear-gradient(#fffffff9),
+        /* linear-gradient(#fffffff3), */
         linear-gradient(90deg, var(--orange), var(--yellow), var(--green), var(--blue), var(--purple), var(--pink), var(--red));
     background-origin: border-box;
     background-clip: padding-box, border-box, border-box;
