@@ -55,9 +55,8 @@ const MySlide: React.FC<MySlideProps> = ({ slides, path = '' }) => {
 
             {/* Navigation Arrows */}
             <div className="flex justify-between items-center gap-2 p-2">
-                <div></div>
                 <div>
-                    <div className="flex transform items-center gap-2">
+                    <div className="flex transform items-center gap-2 px-2">
                         {Array.from({ length: count }).map((_, index) => (
                             <button
                                 key={index}
