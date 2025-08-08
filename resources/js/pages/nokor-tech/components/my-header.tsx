@@ -4,10 +4,11 @@ import ToggleModeSwitch from '@/components/toggle-mode-switch';
 import { TopDesktopNav } from '@/components/TopDesktopNav';
 import { Separator } from '@/components/ui/separator';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import useRole from '@/hooks/use-role';
 import useTranslation from '@/hooks/use-translation';
 import { cn } from '@/lib/utils';
 import { Link, usePage } from '@inertiajs/react';
-import { Menu, Search } from 'lucide-react';
+import { LayoutIcon, Menu, Settings, StoreIcon } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import CartButton from './cart-button';
 import { HomeUserButton } from './home-user-button';
@@ -15,7 +16,7 @@ import { MySearchProducts } from './my-search-products';
 import MySearchProductsDialog from './my-search-products-dialog';
 
 const MyHeader = () => {
-    const { application_info } = usePage().props;
+    const { application_info, auth } = usePage().props;
 
     const { t, currentLocale } = useTranslation();
 
@@ -27,17 +28,14 @@ const MyHeader = () => {
         // { label: t('About'), href: '/about-us' },
         // { label: t('Contact'), href: '/contact-us' },
     ];
-    const { auth } = usePage().props;
+
+    const hasRole = useRole();
 
     const renderNavLink = ({ label, href }) => {
         const isActive = typeof window !== 'undefined' ? window.location.pathname === href : false;
 
         return (
-            <Link
-                prefetch
-                href={href}
-                className={`group relative mx-2 cursor-pointer ${isActive ? 'text-primary font-bold' : ''} hover:text-primary`}
-            >
+            <Link prefetch href={href} className={`group relative cursor-pointer ${isActive ? 'text-primary font-bold' : ''} hover:text-primary`}>
                 {label}
                 <span
                     className={`bg-primary absolute -bottom-1 left-0 h-0.5 w-0 transition-all group-hover:w-full ${isActive ? 'w-full' : ''}`}
@@ -90,8 +88,8 @@ const MyHeader = () => {
                         <div className="mx-10 hidden flex-1 md:block lg:mx-20">
                             <MySearchProducts />
                         </div>
-                        <div className="mx-2 text-primary md:hidden">
-                           <MySearchProductsDialog />
+                        <div className="text-primary mx-2 md:hidden">
+                            <MySearchProductsDialog />
                         </div>
                         <div className="max-md:hidden">
                             <HomeUserButton />
@@ -117,16 +115,59 @@ const MyHeader = () => {
                             <SheetTrigger>
                                 <Menu className="text-primary mx-4 size-8 lg:hidden" />
                             </SheetTrigger>
-                            <SheetContent side="left" className="w-64 bg-gray-100 p-6 shadow-md">
+                            <SheetContent side="left" className="bg-background w-64 shadow-md">
                                 <SheetHeader>
-                                    <SheetTitle className="text-2xl font-bold text-gray-700">{t('Menu')}</SheetTitle>
+                                    <SheetTitle className="text-2xl font-bold">{t('Menu')}</SheetTitle>
                                 </SheetHeader>
-                                <ul className="flex flex-col gap-6 font-semibold text-gray-600">
+                                <div className="flex flex-col gap-6 px-4 font-semibold">
                                     <hr />
                                     {navItems2.map(renderNavLink)}
-                                </ul>
-                                <Separator className="mt-8" />
-                                <div className="flex gap-4 min-md:hidden">
+                                </div>
+                                {auth?.user && (
+                                    <>
+                                        <Separator className="my-4" />
+                                        <div className="flex flex-col gap-6 px-4 font-semibold">
+                                            <Link
+                                                prefetch
+                                                href={`/settings/profile`}
+                                                className={`group hover:text-primary relative flex w-full cursor-pointer items-center`}
+                                            >
+                                                <Settings className="mr-2" />
+                                                Settings
+                                                <span
+                                                    className={`bg-primary absolute -bottom-1 left-0 h-0.5 w-0 transition-all group-hover:w-full`}
+                                                ></span>
+                                            </Link>
+                                            {hasRole('Admin') && (
+                                                <Link
+                                                    prefetch
+                                                    href={`/dashboard`}
+                                                    className={`group hover:text-primary relative flex w-full cursor-pointer items-center`}
+                                                >
+                                                    <LayoutIcon className="mr-2" />
+                                                    Dashboard
+                                                    <span
+                                                        className={`bg-primary absolute -bottom-1 left-0 h-0.5 w-0 transition-all group-hover:w-full`}
+                                                    ></span>
+                                                </Link>
+                                            )}
+                                            {hasRole('Shop') && (
+                                                <Link
+                                                    prefetch
+                                                    href={`/user-dashboard`}
+                                                    className={`group hover:text-primary relative flex w-full cursor-pointer items-center`}
+                                                >
+                                                    <StoreIcon className="mr-2" /> Shop Dashboard
+                                                    <span
+                                                        className={`bg-primary absolute -bottom-1 left-0 h-0.5 w-0 transition-all group-hover:w-full`}
+                                                    ></span>
+                                                </Link>
+                                            )}
+                                        </div>
+                                    </>
+                                )}
+                                <Separator className="my-4" />
+                                <div className="flex gap-4 px-4 min-md:hidden">
                                     <MySelectLanguageSwitch />
                                     <ToggleModeSwitch />
                                 </div>
