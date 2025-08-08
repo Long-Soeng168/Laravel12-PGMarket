@@ -10,6 +10,7 @@ import NokorTechLayout from '../layouts/nokor-tech-layout';
 import BrandList from './components/BrandList';
 import { BreadcrumbComponent } from './components/BreadcrumbComponent';
 import SubCategoryList from './components/SubCategoryList';
+import { MyRefreshButton } from '@/components/my-refresh-button';
 
 const Index = () => {
     const { tableData, selected_category, item_categories, sub_categories, category_brands, page, next_page_url } = usePage().props;
@@ -51,6 +52,7 @@ const Index = () => {
                                 )}
                             </h1>
                             <div className="flex flex-wrap items-center gap-2 md:ml-4">
+                                {/* <MyRefreshButton /> */}
                                 <SortBy />
                             </div>
                         </div>
