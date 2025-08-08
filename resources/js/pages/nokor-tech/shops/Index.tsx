@@ -4,6 +4,7 @@ import { MyRefreshButton } from '@/components/my-refresh-button';
 import { MySearchTableData } from '@/components/my-search-table-data';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import ShopCategories from '@/pages/admin/shops/components/shop-categories';
 import { usePage } from '@inertiajs/react';
 import { FilterIcon } from 'lucide-react';
 import MyShopCard from '../components/ui/my-shop-card';
@@ -16,10 +17,13 @@ const Index = () => {
         <NokorTechLayout>
             <div className="mx-auto mb-8 max-w-screen-xl">
                 <div className="my-4 flex flex-wrap items-center justify-end gap-4 px-4">
-                    <div className="w-full md:flex-1">
-                        <MySearchTableData className="max-w-full" />
+                    <div className="flex w-full items-center gap-2 md:flex-1">
+                        <div className='p-1 border rounded-[12px]'>
+                            <ShopCategories />
+                        </div>
+                        <MySearchTableData placholder="Search Shops" className="max-w-full" />
                     </div>
-                    <div className="flex flex-wrap items-center gap-2 md:ml-4">
+                    <div className="flex flex-wrap items-center gap-2 md:ml-20">
                         <MyRefreshButton />
                         <SortBy />
                         <div className="lg:hidden">

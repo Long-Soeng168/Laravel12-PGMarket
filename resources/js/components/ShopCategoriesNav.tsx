@@ -5,7 +5,8 @@ import { Grip } from 'lucide-react';
 
 export function ShopCategoriesNav() {
     const { t, currentLocale } = useTranslation();
-    const { item_categories } = usePage().props;
+    const { item_categories, url } = usePage().props;
+
     return (
         <ScrollArea className="m-0.5 mr-0 h-[500px] w-[210px] space-y-2 pr-4">
             <Link

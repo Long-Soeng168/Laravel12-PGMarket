@@ -31,7 +31,7 @@ const SortBy = () => {
         <div className="flex items-center gap-2">
             <Select>
                 <div className="rounded-xl border p-1">
-                    <SelectTrigger className="h-10 w-36 rounded-md">
+                    <SelectTrigger className="h-10 w-auto rounded-md">
                         {queryParams?.get('sortBy') ? (
                             <p className="capitalize">{queryParams?.get('sortBy')}</p>
                         ) : (
@@ -53,7 +53,7 @@ const SortBy = () => {
             </Select>
             <Select>
                 <div className="rounded-xl border p-1">
-                    <SelectTrigger className="h-10 w-36 rounded-md">
+                    <SelectTrigger className="h-10 w-auto rounded-md">
                         {queryParams?.get('perPage') ? (
                             <p className="capitalize">{queryParams?.get('perPage')} per page</p>
                         ) : (

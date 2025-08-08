@@ -36,7 +36,7 @@ export function HomeUserButton() {
                     </DropdownMenuContent>
                 </DropdownMenu>
             ) : (
-                <div className="text-muted-foreground flex items-center gap-4 text-base font-semibold max-xl:pr-4">
+                <div className="text-muted-foreground flex items-center gap-4 text-base font-semibold px-2">
                     <a href="/login" className="hover:text-primary flex items-center gap-1 transition-colors">
                         <LogInIcon size={18} />
                         <span className="underline-offset-4 hover:underline">Login</span>

@@ -7,7 +7,7 @@ import debounce from 'debounce';
 import { SearchIcon } from 'lucide-react';
 import { useCallback, useState } from 'react';
 
-export function MySearchTableData({ className }: { className?: string }) {
+export function MySearchTableData({ className, placholder = 'Search' }: { className?: string; placholder?: string }) {
     const { t } = useTranslation();
 
     const initialQueryParams = new URLSearchParams(window.location.search);
@@ -36,7 +36,7 @@ export function MySearchTableData({ className }: { className?: string }) {
                     handleSearch(e.target.value);
                 }}
                 className="ml-0.5 min-w-xs rounded-sm border-none shadow-none"
-                placeholder={`${t('Search')}...`}
+                placeholder={`${t(placholder)}...`}
             />
             <Button variant="outline" type="submit" onClick={() => handleSearch(search)}>
                 <SearchIcon className="[&_svg]:size-2" /> <span className="hidden lg:inline">{t('Search')}</span>
