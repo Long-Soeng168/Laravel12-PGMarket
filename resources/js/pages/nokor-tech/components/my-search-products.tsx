@@ -2,47 +2,59 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import useTranslation from '@/hooks/use-translation';
 import { cn } from '@/lib/utils';
-import { router } from '@inertiajs/react';
-import debounce from 'debounce';
+import { router, usePage } from '@inertiajs/react';
 import { SearchIcon } from 'lucide-react';
-import { useCallback, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-export function MySearchProducts({ className }: { className?: string }) {
+export function MySearchProducts({
+    className,
+    setSearchOpenDialog,
+}: {
+    className?: string;
+    setSearchOpenDialog?: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
     const { t } = useTranslation();
+    const page = usePage();
 
-    const initialQueryParams = new URLSearchParams(window.location.search);
-    const [search, setSearch] = useState(initialQueryParams.get('search') || '');
-    const currentPath = window.location.pathname; // Get dynamic path
+    const [isFocused, setIsFocused] = useState(false);
+    const [search, setSearch] = useState('');
 
-    const handleSearch = useCallback(
-        debounce((searchTerm) => {
-            const queryParams = new URLSearchParams(window.location.search);
-            queryParams.set('search', searchTerm);
-            queryParams.set('page', '1');
+    // Extract path + query from Inertia's page.url
+    const [currentPath, queryString] = page.url.split('?');
+    const searchParams = new URLSearchParams(queryString || '');
 
-            router.get('/products' + '?' + queryParams?.toString(), {}, { preserveState: true });
-        }, 500),
-        [currentPath], // Dependency ensures it updates if the path changes
-    );
+    useEffect(() => {
+        setSearch(searchParams.get('search') || '');
+    }, [page.url]); // Runs whenever URL changes
+
+    const handleSearch = (searchTerm: string) => {
+        const params = new URLSearchParams(queryString || '');
+        params.set('search', searchTerm);
+        params.set('page', '1');
+
+        router.get(`/products?${params.toString()}`, {}, { preserveState: true });
+
+        if (setSearchOpenDialog) {
+            setSearchOpenDialog(false);
+        }
+    };
 
     return (
-        <div className={cn('flex w-full max-w-xl items-center space-x-2 rounded-xl border p-1', className)}>
+        <div className={cn('flex w-full max-w-full items-center space-x-2 rounded-xl border p-1', className, isFocused && 'border-primary')}>
             <Input
-                defaultValue={search}
+                value={search}
                 type="search"
                 autoComplete="search"
-                onChange={(e) => {
-                    setSearch(e.target.value);
-                }}
+                onChange={(e) => setSearch(e.target.value)}
                 onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                        handleSearch(e.target.value);
-                    }
+                    if (e.key === 'Enter') handleSearch(e.currentTarget.value);
                 }}
+                onFocus={() => setIsFocused(true)}
+                onBlur={() => setIsFocused(false)}
                 className="ml-0.5 min-w-xs rounded-sm border-none shadow-none"
-                placeholder={`${t('Search')}...`}
+                placeholder={`${t('Search Products')}...`}
             />
-            <Button variant="outline" type="submit" onClick={() => handleSearch(search)}>
+            <Button variant="outline" className="text-primary" type="button" onClick={() => handleSearch(search)}>
                 <SearchIcon className="[&_svg]:size-2" /> <span className="hidden lg:inline">{t('Search')}</span>
             </Button>
         </div>

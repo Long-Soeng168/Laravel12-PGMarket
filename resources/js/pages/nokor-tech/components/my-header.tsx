@@ -12,7 +12,7 @@ import { useEffect, useRef, useState } from 'react';
 import CartButton from './cart-button';
 import { HomeUserButton } from './home-user-button';
 import { MySearchProducts } from './my-search-products';
-import SearchInput from './SearchInput';
+import MySearchProductsDialog from './my-search-products-dialog';
 
 const MyHeader = () => {
     const { application_info } = usePage().props;
@@ -88,24 +88,10 @@ const MyHeader = () => {
                     )}
                     <div className="flex max-w-full flex-1 items-center justify-end lg:justify-self-center">
                         <div className="mx-10 hidden flex-1 md:block lg:mx-20">
-                            <SearchInput onSearch={() => {}} />
+                            <MySearchProducts />
                         </div>
-                        <div className="mx-2 text-purple-600 md:hidden">
-                            <Sheet>
-                                <SheetTrigger asChild>
-                                    <button
-                                        className={`mr-1 ml-3 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-white shadow-md transition-all duration-300 hover:scale-115`}
-                                    >
-                                        <Search className="size-6" />
-                                    </button>
-                                </SheetTrigger>
-                                <SheetContent side="top" className="w-full p-6 shadow-md">
-                                    <SheetHeader>
-                                        <SheetTitle>Search Products</SheetTitle>
-                                    </SheetHeader>
-                                    <MySearchProducts className="border-primary mx-auto max-w-full" />
-                                </SheetContent>
-                            </Sheet>
+                        <div className="mx-2 text-primary md:hidden">
+                           <MySearchProductsDialog />
                         </div>
                         <div className="max-md:hidden">
                             <HomeUserButton />
@@ -155,22 +141,8 @@ const MyHeader = () => {
 
                     {/* Actions */}
                     <div className="flex shrink-0 items-center gap-4">
-                        <div className={cn(!isStuck && 'hidden', 'text-purple-600')}>
-                            <Sheet>
-                                <SheetTrigger asChild>
-                                    <button
-                                        className={`mr-1 ml-3 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-white shadow-md transition-all duration-300 hover:scale-115`}
-                                    >
-                                        <Search className="size-6" />
-                                    </button>
-                                </SheetTrigger>
-                                <SheetContent side="top" className="w-full p-6 shadow-md">
-                                    <SheetHeader>
-                                        <SheetTitle>Search Products</SheetTitle>
-                                    </SheetHeader>
-                                    <MySearchProducts className="border-primary mx-auto max-w-full" />
-                                </SheetContent>
-                            </Sheet>
+                        <div className={cn(!isStuck && 'hidden', 'text-primary')}>
+                            <MySearchProductsDialog />
                         </div>
 
                         <Link prefetch href="/shopping-cart">
