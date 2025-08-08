@@ -169,7 +169,7 @@ class NokorTechController extends Controller
     {
         $search = $request->input('search', '');
         $brand_code = $request->input('brand_code', '');
-        $perPage = $request->input('perPage', 5);
+        $perPage = $request->input('perPage', 25);
         $sortBy = $request->input('sortBy', 'id');
         $sortDirection = $request->input('sortDirection', 'desc');
         $category_code = $request->input('category_code', '');

@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 import { CategorySelectBreadcrumb } from './category-select-breadcrumb';
 
 const CategorySelect = ({ finalCategorySelect, setFinalCategorySelect }: { finalCategorySelect: any; setFinalCategorySelect: any }) => {
-    const { itemCategories, editData } = usePage<any>().props;
+    const { itemCategories, editData, userShopCategory } = usePage<any>().props;
     const { currentLocale } = useTranslation(); // Replace with actual i18n logic
 
     const [openDialog, setOpenDialog] = useState(false);
@@ -17,7 +17,8 @@ const CategorySelect = ({ finalCategorySelect, setFinalCategorySelect }: { final
     const [selectedSubCategory, setSelectedSubCategory] = useState<any>(null);
 
     useEffect(() => {
-        if (!editData?.category || finalCategorySelect) return;
+        const targetCode = editData?.category?.code || userShopCategory?.code;
+        if (!targetCode || finalCategorySelect) return;
 
         const findCategoryPath = (categories: any, targetCode: any, path: any = []): any => {
             for (const cat of categories) {
@@ -31,25 +32,15 @@ const CategorySelect = ({ finalCategorySelect, setFinalCategorySelect }: { final
             return null;
         };
 
-        const path = findCategoryPath(itemCategories, editData.category.code);
+        const path = findCategoryPath(itemCategories, targetCode);
 
         if (path) {
-            // Always the last one is the final selected category
-            const last = path[path.length - 1];
-            setFinalCategorySelect(last);
-
-            // Optional: set breadcrumb levels based on path length
-            if (path.length === 3) {
-                setSelectedCategory(path[0]);
-                setSelectedSubCategory(path[1]);
-            } else if (path.length === 2) {
-                setSelectedCategory(path[0]);
-                setSelectedSubCategory(path[1]);
-            } else if (path.length === 1) {
-                setSelectedCategory(path[0]);
-            }
+            // const last = path[path.length - 1];
+            setFinalCategorySelect(null);
+            if (path.length >= 1) setSelectedCategory(path[0]);
+            if (path.length >= 2) setSelectedSubCategory(path[1]);
         }
-    }, [editData, itemCategories]);
+    }, [editData, userShopCategory, itemCategories]);
 
     const getCategoriesToRender = () => {
         if (selectedSubCategory?.children?.length) return selectedSubCategory.children;
@@ -94,7 +85,7 @@ const CategorySelect = ({ finalCategorySelect, setFinalCategorySelect }: { final
         <div>
             <Dialog open={openDialog} onOpenChange={setOpenDialog}>
                 <DialogTrigger asChild>
-                    <Button variant="outline" className="h-[37px] w-full">
+                    <Button key={finalCategorySelect?.code} variant="outline" className="h-[37px] w-full">
                         {finalCategorySelect ? (
                             <div className="flex items-center gap-2">
                                 <>
@@ -136,15 +127,15 @@ const CategorySelect = ({ finalCategorySelect, setFinalCategorySelect }: { final
                                     onClick={() => {
                                         if (selectedSubCategory) {
                                             setFinalCategorySelect(selectedSubCategory);
-                                        }else if (selectedCategory) {
+                                        } else if (selectedCategory) {
                                             setFinalCategorySelect(selectedCategory);
                                         }
                                         setOpenDialog(false);
                                     }}
                                     className={`'border-primary'} group bg-background hover:border-primary flex h-full flex-col items-center justify-center gap-2 rounded-xl border px-2 py-2 transition-all duration-300 hover:shadow-sm`}
                                 >
-                                    <p className="text-primary flex gap-2 items-center group-hover:text-primary text-center text-sm font-medium dark:text-white">
-                                          <LayoutGridIcon size={18} /> Other
+                                    <p className="text-primary group-hover:text-primary flex items-center gap-2 text-center text-sm font-medium dark:text-white">
+                                        <LayoutGridIcon size={18} /> Other
                                     </p>
                                 </button>
                             )}

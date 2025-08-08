@@ -88,10 +88,16 @@ class UserItemController extends Controller implements HasMiddleware
                 'categories' => $brand->categories->pluck('code')->values(), // values() to reset keys
             ];
         });
+
+        $user = $request->user()->load('shop');
+        $userShopCategory = $user->shop->category ?? null;
+        // return ($user->shop->category_code);
+
         return Inertia::render('user-dashboard/items/Create', [
             'itemCategories' => $itemCategories,
             'itemBrands' => $itemBrands,
             'shops' => Shop::orderBy('name')->get(),
+            'userShopCategory' => $userShopCategory,
         ]);
     }
 
@@ -109,7 +115,7 @@ class UserItemController extends Controller implements HasMiddleware
             'long_description' => 'nullable|string',
             'long_description_kh' => 'nullable|string',
             'link' => 'nullable|string|max:255',
-            'category_code' => 'nullable|string|exists:item_categories,code',
+            'category_code' => 'required|string|exists:item_categories,code',
             'brand_code' => 'nullable|string|exists:item_brands,code',
             'model_code' => 'nullable|string|exists:item_models,code',
             'body_type_code' => 'nullable|string|exists:item_body_types,code',
@@ -242,7 +248,7 @@ class UserItemController extends Controller implements HasMiddleware
             'long_description' => 'nullable|string',
             'long_description_kh' => 'nullable|string',
             'link' => 'nullable|string|max:255',
-            'category_code' => 'nullable|string|exists:item_categories,code',
+            'category_code' => 'required|string|exists:item_categories,code',
             'brand_code' => 'nullable|string|exists:item_brands,code',
             'model_code' => 'nullable|string|exists:item_models,code',
             'body_type_code' => 'nullable|string|exists:item_body_types,code',
