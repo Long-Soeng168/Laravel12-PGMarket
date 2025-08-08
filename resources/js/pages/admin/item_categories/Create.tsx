@@ -320,7 +320,7 @@ export default function Create({
                                                                             item.code === field.value ? 'opacity-100' : 'opacity-0',
                                                                         )}
                                                                     />
-                                                                    {item.name}
+                                                                    {`${item.order_index} ${item.name}`}
                                                                 </CommandItem>
                                                             );
                                                         })}

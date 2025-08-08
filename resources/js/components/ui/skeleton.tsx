@@ -1,12 +1,26 @@
+import React from "react"
 import { cn } from "@/lib/utils"
 
-function Skeleton({ className, ...props }: React.ComponentProps<"div">) {
+const customPulseKeyframes = `
+  @keyframes customPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+`
+
+function Skeleton({ className, style, ...props }: React.ComponentProps<"div">) {
   return (
-    <div
-      data-slot="skeleton"
-      className={cn("bg-primary/10 animate-pulse rounded-md", className)}
-      {...props}
-    />
+    <>
+      <style>
+        {customPulseKeyframes}
+      </style>
+      <div
+        data-slot="skeleton"
+        className={cn("bg-gray-200 dark:bg-gray-200/20 rounded-md", className)}
+        style={{ animation: "customPulse 2s ease-in-out infinite", ...style }}
+        {...props}
+      />
+    </>
   )
 }
 

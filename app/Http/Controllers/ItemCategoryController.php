@@ -60,7 +60,7 @@ class ItemCategoryController extends Controller implements HasMiddleware
     {
         $query = ItemCategory::query();
 
-        $tableData = $query->where('status', 'active')->orderBy('id', 'desc')->get();
+        $tableData = $query->where('status', 'active')->orderBy('order_index')->get();
 
         return response()->json($tableData);
     }

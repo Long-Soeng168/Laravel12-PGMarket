@@ -9,8 +9,8 @@ import MyProductCard from '../components/ui/my-product-card';
 import NokorTechLayout from '../layouts/nokor-tech-layout';
 import BrandList from './components/BrandList';
 import { BreadcrumbComponent } from './components/BreadcrumbComponent';
+import SkeletonProductList from './components/SkeletonProductList';
 import SubCategoryList from './components/SubCategoryList';
-import { MyRefreshButton } from '@/components/my-refresh-button';
 
 const Index = () => {
     const { tableData, selected_category, item_categories, sub_categories, category_brands, page, next_page_url } = usePage().props;
@@ -81,7 +81,6 @@ const Index = () => {
                                 <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
                                     {tableData?.map((product) => <MyProductCard key={product.id} product={product} />)}
                                 </div>
-
                                 <>
                                     {next_page_url ? (
                                         <WhenVisible
@@ -92,9 +91,9 @@ const Index = () => {
                                                 },
                                                 only: ['tableData', 'page', 'next_page_url'],
                                             }}
-                                            fallback={<div className='w-full text-center text-2xl py-4'>Loading...</div>}
+                                            fallback={<SkeletonProductList />}
                                         >
-                                            <p className="text-3xl">Loading...</p>
+                                            <SkeletonProductList />
                                         </WhenVisible>
                                     ) : (
                                         tableData?.length > 0 && (
@@ -102,7 +101,7 @@ const Index = () => {
                                                 <p className="text-lg font-medium">You have reached the end.</p>
                                                 <a
                                                     href={`${urlCleanPage}`}
-                                                    className="bg-primary hover:bg-primary/90 inline-flex items-center gap-2 rounded-md px-4 py-2 text-white transition-all"
+                                                    className="bg-primary hover:bg-primary/90 inline-flex items-center gap-2 rounded-md px-4 py-2 text-primary-foreground transition-all"
                                                 >
                                                     <ChevronUpIcon /> Start Scroll Again
                                                 </a>
