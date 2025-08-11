@@ -129,11 +129,11 @@ export default function MyFooter() {
                     {/* <a className="text-sm" href="#">
                         {t('Developed by')} : <strong></strong>
                     </a> */}
-                    <div className="flex items-center space-x-[10px] text-[18px]">
+                    <div className="flex items-center space-x-[10px] font-semibold text-[18px]">
                         <p>We accept:</p>
                         <div className="flex gap-[10px]">
-                            <img className="h-[40px]" src="/assets/ABA_PAY.png" alt="" />
-                            <img className="h-[40px]" src="/assets/KHQR.png" alt="" />
+                            <img className="h-[40px]" src="/assets/ABA_PAY.svg" alt="" />
+                            <img className="h-[40px]" src="/assets/KHQR.svg" alt="" />
                         </div>
                     </div>
                 </div>
