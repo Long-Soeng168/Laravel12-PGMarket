@@ -19,7 +19,7 @@ export default function ScrollToTopButton() {
         <Button
             onClick={scrollToTop}
             size='icon'
-            className={`fixed right-6 bottom-6 z-50 border p-3 transition-opacity ${show ? 'opacity-100' : 'pointer-events-none opacity-0'}`}
+            className={`fixed right-6 bottom-24 sm:bottom-6 z-50 border p-3 transition-opacity ${show ? 'opacity-100' : 'pointer-events-none opacity-0'}`}
         >
             <ArrowUp />
         </Button>

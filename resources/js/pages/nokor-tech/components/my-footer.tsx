@@ -18,10 +18,10 @@ export default function MyFooter() {
                     <img
                         src="/assets/backgrounds/footer_banner_for_dark.png"
                         alt=""
-                        className="z-0 hidden w-[100%] max-w-7xl object-contain opacity-[40%]  lg:opacity-[15%] dark:block"
+                        className="z-0 hidden w-[100%] max-w-7xl object-contain opacity-[40%] lg:opacity-[15%] dark:block"
                     />
                 </div>
-                <div className="grid grid-cols-1 gap-12 relative lg:grid-cols-4">
+                <div className="relative grid grid-cols-1 gap-12 lg:grid-cols-4">
                     <div className="justify-self-center">
                         {application_info?.image && (
                             <div className="flex flex-col items-center justify-center">
@@ -126,12 +126,16 @@ export default function MyFooter() {
                 {/* Footer Bottom */}
                 <div className="flex flex-col items-center justify-between gap-4 py-6 md:flex-row">
                     <p className="text-sm">{application_info?.copyright}</p>
-                    <a className="text-sm" href="#">
+                    {/* <a className="text-sm" href="#">
                         {t('Developed by')} : <strong></strong>
-                    </a>
-                    {/* <Link href={`/privacy`} className="hover:underline">
-                        {t('Privacy')}
-                    </Link> */}
+                    </a> */}
+                    <div className="flex items-center space-x-[10px] text-[16px]">
+                        <p>We accept:</p>
+                        <div className="flex gap-[10px]">
+                            <img className="h-[35px]" src="/assets/ABA_PAY.png" alt="" />
+                            <img className="h-[35px]" src="/assets/KHQR.png" alt="" />
+                        </div>
+                    </div>
                 </div>
             </div>
         </footer>
