@@ -76,7 +76,6 @@ const PaymentMethods = () => {
             </div>
             <h2 className="my-4">TOTAL(Testing): ${amount}</h2>
             <form method="POST" target="aba_webservice" action={api_url} id="aba_merchant_request">
-                {/* CSRF handled outside React */}
                 <input type="hidden" name="req_time" value={req_time} />
                 <input type="hidden" name="merchant_id" value={merchant_id} />
                 <input type="hidden" name="tran_id" value={tran_id} />

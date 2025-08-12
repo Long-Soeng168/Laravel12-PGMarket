@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ApplicationInfo;
 use App\Models\Banner;
 use App\Models\Item;
 use App\Models\ItemBodyType;
 use App\Models\ItemBrand;
 use App\Models\ItemCategory;
 use App\Models\ItemDailyView;
-use App\Models\Link;
 use App\Models\Page;
 use App\Models\Post;
 use App\Models\PostCategory;
@@ -397,11 +395,6 @@ class NokorTechController extends Controller
             "itemShow" => $itemShow->load('created_by', 'updated_by', 'images', 'category', 'brand', 'shop'),
             'relatedItems' => $relatedItems,
         ]);
-    }
-
-    public function shopping_cart()
-    {
-        return Inertia::render("nokor-tech/cart/ShoppingCart");
     }
     public function checkout()
     {

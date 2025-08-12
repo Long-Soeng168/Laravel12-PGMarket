@@ -26,7 +26,6 @@ Route::get('/products/{id}', [NokorTechController::class, 'product_show']);
 
 Route::get('/shops/{id}', [NokorTechController::class, 'shop_show']);
 
-Route::get('/shopping-cart', [NokorTechController::class, 'shopping_cart']);
 Route::middleware('auth')->group(function () {
     Route::get('/checkout', [NokorTechController::class, 'checkout']);
 });

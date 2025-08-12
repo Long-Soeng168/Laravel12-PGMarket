@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\PayWayService;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request as GuzzleRequest;
@@ -10,16 +11,40 @@ use Inertia\Inertia;
 class ABAPaywayCheckout extends Controller
 {
 
-    public function abaPaywayCheckout()
-    {
-        $merchant_id = config('services.aba.merchant_id');
-        $public_key = config('services.aba.api_key');
+    protected $payWayService;
 
+    public function __construct(PayWayService $payWayService)
+    {
+        $this->payWayService = $payWayService;
+    }
+
+    public function shopping_cart()
+    {
+        // $item = [
+        //     ['name' => 'test1', 'quantity' => '1', 'price' => '10.00'],
+        //     ['name' => 'test2', 'quantity' => '1', 'price' => '10.00']
+        // ];
+        // $transactionId = 'TXN001234567';
+        // $amount = '1.00';
+        // $firstName = 'Sokha';
+        // $lastName = 'Tim';
+        // $phone = '093630466';
+        // $email = 'sokha.tim@ababank.com'; // or any default payment option if needed
+        // $req_time = date('YmdHis');
+        // $merchant_id = config('payway.merchant_id');
+        // $api_url = config('payway.api_url');
+        // $payment_option = 'abapay'; // or any default payment option if needed
+        // // $return_params ='payment_success';
+        // $hash = $this->payWayService->getHash(
+        //     $req_time . $merchant_id . $transactionId . $amount .
+        //         $firstName . $lastName . $email . $phone . $payment_option
+        // );
         $req_time = date('YmdHis'); // UTC time format
+        $merchant_id = config('payway.merchant_id');
         $tran_id = 'TXN001234567';
-        $amount = '1000';
+        $amount = '1';
         $items = '';
-        $shipping = '100';
+        $shipping = '1';
         $firstname = 'Long';
         $lastname = 'Soeng';
         $email = 'long.soeng@example.com';
@@ -37,7 +62,7 @@ class ABAPaywayCheckout extends Controller
         $lifetime = '';
         $additional_params = '';
         $google_pay_token = '';
-        $skip_success_page = 'true';
+        $skip_success_page = 'false';
 
         $hash_string = $req_time . $merchant_id . $tran_id . $amount . $items . $shipping .
             $firstname . $lastname . $email . $phone . $type . $payment_option .
@@ -45,60 +70,74 @@ class ABAPaywayCheckout extends Controller
             $currency . $custom_fields . $return_params . $payout . $lifetime .
             $additional_params . $google_pay_token . $skip_success_page;
 
-        $hash = base64_encode(hash_hmac('sha512', $hash_string, $public_key, true));
-
-        $client = new Client();
-        $headers = [
-            'Content-Type' => 'multipart/form-data'
-        ];
-        $options = [
-            'multipart' => [
-                ['name' => 'req_time', 'contents' => $req_time],
-                ['name' => 'merchant_id', 'contents' => $merchant_id],
-                ['name' => 'tran_id', 'contents' => $tran_id],
-                ['name' => 'firstname', 'contents' => $firstname],
-                ['name' => 'lastname', 'contents' => $lastname],
-                ['name' => 'email', 'contents' => $email],
-                ['name' => 'phone', 'contents' => $phone],
-                ['name' => 'type', 'contents' => $type],
-                ['name' => 'payment_option', 'contents' => $payment_option],
-                ['name' => 'items', 'contents' => $items],
-                ['name' => 'shipping', 'contents' => $shipping],
-                ['name' => 'amount', 'contents' => $amount],
-                ['name' => 'currency', 'contents' => $currency],
-                ['name' => 'return_url', 'contents' => $return_url],
-                ['name' => 'cancel_url', 'contents' => $cancel_url],
-                ['name' => 'skip_success_page', 'contents' => $skip_success_page],
-                ['name' => 'continue_success_url', 'contents' => $continue_success_url],
-                ['name' => 'return_deeplink', 'contents' => $return_deeplink],
-                ['name' => 'custom_fields', 'contents' => $custom_fields],
-                ['name' => 'return_params', 'contents' => $return_params],
-                ['name' => 'view_type', 'contents' => 'hosted_view'],
-                ['name' => 'payment_gate', 'contents' => ''],
-                ['name' => 'payout', 'contents' => $payout],
-                ['name' => 'additional_params', 'contents' => $additional_params],
-                ['name' => 'lifetime', 'contents' => $lifetime],
-                ['name' => 'google_pay_token', 'contents' => $google_pay_token],
-                ['name' => 'hash', 'contents' => $hash],
-            ]
-        ];
-
-        try {
-            $request = new GuzzleRequest('POST', 'https://checkout-sandbox.payway.com.kh/api/payment-gateway/v1/payments/purchase', $headers);
-            $res = $client->sendAsync($request, $options)->wait();
-            return ($res->getBody());
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => 'ABA request failed',
-                'message' => $e->getMessage()
-            ], 500);
-        }
+        $hash = $this->payWayService->getHash($hash_string);
+        // dd($merchant_id);
+        return Inertia::render("nokor-tech/cart/ShoppingCart", [
+            'req_time' => $req_time,
+            'merchant_id' => $merchant_id,
+            'tran_id' => $tran_id,
+            'amount' => $amount,
+            'items' => $items,
+            'shipping' => $shipping,
+            'firstname' => $firstname,
+            'lastname' => $lastname,
+            'email' => $email,
+            'phone' => $phone,
+            'type' => $type,
+            'payment_option' => $payment_option,
+            'return_url' => $return_url,
+            'cancel_url' => $cancel_url,
+            'continue_success_url' => $continue_success_url,
+            'return_deeplink' => $return_deeplink,
+            'currency' => $currency,
+            'custom_fields' => $custom_fields,
+            'return_params' => $return_params,
+            'payout' => $payout,
+            'lifetime' => $lifetime,
+            'additional_params' => $additional_params,
+            'google_pay_token' => $google_pay_token,
+            'skip_success_page' => $skip_success_page,
+            'hash' => $hash,
+            'api_url' => config('payway.api_url'), // Assuming this is defined elsewhere
+        ]);
     }
+    // End Payment Gateway
 
-    public function aba_pay_interface()
+    public function showTestCheckoutForm()
     {
-        return Inertia::render('aba_pay_interface');
+        $item = [
+            ['name' => 'test1', 'quantity' => '1', 'price' => '10.00'],
+            ['name' => 'test2', 'quantity' => '1', 'price' => '10.00']
+        ];
+        $transactionId = 'TXN001234567';
+        $amount = '1.00';
+        $firstName = 'Sokha';
+        $lastName = 'Tim';
+        $phone = '093630466';
+        $email = 'sokha.tim@ababank.com'; // or any default payment option if needed
+        $req_time = date('YmdHis');
+        $merchant_id = config('payway.merchant_id');
+        $payment_option = 'abapay'; // or any default payment option if needed
+        // $return_params ='payment_success';
+        $hash = $this->payWayService->getHash(
+            $req_time . $merchant_id . $transactionId . $amount .
+                $firstName . $lastName . $email . $phone . $payment_option
+        );
+
+        return view('aba_test_checkout', compact(
+            'hash',
+            'transactionId',
+            'amount',
+            'firstName',
+            'lastName',
+            'phone',
+            'email',
+            'payment_option',
+            'merchant_id',
+            'req_time'
+        ));
     }
+
     public function Callback()
     {
         return 'Callback';

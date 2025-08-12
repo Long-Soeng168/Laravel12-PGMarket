@@ -6,9 +6,15 @@ use App\Http\Controllers\Settings\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+// Testing
+Route::get('/showTestCheckoutForm', [ABAPaywayCheckout::class, 'showTestCheckoutForm']);
 
-Route::get('/pay/aba_pay_interface', [ABAPaywayCheckout::class, 'aba_pay_interface']);
-Route::get('/pay/aba', [ABAPaywayCheckout::class, 'abaPaywayCheckout'])->name('aba.pay');
-Route::post('/pay/aba/callback', fn() => 'Callback')->name('aba.callback');
-Route::get('/pay/aba/cancel', fn() => 'Canceled')->name('aba.cancel');
-Route::get('/pay/aba/success', fn() => 'Success')->name('aba.success');
+// Start Using
+Route::get('/shopping-cart', [ABAPaywayCheckout::class, 'shopping_cart']);
+
+// Route::post('/get-payment-hash', [ABAPaywayCheckout::class, 'getPaymentHash']);
+
+// Route::get('/pay/aba', [ABAPaywayCheckout::class, 'abaPaywayCheckout'])->name('aba.pay');
+// Route::post('/pay/aba/callback', fn() => 'Callback')->name('aba.callback');
+// Route::get('/pay/aba/cancel', fn() => 'Canceled')->name('aba.cancel');
+// Route::get('/pay/aba/success', fn() => 'Success')->name('aba.success');

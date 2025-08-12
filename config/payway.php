@@ -1,6 +1,9 @@
 <?php
+// config/payway.php
 return [
-    'merchant_id' => env('PAYWAY_MERCHANT_ID'),
-    'api_url' => env('PAYWAY_API_URL'),
-    'private_key' => env('PAYWAY_PRIVATE_KEY'),
+    'api_url' => env('ABA_PAYWAY_API_URL', 'https://checkout-sandbox.payway.com.kh/api/payment-gateway/v1/payments/purchase'),
+    // 'api_key' => env('ABA_PAYWAY_API_KEY', 'e72b3ee6918c544f42af460db2ffc9c77d9ca645'),
+    // 'merchant_id' => env('ABA_PAYWAY_MERCHANT_ID', 'ec461385'),
+    'api_key' => env('ABA_PAYWAY_API_KEY', 'dfdb80b7c2adf6ad2f51e03e0ac29cee440d55e8'),
+    'merchant_id' => env('ABA_PAYWAY_MERCHANT_ID', 'ec437721'),
 ];

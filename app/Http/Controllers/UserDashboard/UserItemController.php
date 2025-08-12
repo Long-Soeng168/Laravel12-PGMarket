@@ -109,7 +109,7 @@ class UserItemController extends Controller implements HasMiddleware
         $validated = $request->validate([
             'code' => 'nullable|string|max:255',
             'name' => 'required|string|max:255',
-            'name_kh' => 'nullable|string|max:255',
+            'price' => 'required|numeric',
             'short_description' => 'nullable|string',
             'short_description_kh' => 'nullable|string',
             'long_description' => 'nullable|string',
@@ -242,7 +242,7 @@ class UserItemController extends Controller implements HasMiddleware
         $validated = $request->validate([
             'code' => 'nullable|string|max:255',
             'name' => 'required|string|max:255',
-            'name_kh' => 'nullable|string|max:255',
+            'price' => 'required|numeric',
             'short_description' => 'nullable|string',
             'short_description_kh' => 'nullable|string',
             'long_description' => 'nullable|string',

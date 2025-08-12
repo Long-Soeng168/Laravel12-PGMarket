@@ -78,5 +78,3 @@ Route::get('/paymentBakong/success', function () {
 
 // ========= ABA Payway =========
 require __DIR__ . '/aba_payway.php';
-// Route::get('/checkout_aba', [ABAPaymentController::class, 'checkout'])->name('payment.purchase');
-// Route::post('/checkout_aba', [ABAPaymentController::class, 'checkout'])->name('payment.purchase');
