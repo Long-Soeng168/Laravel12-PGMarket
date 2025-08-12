@@ -4,7 +4,7 @@ import { ChevronRight } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 const PaymentMethods = () => {
-    console.log(usePage<any>().props);
+    // console.log(usePage<any>().props);
     const {
         req_time,
         merchant_id,
