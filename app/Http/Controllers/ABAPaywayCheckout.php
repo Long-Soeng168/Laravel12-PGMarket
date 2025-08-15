@@ -41,7 +41,7 @@ class ABAPaywayCheckout extends Controller
         // );
         $req_time = date('YmdHis'); // UTC time format
         $merchant_id = config('payway.merchant_id');
-        $tran_id = 'TXN001234567';
+        $tran_id = uniqid();
         $amount = '1';
         $items = '';
         $shipping = '1';
@@ -50,7 +50,7 @@ class ABAPaywayCheckout extends Controller
         $email = 'long.soeng@example.com';
         $phone = '012345678';
         $type = 'purchase';
-        $payment_option = 'cards';
+        $payment_option = 'abapay_khqr';
         $return_url = '/aba/callback';
         $cancel_url = '/aba/cancel';
         $continue_success_url = '/aba/success';

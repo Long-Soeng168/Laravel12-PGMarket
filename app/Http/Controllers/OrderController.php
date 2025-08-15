@@ -66,52 +66,84 @@ class OrderController extends Controller implements HasMiddleware
 
     public function store(Request $request)
     {
+        // return response()->json([
+        //     'received' => $request->all(),
+        //     'message' => 'Order received successfully',
+        // ]);
         // Validate request
         $validated = $request->validate([
-            'name'       => 'nullable|string|max:255',
-            'phone'      => 'nullable|string|max:20',
-            'email'      => 'nullable|email|max:255',
-            'address'    => 'nullable|string|max:255',
+            'shop_id' => 'required|exists:shops,id',
             'note'       => 'nullable|string',
-            'total'      => 'nullable|numeric',
-            'transaction_id'       => 'nullable|string',
-            'payment_type'       => 'nullable|string',
+            'total_amount'      => 'nullable|numeric',
+            'payment_method'       => 'nullable|string',
+            'tran_id'       => 'nullable|string',
+            'req_time'       => 'nullable|string',
+            'currency'       => 'nullable|string',
+            'shipping_price' => 'nullable|numeric',
+            'shipping_lat' => 'nullable|numeric',
+            'shipping_lng' => 'nullable|numeric',
             'items'      => 'required|array',
             'items.*.item_id' => 'required|exists:items,id',
+            'items.*.item_name' => 'nullable|string',
             'items.*.price'   => 'required|numeric',
-            'items.*.discount' => 'nullable|numeric',
-            'items.*.discount_type' => 'nullable|string|in:percentage,fixed',
+            'items.*.discount_percent' => 'nullable|numeric',
             'items.*.quantity' => 'required|integer|min:1',
-            'items.*.total'    => 'required|numeric',
+            'items.*.sub_total'    => 'required|numeric',
         ]);
 
         try {
             DB::beginTransaction();
 
+            // Create Order Number Sequent base on each shop
+            $shopId = $validated['shop_id'];
+
+            $lastOrder = Order::where('shop_id', $shopId)
+                ->orderBy('id', 'desc')
+                ->first();
+
+
+            $nextNumber = 1;
+            if ($lastOrder && $lastOrder->order_number) {
+                $parts = explode('-', $lastOrder->order_number);
+                $nextNumber = isset($parts[2]) ? intval($parts[2]) + 1 : 1;
+            }
+
+            $order_number = sprintf('%s-%d-%06d', date('Ymd'), $shopId, $nextNumber);
+            // dd($order_number);
+
+            // Create Order Number Sequent base on each shop
+
             // Create order
             $order = Order::create([
-                'transaction_id'   => $validated['transaction_id'] ?? null,
-                'payment_type'   => $validated['payment_type'] ?? null,
-                'user_id'    => $request->user()?->id ?? null,
-                'name'    => $request->user()?->name ?? 'Guest',
-                'phone'   => $request->user()?->phone ?? null,
-                'email'   => $request->user()?->email ?? null,
-                'address' => $request->user()?->address ?? null,
-                'note'    => $validated['note'] ?? null,
-                'total'   => $validated['total'] ?? 0,
-            ]);
+                'order_number' => $order_number,
+                'shop_id' => $validated['shop_id'],
+                'user_id' => $request->user()?->id ?? null,
 
+                'shipping_price' => $validated['shipping_price'] ?? null,
+                'shipping_address' => $request->user()?->address ?? 'N/A',
+                'shipping_lat' => $validated['shipping_lat'] ?? null,
+                'shipping_lng' => $validated['shipping_lng'] ?? null,
+                'notes' => $validated['note'] ?? null,
+
+                'total_amount' => $validated['total_amount'] ?? 0,
+                'currency' => $validated['currency'] ?? 0,
+                'tran_id' => $validated['tran_id'] ?? null,
+                'req_time' => $validated['req_time'] ?? null,
+                'payment_method' => $validated['payment_method'] ?? null,
+                'payment_status' => 'unpaid',
+            ]);
 
             // Create order items
             foreach ($validated['items'] as $item) {
                 OrderItem::create([
                     'order_id'      => $order->id,
+                    'shop_id'       => $shopId,
                     'item_id'       => $item['item_id'],
+                    'item_name'       => $item['item_name'],
                     'price'         => $item['price'],
-                    'discount'      => $item['discount'] ?? 0,
-                    'discount_type' => $item['discount_type'] ?? 'percentage',
+                    'discount_percent' => $item['discount_percent'] ?? 0.00,
                     'quantity'      => $item['quantity'],
-                    'total'         => $item['total'],
+                    'sub_total'      => $item['sub_total'],
                 ]);
             }
 
@@ -119,12 +151,12 @@ class OrderController extends Controller implements HasMiddleware
 
             // return back()->with('success', 'Order placed successfully!');
 
-            $result = TelegramHelper::sendOrderItems($order);
+            // $result = TelegramHelper::sendOrderItems($order);
             // Normal Process
-            if ($result['success']) {
+            if ($order->id) {
                 return back()->with('success', 'Order placed successfully!');
             } else {
-                return back()->with('error', $result['message']);
+                return back()->with('error', 'Order fail to create.');
             }
 
             // Payment Process

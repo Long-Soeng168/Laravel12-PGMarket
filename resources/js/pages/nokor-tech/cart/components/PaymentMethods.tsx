@@ -1,7 +1,9 @@
 import MyLoadingAnimationOne from '@/components/MyLoadingAnimationOne';
-import { usePage } from '@inertiajs/react';
+import { useCart } from '@/contexts/cart-contexts';
+import { useForm, usePage } from '@inertiajs/react';
 import { ChevronRight } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 const PaymentMethods = () => {
     // console.log(usePage<any>().props);
@@ -34,7 +36,30 @@ const PaymentMethods = () => {
         api_url,
     } = usePage<any>().props;
 
+    const { post, progress, processing, transform, errors } = useForm();
+
     const [paywayReady, setPaywayReady] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const { cartItems, clearCart } = useCart();
+    const cartItemsSubmit =
+        cartItems?.map((item) => {
+            const itemPrice = parseFloat(item.price);
+            const discount_percent = parseFloat(item.discount_percent);
+            const discountAmount = (itemPrice * discount_percent) / 100;
+
+            const itemTotal = (itemPrice - (discount_percent ? discountAmount : 0)) * item.cartQuantity;
+
+            return {
+                item_id: item.id,
+                item_name: item.name,
+                price: itemPrice,
+                discount_percent: discount_percent,
+                quantity: item.cartQuantity,
+                sub_total: itemTotal,
+            };
+        }) || [];
+    const total_amount = cartItemsSubmit.reduce((sum, item) => sum + item.total, 0);
 
     useEffect(() => {
         if (typeof window === 'undefined') return; // no-op on server
@@ -62,11 +87,48 @@ const PaymentMethods = () => {
 
     const handleCheckout = () => {
         if (typeof window === 'undefined') return; // safety no-op on server
-        if (paywayReady) {
-            AbaPayway.checkout();
-        } else {
-            alert('Payment system not loaded yet, please wait.');
-        }
+
+        const orderData = {
+            shop_id: cartItems[0]?.shop_id || null,
+            note: '',
+            total_amount: total_amount,
+            payment_method: payment_option,
+            currency: currency,
+            tran_id: tran_id,
+            req_time: req_time,
+            shipping_price: shipping,
+            shipping_lat: 0.0,
+            shipping_lng: 0.0,
+            items: cartItemsSubmit,
+        };
+
+        setIsLoading(true);
+        transform(() => orderData);
+        post(`/orders`, {
+            preserveScroll: true,
+            onSuccess: (page: any) => {
+                if (page.props.flash?.success) {
+                    toast.success('Success', {
+                        description: page.props.flash.success,
+                    });
+                }
+                if (page.props.flash?.error) {
+                    toast.error('Error', {
+                        description: page.props.flash.error,
+                    });
+                }
+            },
+            onError: (e) => {
+                toast.error('Error', {
+                    description: 'Failed to create.' + JSON.stringify(e, null, 2),
+                });
+            },
+            onFinish: () => {
+                 setIsLoading(false);
+                console.log('Finally!');
+            },
+        });
+        
     };
 
     return (
@@ -125,6 +187,7 @@ const PaymentMethods = () => {
             ) : (
                 <MyLoadingAnimationOne />
             )}
+            {isLoading && <MyLoadingAnimationOne />}
         </div>
     );
 };
