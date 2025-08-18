@@ -20,12 +20,12 @@ return new class extends Migration
             $table->foreign('order_id')
                 ->references('id')
                 ->on('orders')
-                ->onUpdate('cascade');
+                ->onUpdate('cascade')
                 ->onDelete('cascade');
 
             $table->unsignedBigInteger('shop_id')->comment('FK → shops.id');
             $table->unsignedBigInteger('item_id')->comment('FK → products.id');
-            
+
             $table->string('item_name', 500)->comment('Snapshot of product name at purchase');
             $table->decimal('price', 10, 2)->comment('Price at purchase time');
             $table->decimal('discount_percent', 5, 2)->default(0.00)->comment('Discount percentage for this item');
