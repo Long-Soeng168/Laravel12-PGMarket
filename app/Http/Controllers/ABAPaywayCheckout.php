@@ -51,9 +51,9 @@ class ABAPaywayCheckout extends Controller
         $phone = '012345678';
         $type = 'purchase';
         $payment_option = 'abapay_khqr';
-        $return_url = '/aba/callback';
-        $cancel_url = '/aba/cancel';
-        $continue_success_url = '/aba/success';
+        $return_url = 'https://pgmarket.online/aba/callback';
+        $cancel_url = 'https://pgmarket.online/aba/cancel';
+        $continue_success_url = 'https://pgmarket.online/aba/success';
         $return_deeplink = '';
         $currency = 'USD';
         $custom_fields = '';
