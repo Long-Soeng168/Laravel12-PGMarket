@@ -62,7 +62,7 @@ class ABAPaywayCheckout extends Controller
         $lifetime = '';
         $additional_params = '';
         $google_pay_token = '';
-        $skip_success_page = 'false';
+        $skip_success_page = 'true';
 
         $hash_string = $req_time . $merchant_id . $tran_id . $amount . $items . $shipping .
             $firstname . $lastname . $email . $phone . $type . $payment_option .
