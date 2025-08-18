@@ -141,8 +141,16 @@ class ABAPaywayCheckout extends Controller
 
     public function callback(Request $request)
     {
-        return response()->json($request->all());
-        return 'Callback';
+        $order = Order::where('tran_id', $request->tran_id)->firstOrFail();
+
+        $order->update([
+            'notes' => json_encode($request->all(), JSON_UNESCAPED_UNICODE),
+        ]);
+
+        return response()->json([
+            'message' => 'Success',
+            'request' => $request->all(),
+        ]);
     }
     public function cancel(Request $request)
     {
@@ -151,11 +159,11 @@ class ABAPaywayCheckout extends Controller
     }
     public function success(Request $request)
     {
-        $order = Order::where('tran_id', $request->tran_id)->firstOrFail();
+        // $order = Order::where('tran_id', $request->tran_id)->firstOrFail();
 
-        $order->update([
-            'notes' => json_encode($request->all(), JSON_UNESCAPED_UNICODE),
-        ]);
+        // $order->update([
+        //     'notes' => json_encode($request->all(), JSON_UNESCAPED_UNICODE),
+        // ]);
 
         return response()->json([
             'message' => 'Success',
