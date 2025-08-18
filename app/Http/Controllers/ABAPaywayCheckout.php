@@ -143,13 +143,44 @@ class ABAPaywayCheckout extends Controller
     {
         $order = Order::where('tran_id', $request->tran_id)->firstOrFail();
 
+        $req_time   = $order->req_time; // already UTC format
+        $merchantId = config('payway.merchant_id');
+        $tran_id    = $order->tran_id;
+
+        $hashString = $req_time . $merchantId . $tran_id;
+        $hash       = $this->payWayService->getHash($hashString);
+
+        $client = new Client();
+        $headers = [
+            'Content-Type' => 'application/json'
+        ];
+
+        $body = json_encode([
+            'req_time'    => $req_time,
+            'merchant_id' => $merchantId,
+            'tran_id'     => $tran_id,
+            'hash'        => $hash,
+        ]);
+
+        $guzzleRequest = new GuzzleRequest(
+            'POST',
+            'https://checkout-sandbox.payway.com.kh/api/payment-gateway/v1/payments/transaction-detail',
+            $headers,
+            $body
+        );
+
+        $res    = $client->send($guzzleRequest);
+        $result = (string) $res->getBody(); // convert stream → string
+
+        // Save response into notes
         $order->update([
-            'notes' => json_encode($request->all(), JSON_UNESCAPED_UNICODE),
+            'notes' => $result, // already JSON from PayWay
         ]);
 
         return response()->json([
             'message' => 'Success',
             'request' => $request->all(),
+            'payway_response' => json_decode($result, true), // optional: return parsed response
         ]);
     }
     public function cancel(Request $request)
