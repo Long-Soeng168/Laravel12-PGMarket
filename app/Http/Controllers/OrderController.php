@@ -130,7 +130,7 @@ class OrderController extends Controller implements HasMiddleware
                 'tran_id' => $validated['tran_id'] ?? null,
                 'req_time' => $validated['req_time'] ?? null,
                 'payment_method' => $validated['payment_method'] ?? null,
-                'payment_status' => 'unpaid',
+                'payment_status' => 'PENDING',
             ]);
 
             // Create order items
