@@ -45,14 +45,14 @@ class ABAPaywayCheckout extends Controller
         $tran_id = uniqid();
         $amount = '0.01';
         $items = '';
-        $shipping = '0.01';
+        $shipping = '0';
         $firstname = 'Long';
         $lastname = 'Soeng';
         $email = 'long.soeng@example.com';
         $phone = '012345678';
         $type = 'purchase';
         $payment_option = 'abapay_khqr';
-        $return_url = 'https://pgmarket.online/aba/callback';
+        $return_url = 'https://pgmarket.online/aba/callback?tran_id=' . $tran_id;
         $cancel_url = 'https://pgmarket.online/aba/cancel';
         $continue_success_url = 'https://pgmarket.online/aba/success?tran_id=' . $tran_id;
         $return_deeplink = '';
@@ -63,7 +63,7 @@ class ABAPaywayCheckout extends Controller
         $lifetime = '';
         $additional_params = '';
         $google_pay_token = '';
-        $skip_success_page = 'true';
+        $skip_success_page = 1;
 
         $hash_string = $req_time . $merchant_id . $tran_id . $amount . $items . $shipping .
             $firstname . $lastname . $email . $phone . $type . $payment_option .
