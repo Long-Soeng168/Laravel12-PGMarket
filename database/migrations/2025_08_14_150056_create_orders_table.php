@@ -18,7 +18,7 @@ return new class extends Migration
             $table->id();
 
             $table->string('order_number', 50)->unique()->comment('Human-readable order code (ORD-YYYYMMDD-XXXX)');
-            
+
             $table->foreignId('user_id')
                 ->nullable()
                 ->constrained('users')
@@ -31,8 +31,8 @@ return new class extends Migration
 
             $table->decimal('total_amount', 10, 2)->comment('Total order price');
             $table->char('currency', 3)->default('USD')->comment('ISO currency code');
-            $table->enum('status', ['pending', 'paid', 'shipped', 'completed', 'cancelled'])->default('pending')->comment('pending, paid, shipped, completed, cancelled');
-            $table->enum('payment_status', ['unpaid', 'paid', 'failed', 'refunded'])->default('unpaid')->comment('unpaid, paid, failed, refunded');
+            $table->enum('status', ['pending', 'paid', 'shipped', 'completed', 'cancelled', 'refunded'])->default('PENDING')->comment('pending, paid, shipped, completed, cancelled, refunded');
+            $table->enum('payment_status', ['APPROVED', 'PRE-AUTH', 'PENDING', 'DECLINED', 'REFUNDED', 'CANCELLED'])->default('PENDING')->comment('APPROVED, PRE-AUTH, PENDING, DECLINED, REFUNDED, CANCELLED');
             $table->string('payment_method', 50)->nullable()->comment('e.g., abapay_khqr, card');
             $table->string('tran_id', 100)->nullable()->comment('A unique transaction identifier for the payment.');
             $table->string('req_time', 14)->nullable()->comment('ABA request timestamp (YYYYMMDDHHmmss)');

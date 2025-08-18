@@ -143,7 +143,7 @@ class ABAPaywayCheckout extends Controller
     {
         $order = Order::where('tran_id', $request->tran_id)->firstOrFail();
 
-        $req_time   = $order->req_time; // already UTC format
+        $req_time   = $order->req_time; // UTC format from DB
         $merchantId = config('payway.merchant_id');
         $tran_id    = $order->tran_id;
 
@@ -170,17 +170,19 @@ class ABAPaywayCheckout extends Controller
         );
 
         $res    = $client->send($guzzleRequest);
-        $result = (string) $res->getBody(); // convert stream → string
+        $result = json_decode((string) $res->getBody(), true); // decode JSON
 
-        // Save response into notes
+        // Save response into transaction_detail (json column)
         $order->update([
-            'notes' => $result, // already JSON from PayWay
+            'transaction_detail' => $result,
+            'payment_status' => $result['data']['payment_status'],
         ]);
 
         return response()->json([
-            'message' => 'Success',
-            'request' => $request->all(),
-            'payway_response' => json_decode($result, true), // optional: return parsed response
+            'message'   => 'Success',
+            'tran_id'   => $tran_id,
+            'status'    => $result['status']['message'] ?? null,
+            'response'  => $result, // optional: return full payload
         ]);
     }
     public function cancel(Request $request)
@@ -199,6 +201,7 @@ class ABAPaywayCheckout extends Controller
         return response()->json([
             'message' => 'Success',
             'request' => $request->all(),
+
         ]);
     }
 }
