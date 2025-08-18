@@ -42,9 +42,9 @@ class ABAPaywayCheckout extends Controller
         $req_time = date('YmdHis'); // UTC time format
         $merchant_id = config('payway.merchant_id');
         $tran_id = uniqid();
-        $amount = '1';
+        $amount = '0.01';
         $items = '';
-        $shipping = '1';
+        $shipping = '0.01';
         $firstname = 'Long';
         $lastname = 'Soeng';
         $email = 'long.soeng@example.com';
