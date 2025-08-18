@@ -138,12 +138,14 @@ class ABAPaywayCheckout extends Controller
         ));
     }
 
-    public function Callback()
+    public function callback(Request $request)
     {
+        return response()->json($request->all());
         return 'Callback';
     }
-    public function Canceled()
+    public function cancel(Request $request)
     {
+        return response()->json($request->all());
         return 'Canceled';
     }
     public function success(Request $request)
