@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use App\Services\PayWayService;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
@@ -150,7 +151,15 @@ class ABAPaywayCheckout extends Controller
     }
     public function success(Request $request)
     {
-        return response()->json($request->all());
-        return 'Success';
+        $order = Order::where('tran_id', $request->tran_id)->firstOrFail();
+
+        $order->update([
+            'note' => json_encode($request->all(), JSON_UNESCAPED_UNICODE),
+        ]);
+
+        return response()->json([
+            'message' => 'Success',
+            'request' => $request->all(),
+        ]);
     }
 }
