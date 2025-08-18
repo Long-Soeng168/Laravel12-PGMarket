@@ -10,6 +10,7 @@ import {
     AppWindowIcon,
     BriefcaseBusinessIcon,
     CarIcon,
+    ClipboardListIcon,
     FilePenLineIcon,
     FilesIcon,
     FolderTreeIcon,
@@ -408,6 +409,12 @@ export function AppSidebar() {
             permission: 'Shop',
             url: '/user-items',
             icon: ListTodoIcon,
+        },
+        {
+            title: t('Orders'),
+            permission: '',
+            url: '/user-orders',
+            icon: ClipboardListIcon,
         },
         // {
         //     title: t('Your Garage'),
