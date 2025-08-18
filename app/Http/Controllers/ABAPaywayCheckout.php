@@ -187,8 +187,13 @@ class ABAPaywayCheckout extends Controller
     }
     public function cancel(Request $request)
     {
-        return response()->json($request->all());
-        return 'Canceled';
+        $order = Order::where('tran_id', $request->tran_id)->firstOrFail();
+        if($request->user()->id != $order->user_id){
+            abort(404);
+        }
+        $order->delete();
+
+        return redirect('/shopping-cart?user_cancel=1');
     }
     public function success(Request $request)
     {
