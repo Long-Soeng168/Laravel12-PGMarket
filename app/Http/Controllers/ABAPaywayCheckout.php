@@ -53,7 +53,7 @@ class ABAPaywayCheckout extends Controller
         $type = 'purchase';
         $payment_option = 'abapay_khqr';
         $return_url = 'https://pgmarket.online/aba/callback?tran_id=' . $tran_id;
-        $cancel_url = 'https://pgmarket.online/aba/cancel';
+        $cancel_url = 'https://pgmarket.online/aba/cancel?tran_id=' . $tran_id;
         $continue_success_url = 'https://pgmarket.online/aba/success?tran_id=' . $tran_id;
         $return_deeplink = '';
         $currency = 'USD';
@@ -104,40 +104,40 @@ class ABAPaywayCheckout extends Controller
     }
     // End Payment Gateway
 
-    public function showTestCheckoutForm()
-    {
-        $item = [
-            ['name' => 'test1', 'quantity' => '1', 'price' => '10.00'],
-            ['name' => 'test2', 'quantity' => '1', 'price' => '10.00']
-        ];
-        $transactionId = 'TXN001234567';
-        $amount = '1.00';
-        $firstName = 'Sokha';
-        $lastName = 'Tim';
-        $phone = '093630466';
-        $email = 'sokha.tim@ababank.com'; // or any default payment option if needed
-        $req_time = date('YmdHis');
-        $merchant_id = config('payway.merchant_id');
-        $payment_option = 'abapay'; // or any default payment option if needed
-        // $return_params ='payment_success';
-        $hash = $this->payWayService->getHash(
-            $req_time . $merchant_id . $transactionId . $amount .
-                $firstName . $lastName . $email . $phone . $payment_option
-        );
+    // public function showTestCheckoutForm()
+    // {
+    //     $item = [
+    //         ['name' => 'test1', 'quantity' => '1', 'price' => '10.00'],
+    //         ['name' => 'test2', 'quantity' => '1', 'price' => '10.00']
+    //     ];
+    //     $transactionId = 'TXN001234567';
+    //     $amount = '1.00';
+    //     $firstName = 'Sokha';
+    //     $lastName = 'Tim';
+    //     $phone = '093630466';
+    //     $email = 'sokha.tim@ababank.com'; // or any default payment option if needed
+    //     $req_time = date('YmdHis');
+    //     $merchant_id = config('payway.merchant_id');
+    //     $payment_option = 'abapay'; // or any default payment option if needed
+    //     // $return_params ='payment_success';
+    //     $hash = $this->payWayService->getHash(
+    //         $req_time . $merchant_id . $transactionId . $amount .
+    //             $firstName . $lastName . $email . $phone . $payment_option
+    //     );
 
-        return view('aba_test_checkout', compact(
-            'hash',
-            'transactionId',
-            'amount',
-            'firstName',
-            'lastName',
-            'phone',
-            'email',
-            'payment_option',
-            'merchant_id',
-            'req_time'
-        ));
-    }
+    //     return view('aba_test_checkout', compact(
+    //         'hash',
+    //         'transactionId',
+    //         'amount',
+    //         'firstName',
+    //         'lastName',
+    //         'phone',
+    //         'email',
+    //         'payment_option',
+    //         'merchant_id',
+    //         'req_time'
+    //     ));
+    // }
 
     public function callback(Request $request)
     {
@@ -192,10 +192,10 @@ class ABAPaywayCheckout extends Controller
         if ($request->user()->id != $order->user_id) {
             abort(403, 'Unauthorized action.');
         }
-        
-        $order->delete();
 
-        return redirect('/shopping-cart?user_cancel=1');
+        $order->delete();
+        return 'hh';
+        // return redirect('/shopping-cart?user_cancel=1');
     }
     public function success(Request $request)
     {
