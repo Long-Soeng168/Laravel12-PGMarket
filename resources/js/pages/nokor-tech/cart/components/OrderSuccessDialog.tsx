@@ -36,6 +36,7 @@ export function OrderSuccessDialog({
         // Remove order_success from URL without reloading
         const queryParams = new URL(url, typeof window !== 'undefined' ? window.location.origin : 'http://localhost').searchParams;
         queryParams.delete('order_success');
+        queryParams.delete('order_id');
         const newUrl = queryParams.toString() ? `${window.location.pathname}?${queryParams.toString()}` : window.location.pathname;
 
         router.visit(newUrl, { replace: false, preserveState: true, preserveScroll: true });
