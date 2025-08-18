@@ -198,16 +198,19 @@ class ABAPaywayCheckout extends Controller
     }
     public function success(Request $request)
     {
-        // $order = Order::where('tran_id', $request->tran_id)->firstOrFail();
-
+        $order = Order::where('tran_id', $request->tran_id)->first();
         // $order->update([
         //     'notes' => json_encode($request->all(), JSON_UNESCAPED_UNICODE),
         // ]);
+        if ($order) {
+            return redirect('/shopping-cart?order_success=1&order_id=' . $order->id);
+        } else {
+            return redirect('/shopping-cart?order_fail=1');
+        }
 
-        return response()->json([
-            'message' => 'Success',
-            'request' => $request->all(),
-
-        ]);
+        // return response()->json([
+        //     'message' => 'Success',
+        //     'request' => $request->all(),
+        // ]);
     }
 }
