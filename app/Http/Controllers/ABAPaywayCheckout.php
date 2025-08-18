@@ -194,8 +194,7 @@ class ABAPaywayCheckout extends Controller
         }
 
         $order->delete();
-        return 'hh';
-        // return redirect('/shopping-cart?user_cancel=1');
+        return redirect('/shopping-cart?user_cancel=1');
     }
     public function success(Request $request)
     {
