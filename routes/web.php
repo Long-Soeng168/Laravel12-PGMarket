@@ -75,6 +75,3 @@ Route::get('/bakong', function () {
 Route::get('/paymentBakong/success', function () {
    return view('bakong_success');
 });
-
-// ========= ABA Payway =========
-require __DIR__ . '/aba_payway.php';

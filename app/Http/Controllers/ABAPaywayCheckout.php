@@ -146,8 +146,9 @@ class ABAPaywayCheckout extends Controller
     {
         return 'Canceled';
     }
-    public function Success()
+    public function success(Request $request)
     {
+        return response()->json($request->all());
         return 'Success';
     }
 }

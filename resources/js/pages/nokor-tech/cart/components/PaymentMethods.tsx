@@ -107,11 +107,16 @@ const PaymentMethods = () => {
         post(`/orders`, {
             preserveScroll: true,
             onSuccess: (page: any) => {
-                if (page.props.flash?.success) {
-                    toast.success('Success', {
-                        description: page.props.flash.success,
-                    });
+                if (paywayReady) {
+                    AbaPayway.checkout();
+                } else {
+                    alert('Payment system not loaded yet, please wait.');
                 }
+                // if (page.props.flash?.success) {
+                //     toast.success('Success', {
+                //         description: page.props.flash.success,
+                //     });
+                // }
                 if (page.props.flash?.error) {
                     toast.error('Error', {
                         description: page.props.flash.error,
@@ -124,11 +129,10 @@ const PaymentMethods = () => {
                 });
             },
             onFinish: () => {
-                 setIsLoading(false);
+                setIsLoading(false);
                 console.log('Finally!');
             },
         });
-        
     };
 
     return (
