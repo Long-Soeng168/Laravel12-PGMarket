@@ -166,7 +166,7 @@ const PaymentMethods = () => {
                 <input type="hidden" name="lifetime" value={lifetime} />
                 <input type="hidden" name="additional_params" value={additional_params} />
                 <input type="hidden" name="google_pay_token" value={google_pay_token} />
-                <input type="hidden" name="skip_success_page" value={skip_success_page} />
+                <input type="hidden" name="skip_success_page" value={1} />
                 <input type="hidden" name="hash" value={hash} />
             </form>
 
