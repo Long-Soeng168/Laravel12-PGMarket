@@ -154,7 +154,7 @@ class ABAPaywayCheckout extends Controller
         $order = Order::where('tran_id', $request->tran_id)->firstOrFail();
 
         $order->update([
-            'note' => json_encode($request->all(), JSON_UNESCAPED_UNICODE),
+            'notes' => json_encode($request->all(), JSON_UNESCAPED_UNICODE),
         ]);
 
         return response()->json([
