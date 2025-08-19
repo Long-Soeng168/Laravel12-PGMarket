@@ -52,7 +52,7 @@ class ABAPaywayCheckout extends Controller
         $phone = '012345678';
         $type = 'purchase';
         $payment_option = 'abapay_khqr';
-        $return_url = 'http://aba_test_checkout.corasolution.com/aba/callback?tran_id=' . $tran_id;
+        $return_url = 'https://pgmarket.online/aba/callback?tran_id=' . $tran_id;
         $cancel_url = 'https://pgmarket.online/aba/cancel?tran_id=' . $tran_id;
         $continue_success_url = 'https://pgmarket.online/aba/success?tran_id=' . $tran_id;
         $return_deeplink = '';
@@ -141,70 +141,51 @@ class ABAPaywayCheckout extends Controller
 
     public function callback(Request $request)
     {
-        // Make sure content-type is JSON
-        if (!$request->isJson()) {
-            return response()->json(['error' => 'Invalid content type'], 400);
-        }
+        $order = Order::where('tran_id', $request->tran_id)->firstOrFail();
 
-        $data = $request->json()->all();
+        $req_time   = $order->req_time; // UTC format from DB
+        $merchantId = config('payway.merchant_id');
+        $tran_id    = $order->tran_id;
 
-        $tranId = $data['tran_id'] ?? null;
-        if (!$tranId) {
-            return response()->json(['error' => 'Missing tran_id'], 422);
-        }
+        $hashString = $req_time . $merchantId . $tran_id;
+        $hash       = $this->payWayService->getHash($hashString);
 
-        $order = Order::where('tran_id', $tranId)->firstOrFail();
+        $client = new Client();
+        $headers = [
+            'Content-Type' => 'application/json'
+        ];
 
-        $order->update([
-            'transaction_detail' => $data['tran_id'], // make sure column is JSON type
+        $body = json_encode([
+            'req_time'    => $req_time,
+            'merchant_id' => $merchantId,
+            'tran_id'     => $tran_id,
+            'hash'        => $hash,
         ]);
 
-        return response()->json(['success' => true]);
+        $guzzleRequest = new GuzzleRequest(
+            'POST',
+            'https://checkout-sandbox.payway.com.kh/api/payment-gateway/v1/payments/check-transaction-2',
+            $headers,
+            $body
+        );
 
+        $res    = $client->send($guzzleRequest);
+        $result = json_decode((string) $res->getBody(), true); // decode JSON
 
-        // $req_time   = $order->req_time; // UTC format from DB
-        // $merchantId = config('payway.merchant_id');
-        // $tran_id    = $order->tran_id;
+        // Save response into transaction_detail (json column)
+        $order_status =  $result['data']['payment_status'] == 'APPROVED' ? 'paid' : 'pending';
+        $order->update([
+            'transaction_detail' => $result,
+            'status' => $order_status,
+            'payment_status' => $result['data']['payment_status'],
+        ]);
 
-        // $hashString = $req_time . $merchantId . $tran_id;
-        // $hash       = $this->payWayService->getHash($hashString);
-
-        // $client = new Client();
-        // $headers = [
-        //     'Content-Type' => 'application/json'
-        // ];
-
-        // $body = json_encode([
-        //     'req_time'    => $req_time,
-        //     'merchant_id' => $merchantId,
-        //     'tran_id'     => $tran_id,
-        //     'hash'        => $hash,
-        // ]);
-
-        // $guzzleRequest = new GuzzleRequest(
-        //     'POST',
-        //     config('payway.api_url') . '/transaction-detail',
-        //     $headers,
-        //     $body
-        // );
-
-        // $res    = $client->send($guzzleRequest);
-        // $result = json_decode((string) $res->getBody(), true); // decode JSON
-
-        // // Save response into transaction_detail (json column)
-        // $order_status =  $result['data']['payment_status'] == 'APPROVED' ? 'paid' : 'pending';
-        // $order->update([
-        //     'transaction_detail' => $result,
-        //     'status' => $order_status,
-        //     'payment_status' => $result['data']['payment_status'],
-        // ]);
-
-        // return response()->json([
-        //     'message'   => 'Success',
-        //     'tran_id'   => $tran_id,
-        //     'status'    => $result['status']['message'] ?? null,
-        //     'response'  => $result, // optional: return full payload
-        // ]);
+        return response()->json([
+            'message'   => 'Success',
+            'tran_id'   => $tran_id,
+            'status'    => $result['status']['message'] ?? null,
+            'response'  => $result, // optional: return full payload
+        ]);
     }
     public function cancel(Request $request)
     {
