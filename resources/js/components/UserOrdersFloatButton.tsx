@@ -1,10 +1,10 @@
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import useTranslation from '@/hooks/use-translation';
-import StatusBadge from '@/pages/user-dashboard/orders/components/StatusBadge';
 import { Link, usePage } from '@inertiajs/react';
 import { ClipboardListIcon, ScanEyeIcon } from 'lucide-react';
 import DeleteButton from './delete-button';
+import StatusBadge from '@/pages/nokor-tech/components/StatusBadge';
 
 export function UserOrdersFloatButton() {
     const { user_orders } = usePage().props;
