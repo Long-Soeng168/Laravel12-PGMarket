@@ -141,51 +141,70 @@ class ABAPaywayCheckout extends Controller
 
     public function callback(Request $request)
     {
-        $order = Order::where('tran_id', $request->tran_id)->firstOrFail();
+        // Make sure content-type is JSON
+        if (!$request->isJson()) {
+            return response()->json(['error' => 'Invalid content type'], 400);
+        }
 
-        $req_time   = $order->req_time; // UTC format from DB
-        $merchantId = config('payway.merchant_id');
-        $tran_id    = $order->tran_id;
+        $data = $request->json()->all();
 
-        $hashString = $req_time . $merchantId . $tran_id;
-        $hash       = $this->payWayService->getHash($hashString);
+        $tranId = $data['tran_id'] ?? null;
+        if (!$tranId) {
+            return response()->json(['error' => 'Missing tran_id'], 422);
+        }
 
-        $client = new Client();
-        $headers = [
-            'Content-Type' => 'application/json'
-        ];
+        $order = Order::where('tran_id', $tranId)->firstOrFail();
 
-        $body = json_encode([
-            'req_time'    => $req_time,
-            'merchant_id' => $merchantId,
-            'tran_id'     => $tran_id,
-            'hash'        => $hash,
-        ]);
-
-        $guzzleRequest = new GuzzleRequest(
-            'POST',
-            config('payway.api_url') . '/transaction-detail',
-            $headers,
-            $body
-        );
-
-        $res    = $client->send($guzzleRequest);
-        $result = json_decode((string) $res->getBody(), true); // decode JSON
-
-        // Save response into transaction_detail (json column)
-        $order_status =  $result['data']['payment_status'] == 'APPROVED' ? 'paid' : 'pending';
         $order->update([
-            'transaction_detail' => $result,
-            'status' => $order_status,
-            'payment_status' => $result['data']['payment_status'],
+            'transaction_detail' => $data, // make sure column is JSON type
         ]);
 
-        return response()->json([
-            'message'   => 'Success',
-            'tran_id'   => $tran_id,
-            'status'    => $result['status']['message'] ?? null,
-            'response'  => $result, // optional: return full payload
-        ]);
+        return response()->json(['success' => true]);
+
+
+        // $req_time   = $order->req_time; // UTC format from DB
+        // $merchantId = config('payway.merchant_id');
+        // $tran_id    = $order->tran_id;
+
+        // $hashString = $req_time . $merchantId . $tran_id;
+        // $hash       = $this->payWayService->getHash($hashString);
+
+        // $client = new Client();
+        // $headers = [
+        //     'Content-Type' => 'application/json'
+        // ];
+
+        // $body = json_encode([
+        //     'req_time'    => $req_time,
+        //     'merchant_id' => $merchantId,
+        //     'tran_id'     => $tran_id,
+        //     'hash'        => $hash,
+        // ]);
+
+        // $guzzleRequest = new GuzzleRequest(
+        //     'POST',
+        //     config('payway.api_url') . '/transaction-detail',
+        //     $headers,
+        //     $body
+        // );
+
+        // $res    = $client->send($guzzleRequest);
+        // $result = json_decode((string) $res->getBody(), true); // decode JSON
+
+        // // Save response into transaction_detail (json column)
+        // $order_status =  $result['data']['payment_status'] == 'APPROVED' ? 'paid' : 'pending';
+        // $order->update([
+        //     'transaction_detail' => $result,
+        //     'status' => $order_status,
+        //     'payment_status' => $result['data']['payment_status'],
+        // ]);
+
+        // return response()->json([
+        //     'message'   => 'Success',
+        //     'tran_id'   => $tran_id,
+        //     'status'    => $result['status']['message'] ?? null,
+        //     'response'  => $result, // optional: return full payload
+        // ]);
     }
     public function cancel(Request $request)
     {
