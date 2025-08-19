@@ -13,6 +13,9 @@ Route::get('/showTestCheckoutForm', [ABAPaywayCheckout::class, 'showTestCheckout
 
 // Start Using
 Route::get('/shopping-cart', [ABAPaywayCheckout::class, 'shopping_cart']);
+
 Route::post('/aba/callback', [ABAPaywayCheckout::class, 'callback']);
+Route::get('/aba/callback', [ABAPaywayCheckout::class, 'callback']);
+
 Route::get('/aba/success', [ABAPaywayCheckout::class, 'success']);
 Route::get('/aba/cancel', [ABAPaywayCheckout::class, 'cancel']);

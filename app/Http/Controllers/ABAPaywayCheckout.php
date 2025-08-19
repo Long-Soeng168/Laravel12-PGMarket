@@ -156,7 +156,7 @@ class ABAPaywayCheckout extends Controller
         $order = Order::where('tran_id', $tranId)->firstOrFail();
 
         $order->update([
-            'transaction_detail' => $data, // make sure column is JSON type
+            'transaction_detail' => $data['tran_id'], // make sure column is JSON type
         ]);
 
         return response()->json(['success' => true]);
