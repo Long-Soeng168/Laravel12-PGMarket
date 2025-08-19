@@ -52,7 +52,7 @@ class ABAPaywayCheckout extends Controller
         $phone = '012345678';
         $type = 'purchase';
         $payment_option = 'abapay_khqr';
-        $return_url = 'https://pgmarket.online/aba/callback?tran_id=' . $tran_id;
+        $return_url = 'http://aba_test_checkout.corasolution.com/aba/callback?tran_id=' . $tran_id;
         $cancel_url = 'https://pgmarket.online/aba/cancel?tran_id=' . $tran_id;
         $continue_success_url = 'https://pgmarket.online/aba/success?tran_id=' . $tran_id;
         $return_deeplink = '';
