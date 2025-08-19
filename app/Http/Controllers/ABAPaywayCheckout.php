@@ -176,7 +176,7 @@ class ABAPaywayCheckout extends Controller
         $order_status =  $result['data']['payment_status'] == 'APPROVED' ? 'paid' : 'pending';
         $order->update([
             'transaction_detail' => $result,
-            'note' => $request->apv,
+            'notes' => $request->apv,
             'status' => $order_status,
             'payment_status' => $result['data']['payment_status'],
         ]);
