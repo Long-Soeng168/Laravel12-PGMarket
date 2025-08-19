@@ -45,7 +45,7 @@ export function UserOrdersFloatButton() {
                                 {/* Top row: Order info + actions */}
                                 <div className="flex items-start justify-between">
                                     <div className="flex flex-col">
-                                        <h3 className="text-sm font-semibold">Order #{item.order_number.split('-').slice(1).join('-')}</h3>
+                                        <h3 className="text-sm font-semibold">Order {item.order_number.split('-').slice(1).join('-')}</h3>
                                         <p className="text-muted-foreground text-xs">
                                             {item.created_at
                                                 ? new Date(item.created_at).toLocaleString('en-UK', {
@@ -65,12 +65,6 @@ export function UserOrdersFloatButton() {
                                         <Button title={t('View Order')} variant="outline" className="text-primary">
                                             <ScanEyeIcon className="h-4 w-4" /> View
                                         </Button>
-
-                                        {item?.status === 'pending' && (
-                                            <span className="rounded-md border p-0.5">
-                                                <DeleteButton deletePath="/user-orders/" id={item.id} />
-                                            </span>
-                                        )}
                                     </div>
                                 </div>
 
