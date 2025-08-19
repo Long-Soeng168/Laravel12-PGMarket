@@ -1,6 +1,6 @@
+import { ArrowUp } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Button } from './ui/button';
-import { ArrowUp } from 'lucide-react';
 
 export default function ScrollToTopButton() {
     const [show, setShow] = useState(false);
@@ -18,8 +18,8 @@ export default function ScrollToTopButton() {
     return (
         <Button
             onClick={scrollToTop}
-            size='icon'
-            className={`fixed right-6 bottom-24 sm:bottom-6 z-50 border p-3 transition-opacity ${show ? 'opacity-100' : 'pointer-events-none opacity-0'}`}
+            size="icon"
+            className={`fixed right-6 bottom-48 z-50 border p-3 transition-opacity sm:bottom-32 ${show ? 'opacity-100' : 'pointer-events-none opacity-0'}`}
         >
             <ArrowUp />
         </Button>

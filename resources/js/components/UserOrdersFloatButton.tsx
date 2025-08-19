@@ -13,7 +13,7 @@ export function UserOrdersFloatButton() {
     return (
         <Sheet>
             <SheetTrigger asChild>
-                <button className={`fixed right-6 bottom-40 z-50 sm:bottom-20 ${(user_orders?.length ?? 0) === 0 ? 'hidden' : ''}`}>
+                <button className={`fixed right-6 bottom-22 sm:bottom-6 z-50 ${(user_orders?.length ?? 0) === 0 ? 'hidden' : ''}`}>
                     <div className="rainbow-button rounded-full transition-all duration-300">
                         <div className="bg-background/50 rounded-full p-1 transition-all duration-300">
                             <span className="group border-foreground bg-background text-foreground relative flex h-16 w-16 cursor-pointer items-center justify-center overflow-hidden rounded-full border-[1.5px] text-base font-semibold transition-all duration-[600ms] ease-[cubic-bezier(0.23,1,0.32,1)] hover:border-white hover:text-white active:scale-[0.95]">
