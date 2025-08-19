@@ -164,7 +164,7 @@ class ABAPaywayCheckout extends Controller
 
         $guzzleRequest = new GuzzleRequest(
             'POST',
-            'https://checkout-sandbox.payway.com.kh/api/payment-gateway/v1/payments/check-transaction-2',
+            config('payway.base_api_domain') . '/api/payment-gateway/v1/payments/check-transaction-2',
             $headers,
             $body
         );
