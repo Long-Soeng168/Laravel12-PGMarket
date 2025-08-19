@@ -12,7 +12,7 @@ Route::post('/orders', [OrderController::class, 'store']);
 Route::get('/showTestCheckoutForm', [ABAPaywayCheckout::class, 'showTestCheckoutForm']);
 
 // Start Using
-Route::get('/shopping-cart', [ABAPaywayCheckout::class, 'shopping_cart']);
+Route::get('/shopping-cart', [ABAPaywayCheckout::class, 'shopping_cart'])->middleware('auth');
 
 // Route::post('/aba/callback', [ABAPaywayCheckout::class, 'callback']);
 Route::get('/aba/callback', [ABAPaywayCheckout::class, 'callback']);

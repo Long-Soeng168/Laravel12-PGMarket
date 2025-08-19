@@ -6,6 +6,7 @@ use App\Models\ApplicationInfo;
 use App\Models\Garage;
 use App\Models\ItemCategory;
 use App\Models\Link;
+use App\Models\Order;
 use App\Models\Post;
 use App\Models\Shop;
 use Illuminate\Foundation\Inspiring;
@@ -51,6 +52,10 @@ class HandleInertiaRequests extends Middleware
             'name' => config('app.name'),
             'app_url' => config('app.url'),
             'quote' => ['message' => trim($message), 'author' => trim($author)],
+            'user_orders' => $request->user() ? Order::where('user_id', $request->user()->id)
+                ->whereIn('status', ['pending', 'paid', 'shipped'])
+                ->get() : [],
+
             'auth' => [
                 'user' => $request->user(),
                 'shop' => Shop::find($request->user()?->shop_id) ?? null,

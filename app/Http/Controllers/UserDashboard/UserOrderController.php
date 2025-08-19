@@ -88,7 +88,7 @@ class UserOrderController extends Controller implements HasMiddleware
     public function show(Order $user_order)
     {
         if ($user_order->user_id != Auth::user()->id) {
-            abort(404);
+            abort(403, 'Unauthorized resource');
         }
 
         return Inertia::render('user-dashboard/orders/Show', [
