@@ -6,11 +6,11 @@ import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import useRole from '@/hooks/use-role';
 import useTranslation from '@/hooks/use-translation';
+import StatusBadge from '@/pages/nokor-tech/components/StatusBadge';
+import { TransactionDetailDialog } from '@/pages/nokor-tech/components/TransactionDetailDialog';
 import { Link, router, usePage } from '@inertiajs/react';
 import { ArrowUpDown, ScanEyeIcon } from 'lucide-react';
 import { useState } from 'react';
-import StatusBadge from './StatusBadge';
-import { TransactionDetailDialog } from './TransactionDetailDialog';
 
 const MyTableData = () => {
     const { t } = useTranslation();
@@ -107,9 +107,9 @@ const MyTableData = () => {
                                         </Link> */}
 
                                         {/* Show Transaction Detail */}
-                                        <span className="rounded-md border">
+                                        {/* <span className="rounded-md border">
                                             <TransactionDetailDialog detail={item.transaction_detail || ''} />
-                                        </span>
+                                        </span> */}
                                         {/* End Show Transaction Detail */}
                                         {item?.status == 'pending' && (
                                             <span className="rounded-md border p-0.5">

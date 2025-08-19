@@ -10,7 +10,7 @@ import MyNoData from '@/components/my-no-data';
 import { usePage } from '@inertiajs/react';
 import { CheckCircle2, Clock, CreditCard, Loader2, ShoppingCart, Truck } from 'lucide-react';
 import OrderItemCard from './components/OrderItemCard';
-import StatusBadge from './components/StatusBadge';
+import StatusBadge from '@/pages/nokor-tech/components/StatusBadge';
 
 const Show = () => {
     const { order_detail } = usePage().props;
@@ -87,16 +87,16 @@ const Show = () => {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Stepper value={currentStep} className="space-y-8 lg:p-6">
-                <StepperNav className="mb-15 gap-3.5">
+            <Stepper value={currentStep} className="space-y-8 p-4 lg:p-6">
+                <StepperNav className="mb-15 gap-4 gap-y-8 grid grid-cols-1 items-start lg:grid-cols-4 border-primary max-lg:pl-6 border-l-2 lg:border-none">
                     {steps.map((step, index) => {
                         const badge = getBadge(index);
                         const Icon = step.icon;
                         return (
-                            <StepperItem key={index} step={index + 1} className="relative flex-1">
+                            <StepperItem key={index} step={index + 1} className="relative w-full">
                                 <StepperTrigger className="flex grow flex-col items-start gap-3.5">
                                     <StepperIndicator
-                                        className={`h-1 w-full rounded-full ${index + 1 <= currentStep ? '!bg-primary' : '!bg-border'}`}
+                                        className={`h-1 lg:w-full rounded-full ${index + 1 <= currentStep ? '!bg-primary' : '!bg-border'}`}
                                     />
                                     <div className="flex flex-col items-start gap-1">
                                         <div className="text-muted-foreground text-[10px] font-semibold">Step {index + 1}</div>

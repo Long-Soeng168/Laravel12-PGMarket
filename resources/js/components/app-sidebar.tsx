@@ -21,7 +21,6 @@ import {
     Layers2Icon,
     LayoutDashboardIcon,
     LinkIcon,
-    ListOrderedIcon,
     ListTodoIcon,
     MailCheckIcon,
     MailsIcon,
@@ -277,12 +276,6 @@ export function AppSidebar() {
             ],
         },
         {
-            title: t('Orders'),
-            permission: 'order view',
-            url: '/admin/orders',
-            icon: ListOrderedIcon,
-        },
-        {
             title: t('Banners'),
             permission: 'banner view',
             url: '/admin/banners',
@@ -376,6 +369,12 @@ export function AppSidebar() {
             url: '/admin/types',
             icon: ShapesIcon,
         },
+        {
+            title: t('All Orders'),
+            permission: 'order view',
+            url: '/admin/orders',
+            icon: ClipboardListIcon,
+        },
     ];
 
     const footerNavItems: NavItem[] = [
@@ -409,6 +408,12 @@ export function AppSidebar() {
             permission: 'Shop',
             url: '/user-items',
             icon: ListTodoIcon,
+        },
+        {
+            title: t('Shop Orders'),
+            permission: 'Shop',
+            url: '/shop-orders',
+            icon: ClipboardListIcon,
         },
         {
             title: t('Your Orders'),

@@ -31,6 +31,8 @@ class OrderController extends Controller implements HasMiddleware
 
         $query = Order::query();
 
+        $query->with('buyer', 'shop');
+
         if ($status) {
             $query->where('status', $status);
         }
@@ -51,17 +53,18 @@ class OrderController extends Controller implements HasMiddleware
     }
     public function show(Order $order)
     {
-        $orderItems = OrderItem::with('item.images')->where('order_id', $order->id)->get();
-        // return $orderItems;
         return Inertia::render('admin/orders/Show', [
-            'order' => $order,
-            'orderItems' => $orderItems
+            'order_detail' => $order->load('order_items.item.images', 'buyer', 'shop'),
+            'readOnly' => true,
         ]);
     }
     public function destroy(Order $order)
     {
-        $order->delete();
-        return redirect()->back()->with('success', 'Message deleted successfully.');
+        if ($order->status == 'pending') {
+            $order->delete();
+            return redirect()->back()->with('success', 'Order deleted successfully.');
+        }
+        return redirect()->back()->with('error', 'Order cannot deleted, Please Contact Developer.');
     }
 
     public function store(Request $request)
