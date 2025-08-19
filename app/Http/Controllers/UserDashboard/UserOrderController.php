@@ -37,7 +37,7 @@ class UserOrderController extends Controller implements HasMiddleware
     public function index(Request $request)
     {
         $search = $request->input('search', '');
-        $sortBy = $request->input('sortBy', 'order_number');
+        $sortBy = $request->input('sortBy', 'id');
         $sortDirection = $request->input('sortDirection', 'desc');
         $status = $request->input('status');
 

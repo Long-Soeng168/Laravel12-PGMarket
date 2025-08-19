@@ -54,6 +54,7 @@ class HandleInertiaRequests extends Middleware
             'quote' => ['message' => trim($message), 'author' => trim($author)],
             'user_orders' => $request->user() ? Order::where('user_id', $request->user()->id)
                 ->whereIn('status', ['pending', 'paid', 'shipped'])
+                ->orderBy('id', 'desc')
                 ->get() : [],
 
             'auth' => [
