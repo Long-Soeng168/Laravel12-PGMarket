@@ -60,9 +60,6 @@ const DeleteButton = ({ deletePath, id }: { deletePath: string; id: number }) =>
                     </DialogDescription>
                 </DialogHeader>
                 <DialogFooter>
-                    <Button onClick={() => setIsOpen(false)} disabled={processing} variant="secondary">
-                        {t('Cancel')}
-                    </Button>
                     <Button
                         onClick={handleDelete}
                         autoFocus
@@ -76,6 +73,9 @@ const DeleteButton = ({ deletePath, id }: { deletePath: string; id: number }) =>
                             </span>
                         )}
                         {processing ? t('Deleting') : t('Delete')}
+                    </Button>
+                    <Button onClick={() => setIsOpen(false)} disabled={processing} variant="secondary" className='border border-foreground'>
+                        {t('Cancel')}
                     </Button>
                 </DialogFooter>
             </DialogContent>

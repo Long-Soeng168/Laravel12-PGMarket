@@ -4,20 +4,20 @@ import { JSX } from 'react';
 
 const statusColors: Record<string, string> = {
     // 🔹 Payment statuses
-    APPROVED: 'bg-green-400 text-white dark:bg-green-500',
-    'PRE-AUTH': 'bg-blue-400 text-white dark:bg-blue-500',
+    APPROVED: 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300',
+    'PRE-AUTH': 'bg-cyan-100 text-cyan-700 dark:bg-cyan-900 dark:text-cyan-300',
     PENDING: 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300',
-    DECLINED: 'bg-red-400 text-white dark:bg-red-500',
-    REFUNDED: 'bg-yellow-400 text-white dark:bg-yellow-500',
-    CANCELLED: 'bg-gray-400 text-white dark:bg-gray-500',
+    DECLINED: 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300',
+    REFUNDED: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300',
+    CANCELLED: 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300',
 
     // 🔹 Order statuses
+    completed: 'bg-green-500 text-white dark:bg-green-700 dark:text-white',
+    paid: 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300',
     pending: 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300',
-    paid: 'bg-blue-400 text-white dark:bg-blue-500',
-    shipped: 'bg-purple-400 text-white dark:bg-purple-500',
-    completed: 'bg-green-400 text-white dark:bg-green-500',
-    cancelled: 'bg-red-400 text-white dark:bg-red-500',
-    refunded: 'bg-yellow-400 text-white dark:bg-yellow-500',
+    shipped: 'bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300',
+    refunded: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300',
+    cancelled: 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300',
 };
 
 const statusIcons: Record<string, JSX.Element> = {

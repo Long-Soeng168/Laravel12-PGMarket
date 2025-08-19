@@ -164,7 +164,7 @@ class ABAPaywayCheckout extends Controller
 
         $guzzleRequest = new GuzzleRequest(
             'POST',
-            'https://checkout-sandbox.payway.com.kh/api/payment-gateway/v1/payments/transaction-detail',
+            config('payway.api_url') . '/transaction-detail',
             $headers,
             $body
         );
@@ -173,8 +173,10 @@ class ABAPaywayCheckout extends Controller
         $result = json_decode((string) $res->getBody(), true); // decode JSON
 
         // Save response into transaction_detail (json column)
+        $order_status =  $result['data']['payment_status'] == 'APPROVED' ? 'paid' : 'pending';
         $order->update([
             'transaction_detail' => $result,
+            'status' => $order_status,
             'payment_status' => $result['data']['payment_status'],
         ]);
 

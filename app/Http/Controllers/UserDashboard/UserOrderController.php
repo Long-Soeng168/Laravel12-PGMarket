@@ -37,13 +37,13 @@ class UserOrderController extends Controller implements HasMiddleware
     public function index(Request $request)
     {
         $search = $request->input('search', '');
-        $sortBy = $request->input('sortBy', 'id');
+        $sortBy = $request->input('sortBy', 'order_number');
         $sortDirection = $request->input('sortDirection', 'desc');
         $status = $request->input('status');
 
         $query = Order::query();
 
-        // $query->with('created_by', 'updated_by', 'images', 'category', 'shop');
+        // $query->with('order_items');
 
         if ($status) {
             $query->where('status', $status);
@@ -170,9 +170,8 @@ class UserOrderController extends Controller implements HasMiddleware
         if ($user_order->user_id != Auth::user()->id) {
             abort(404);
         }
-
         return Inertia::render('user-dashboard/orders/Show', [
-            'editData' => $user_order,
+            'order_detail' => $user_order->load('order_items.item.images'),
             'readOnly' => true,
         ]);
     }
