@@ -4,7 +4,7 @@ import { Link } from '@inertiajs/react';
 export default function OrderItemCard({ order_item }: { order_item: any }) {
     return (
         <Link href={`/`}>
-            <Card className="flex w-full max-w-full flex-row gap-0 overflow-hidden rounded-2xl p-0 shadow-sm transition-shadow hover:shadow-md">
+            <Card className="flex w-full max-w-full h-full flex-row gap-0 overflow-hidden rounded-2xl p-0 shadow-sm transition-shadow hover:shadow-md">
                 {/* Product Image */}
                 <div className="bg-accent relative w-40 md:w-48 flex-shrink-0">
                     <img

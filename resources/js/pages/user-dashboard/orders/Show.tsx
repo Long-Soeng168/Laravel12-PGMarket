@@ -117,7 +117,7 @@ const Show = () => {
                 </StepperNav>
                 <div>
                     <div className="flex items-center gap-2">
-                        Current Order Status :{' '}
+                        Order Status :{' '}
                         <span className="capitalize">
                             <StatusBadge status={order_detail?.status} />
                         </span>
