@@ -411,7 +411,7 @@ export function AppSidebar() {
             icon: ListTodoIcon,
         },
         {
-            title: t('Orders'),
+            title: t('Your Orders'),
             permission: '',
             url: '/user-orders',
             icon: ClipboardListIcon,
