@@ -411,7 +411,7 @@ export function AppSidebar() {
         },
         {
             title: t('Shop Orders'),
-            permission: 'Shop',
+            // permission: 'Shop',
             url: '/shop-orders',
             icon: ClipboardListIcon,
         },
