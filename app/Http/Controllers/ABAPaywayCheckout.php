@@ -170,17 +170,31 @@ class ABAPaywayCheckout extends Controller
             $body
         );
 
-        $res    = $client->send($guzzleRequest);
-        $result = json_decode((string) $res->getBody(), true); // decode JSON
+        try {
+            $res    = $client->send($guzzleRequest);
+            $result = json_decode((string) $res->getBody(), true);
 
-        // Save response into transaction_detail (json column)
-        $order_status =  $result['data']['payment_status'] == 'APPROVED' ? 'paid' : 'pending';
-        $order->update([
-            'transaction_detail' => $result,
-            'notes' => $request->json()->all(),
-            'status' => $order_status,
-            'payment_status' => $result['data']['payment_status'],
-        ]);
+            // Save response into transaction_detail (json column)
+            $order_status = $result['data']['payment_status'] == 'APPROVED' ? 'paid' : 'pending';
+
+            $order->update([
+                'transaction_detail' => $result,
+                'notes'             => $request->json()->all(),
+                'status'            => $order_status,
+                'payment_status'    => $result['data']['payment_status'],
+            ]);
+        } catch (\Throwable $e) {
+            \Log::error('ABA callback failed', [
+                'tran_id' => $order->tran_id,
+                'error'   => $e->getMessage(),
+            ]);
+
+            return response()->json([
+                'message' => 'Failed to process callback',
+                'error'   => $e->getMessage(),
+            ], 500);
+        }
+
 
         return response()->json([
             'message'   => 'Success',
