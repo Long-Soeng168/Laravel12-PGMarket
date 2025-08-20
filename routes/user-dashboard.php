@@ -1,8 +1,7 @@
 <?php
 
+use App\Http\Controllers\ShopOrderController;
 use App\Http\Controllers\UserDashboard\UserDashboardController;
-use App\Http\Controllers\UserDashboard\UserGarageController;
-use App\Http\Controllers\UserDashboard\UserGaragePostController;
 use App\Http\Controllers\UserDashboard\UserItemController;
 use App\Http\Controllers\UserDashboard\UserOrderController;
 use App\Http\Controllers\UserDashboard\UserShopController;
@@ -19,9 +18,9 @@ Route::middleware('auth')->group(function () {
     Route::get('admin/item_view_counts', [UserItemController::class, 'item_view_counts']);
 
     // Shop Route
+    Route::resource('shop-orders', ShopOrderController::class);
     Route::get('user-shops/update', [UserShopController::class, 'edit']);
     Route::get('user-shops/create', [UserShopController::class, 'create']);
     Route::post('user-shops', [UserShopController::class, 'store']);
     Route::post('user-shops/{user_shop}/update', [UserShopController::class, 'update']);
-
 });

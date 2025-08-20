@@ -1,23 +1,23 @@
+import MyAddNewButton from '@/components/my-add-new-button';
 import { MyPagination } from '@/components/my-pagination';
 import { MyRefreshButton } from '@/components/my-refresh-button';
 import { MySearchTableData } from '@/components/my-search-table-data';
-import useRole from '@/hooks/use-role';
+import usePermission from '@/hooks/use-permission';
 import useTranslation from '@/hooks/use-translation';
 import AppLayout from '@/layouts/app-layout';
 import { BreadcrumbItem } from '@/types';
-import { usePage } from '@inertiajs/react';
+import { MyFilterButton } from './components/my-filter-button';
 import MyTableData from './components/my-table-data';
 
 const Index = () => {
-    const hasRole = useRole();
+    const hasPermission = usePermission();
     const { t } = useTranslation();
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: t('Orders'),
-            href: '/user-orders',
+            href: '/shop-orders',
         },
     ];
-    const { tableData, auth } = usePage().props;
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <div className="flex max-w-[100vw] flex-wrap items-center justify-end gap-2">
@@ -26,6 +26,9 @@ const Index = () => {
                     {/* <MyFilterButton /> */}
                     <MyRefreshButton />
                     <span className="flex-1"></span>
+                    {/* <MyExportButton />
+                    <MyImportButton /> */}
+                    {/* {hasPermission('message create') && <MyAddNewButton url="/admin/items/create" type="link" />} */}
                 </div>
             </div>
             <div className="h-2" />

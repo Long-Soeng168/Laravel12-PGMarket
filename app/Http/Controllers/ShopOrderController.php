@@ -1,28 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\UserDashboard;
+namespace App\Http\Controllers;
 
-use App\Exports\ItemDailyViewExport;
-use App\Helpers\ImageHelper;
-use App\Helpers\TelegramHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Item;
-use App\Models\ItemBrand;
-use App\Models\ItemCategory;
-use App\Models\ItemDailyView;
-use App\Models\ItemImage;
 use App\Models\Order;
-use App\Models\Shop;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Support\Facades\Auth;
-use Maatwebsite\Excel\Facades\Excel;
 
-class UserOrderController extends Controller implements HasMiddleware
+class ShopOrderController extends Controller implements HasMiddleware
 {
     public static function middleware(): array
     {
@@ -43,7 +32,7 @@ class UserOrderController extends Controller implements HasMiddleware
 
         $query = Order::query();
 
-        // $query->with('order_items');
+        $query->with('buyer', 'shop');
 
         if ($status) {
             $query->where('status', $status);
@@ -56,12 +45,12 @@ class UserOrderController extends Controller implements HasMiddleware
             });
         }
 
-        $query->where('user_id', $request->user()->id);
+        $query->where('shop_id', $request->user()->shop_id);
 
         $tableData = $query->paginate(perPage: 10)->onEachSide(1);
 
         // return $tableData;
-        return Inertia::render('user-dashboard/orders/Index', [
+        return Inertia::render('user-dashboard/shop_orders/Index', [
             'tableData' => $tableData,
         ]);
     }
@@ -85,19 +74,14 @@ class UserOrderController extends Controller implements HasMiddleware
     /**
      * Display the specified resource.
      */
-    public function show(Order $user_order)
+    public function show(Order $shop_order)
     {
-        if ($user_order->user_id != Auth::user()->id) {
+        if ($shop_order->shop_id != Auth::user()->shop_id) {
             abort(403, 'Unauthorized resource');
         }
 
-        if ($user_order->status != 'pending') {
-            abort(403, 'Cannot delete: status is not pending');
-        }
-
-
-        return Inertia::render('user-dashboard/orders/Show', [
-            'order_detail' => $user_order->load('order_items.item.images'),
+        return Inertia::render('user-dashboard/shop_orders/Show', [
+            'order_detail' => $shop_order->load('order_items.item.images', 'buyer'),
             'readOnly' => true,
         ]);
     }
@@ -106,14 +90,14 @@ class UserOrderController extends Controller implements HasMiddleware
      * Show the form for editing the specified resource.
      */
 
-    public function edit(Item $user_order)
+    public function edit(Item $shop_order)
     {
-        if ($user_order->user_id != Auth::user()->id) {
+        if ($shop_order->shop_id != Auth::user()->shop_id) {
             abort(404);
         }
-        $editData = $user_order->load('order_items.item.images');
+        $editData = $shop_order->load('order_items.item.images');
         dd($editData);
-        return Inertia::render('user-dashboard/orders/Create', [
+        return Inertia::render('user-dashboard/shop_orders/Create', [
             'editData' => $editData,
         ]);
     }
@@ -121,9 +105,9 @@ class UserOrderController extends Controller implements HasMiddleware
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Order $user_order)
+    public function update(Request $request, Order $shop_order)
     {
-        if ($user_order->user_id != Auth::user()->id) {
+        if ($shop_order->shop_id != Auth::user()->shop_id) {
             abort(404);
         }
         dd($request->all());
@@ -147,12 +131,17 @@ class UserOrderController extends Controller implements HasMiddleware
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Order $user_order)
+    public function destroy(Order $shop_order)
     {
-        if ($user_order->user_id != Auth::user()->id) {
-            abort(404);
+        if ($shop_order->shop_id != Auth::user()->shop_id) {
+            abort(404); // order not found / not yours
         }
-        $user_order->delete();
+
+        if ($shop_order->status != 'pending') {
+            abort(403, 'Cannot delete: status is not pending');
+        }
+
+        $shop_order->delete();
         return redirect()->back()->with('success', 'Order deleted successfully.');
     }
 }

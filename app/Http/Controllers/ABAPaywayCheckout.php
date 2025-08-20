@@ -175,21 +175,27 @@ class ABAPaywayCheckout extends Controller
             $res    = $client->send($guzzleRequest);
             $result = json_decode((string) $res->getBody(), true);
 
+            $order->update([
+                'transaction_detail' => $result,
+            ]);
+
             $statusCode = $result['status']['code'] ?? null;
 
-            if ($statusCode === '00') {
+            if ($statusCode == '00') {
                 $paymentStatus = $result['data']['payment_status'] ?? null;
                 $order_status  = $paymentStatus === 'APPROVED' ? 'paid' : 'pending';
 
+                
+
                 $order->update([
-                    'transaction_detail' => $result,
                     'status'            => $order->status == 'pending' ? $order_status : $order->status,
                     'payment_status'    => $paymentStatus,
                 ]);
+                return response()->json([
+                    'tran_id'  => $tran_id,
+                    'response' => $order,
+                ], 500);
             } else {
-                $order->update([
-                    'transaction_detail' => $result,
-                ]);
 
                 Log::warning('ABA callback returned error', [
                     'tran_id' => $order->tran_id,
@@ -227,6 +233,10 @@ class ABAPaywayCheckout extends Controller
         // Authorization
         if ($request->user()->id != $order->user_id) {
             abort(403, 'Unauthorized action.');
+        }
+
+        if ($order->status != 'pending') {
+            abort(403, 'Cannot delete: status is not pending');
         }
 
         $order->delete();

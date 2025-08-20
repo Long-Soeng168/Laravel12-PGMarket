@@ -34,7 +34,7 @@ return new class extends Migration
             $table->enum('status', ['pending', 'paid', 'shipped', 'completed', 'cancelled', 'refunded'])->default('PENDING')->comment('pending, paid, shipped, completed, cancelled, refunded');
             $table->enum('payment_status', ['APPROVED', 'PRE-AUTH', 'PENDING', 'DECLINED', 'REFUNDED', 'CANCELLED'])->default('PENDING')->comment('APPROVED, PRE-AUTH, PENDING, DECLINED, REFUNDED, CANCELLED');
             $table->string('payment_method', 50)->nullable()->comment('e.g., abapay_khqr, card');
-            $table->string('tran_id', 100)->nullable()->comment('A unique transaction identifier for the payment.');
+            $table->string('tran_id', 100)->unique()->nullable()->comment('A unique transaction identifier for the payment.');
             $table->string('req_time', 14)->nullable()->comment('ABA request timestamp (YYYYMMDDHHmmss)');
             $table->text('shipping_address')->comment('Delivery info');
             $table->decimal('shipping_lat', 10, 7)->nullable()->comment('Shipping address latitude');
