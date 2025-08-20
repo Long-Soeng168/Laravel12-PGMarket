@@ -7,6 +7,7 @@ use App\Services\PayWayService;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request as GuzzleRequest;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class ABAPaywayCheckout extends Controller
@@ -174,17 +175,31 @@ class ABAPaywayCheckout extends Controller
             $res    = $client->send($guzzleRequest);
             $result = json_decode((string) $res->getBody(), true);
 
-            // Save response into transaction_detail (json column)
-            $order_status = $result['data']['payment_status'] == 'APPROVED' ? 'paid' : 'pending';
+            $statusCode = $result['status']['code'] ?? null;
 
-            $order->update([
-                'transaction_detail' => $result,
-                'notes'             => $request->json()->all(),
-                'status'            => $order_status,
-                'payment_status'    => $result['data']['payment_status'],
-            ]);
+            if ($statusCode === '00') {
+                $paymentStatus = $result['data']['payment_status'] ?? null;
+                $order_status  = $paymentStatus === 'APPROVED' ? 'paid' : 'pending';
+
+                $order->update([
+                    'transaction_detail' => $result,
+                    'notes'             => $request->json()->all(),
+                    'status'            => $order_status,
+                    'payment_status'    => $paymentStatus,
+                ]);
+            } else {
+                Log::warning('ABA callback returned error', [
+                    'tran_id' => $order->tran_id,
+                    'response' => $result,
+                ]);
+
+                return response()->json([
+                    'tran_id'  => $tran_id,
+                    'response' => $result,
+                ], 500);
+            }
         } catch (\Throwable $e) {
-            \Log::error('ABA callback failed', [
+            Log::error('ABA callback failed', [
                 'tran_id' => $order->tran_id,
                 'error'   => $e->getMessage(),
             ]);
@@ -195,12 +210,12 @@ class ABAPaywayCheckout extends Controller
             ], 500);
         }
 
-
+        // Safe final return
         return response()->json([
-            'message'   => 'Success',
-            'tran_id'   => $tran_id,
-            'status'    => $result['status']['message'] ?? null,
-            'response'  => $result, // optional: return full payload
+            'message'  => 'Success',
+            'tran_id'  => $tran_id,
+            'status'   => $result['status']['message'] ?? null,
+            'response' => $result,
         ]);
     }
     public function cancel(Request $request)
