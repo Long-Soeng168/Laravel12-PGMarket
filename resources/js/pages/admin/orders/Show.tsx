@@ -19,7 +19,7 @@ const Show = () => {
     const { order_detail } = usePage().props;
     const { t } = useTranslation();
     const breadcrumbs: BreadcrumbItem[] = [
-        { title: t('Orders'), href: '/user-orders' },
+        { title: t('Orders'), href: '/admin/orders' },
         { title: order_detail?.order_number.split('-').slice(1).join('-'), href: '#' },
     ];
 
@@ -64,7 +64,7 @@ const Show = () => {
         if (order_detail?.status == 'cancelled') {
             setCurrentStep(0);
         }
-    }, []);
+    }, [order_detail?.status]);
 
     const getBadge = (stepIndex: number) => {
         if (stepIndex + 1 < currentStep) {

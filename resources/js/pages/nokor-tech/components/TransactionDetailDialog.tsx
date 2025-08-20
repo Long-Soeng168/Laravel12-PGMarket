@@ -10,7 +10,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '@/components/ui/dialog';
-import { useForm } from '@inertiajs/react';
+import { router } from '@inertiajs/react';
 import { Loader2, ReceiptTextIcon } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -18,30 +18,33 @@ import { toast } from 'sonner';
 export function TransactionDetailDialog({ detail, tranId }: { detail: string; tranId: string }) {
     const [loading, setLoading] = useState(false);
     const [transaction, setTransaction] = useState(detail);
-    const { get } = useForm();
-    const handleRecheck = () => {
+
+    const handleRecheck = async () => {
         setLoading(true);
 
-        get(`/aba/callback?tran_id=` + tranId, {
-            preserveScroll: true,
-            preserveState: true,
-            onSuccess: (page) => {
-                // backend should return JSON in props if you want to use it directly
-                const response = (page.props?.response as any) ?? null;
-                if (response) {
-                    setTransaction(JSON.stringify(response, null, 2));
-                    toast.success('Transaction rechecked successfully');
-                } else {
-                    toast.warning('Recheck completed but no data returned');
-                }
-            },
-            onError: () => {
-                toast.error('Something went wrong while rechecking');
-            },
-            onFinish: () => {
-                setLoading(false);
-            },
-        });
+        try {
+            const response = await fetch(`/aba/callback?tran_id=${tranId}`, {
+                method: 'GET', // or POST if your callback expects POST
+                headers: {
+                    'Accept': 'application/json',
+                },
+            });
+
+            const data = await response.json();
+
+            if (data.response) {
+                setTransaction(JSON.stringify(data.response, null, 2));
+                toast.success('Transaction rechecked successfully');
+            } else {
+                setTransaction(JSON.stringify(data, null, 2));
+                toast.warning('Recheck completed but no transaction data returned');
+            }
+        } catch (err: any) {
+            toast.error(err.message || 'Something went wrong while rechecking');
+        } finally {
+            setLoading(false);
+            router.reload();
+        }
     };
 
     return (
