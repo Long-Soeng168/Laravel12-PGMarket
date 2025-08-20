@@ -183,11 +183,14 @@ class ABAPaywayCheckout extends Controller
 
                 $order->update([
                     'transaction_detail' => $result,
-                    'notes'             => $request->json()->all(),
                     'status'            => $order_status,
                     'payment_status'    => $paymentStatus,
                 ]);
             } else {
+                $order->update([
+                    'transaction_detail' => $result,
+                ]);
+
                 Log::warning('ABA callback returned error', [
                     'tran_id' => $order->tran_id,
                     'response' => $result,

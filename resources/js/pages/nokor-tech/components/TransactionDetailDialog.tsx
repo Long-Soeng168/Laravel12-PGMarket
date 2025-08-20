@@ -73,7 +73,7 @@ export function TransactionDetailDialog({ detail, tranId }: { detail: string; tr
                         } catch (e) {
                             return transaction;
                         }
-                    })()}{' '}
+                    })()}
                 </pre>
 
                 <DialogFooter>
