@@ -91,11 +91,6 @@ class UserOrderController extends Controller implements HasMiddleware
             abort(403, 'Unauthorized resource');
         }
 
-        if ($user_order->status != 'pending') {
-            abort(403, 'Cannot delete: status is not pending');
-        }
-
-
         return Inertia::render('user-dashboard/orders/Show', [
             'order_detail' => $user_order->load('order_items.item.images'),
             'readOnly' => true,
@@ -152,6 +147,10 @@ class UserOrderController extends Controller implements HasMiddleware
         if ($user_order->user_id != Auth::user()->id) {
             abort(404);
         }
+        if ($user_order->status != 'pending') {
+            abort(403, 'Cannot delete: status is not pending');
+        }
+
         $user_order->delete();
         return redirect()->back()->with('success', 'Order deleted successfully.');
     }
