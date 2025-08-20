@@ -51,7 +51,7 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'name' => config('app.name'),
             'app_url' => config('app.url'),
-            'quote' => ['message' => trim($message), 'author' => trim($author)],
+            // 'quote' => ['message' => trim($message), 'author' => trim($author)],
             'user_orders' => $request->user() ? Order::where('user_id', $request->user()->id)
                 ->whereIn('status', ['pending', 'paid', 'shipped'])
                 ->orderBy('id', 'desc')

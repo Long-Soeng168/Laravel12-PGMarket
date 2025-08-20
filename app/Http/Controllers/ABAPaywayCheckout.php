@@ -7,6 +7,7 @@ use App\Services\PayWayService;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request as GuzzleRequest;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class ABAPaywayCheckout extends Controller
@@ -141,53 +142,103 @@ class ABAPaywayCheckout extends Controller
 
     public function callback(Request $request)
     {
-        $order = Order::where('tran_id', $request->tran_id)->firstOrFail();
+        try {
+            // Validate incoming request
+            $request->validate([
+                'tran_id' => 'required|string',
+            ]);
 
-        $req_time   = $order->req_time; // UTC format from DB
-        $merchantId = config('payway.merchant_id');
-        $tran_id    = $order->tran_id;
+            $order = Order::where('tran_id', $request->tran_id)->firstOrFail();
 
-        $hashString = $req_time . $merchantId . $tran_id;
-        $hash       = $this->payWayService->getHash($hashString);
+            $req_time   = $order->req_time; // stored UTC
+            $merchantId = config('payway.merchant_id');
+            $tran_id    = $order->tran_id;
 
-        $client = new Client();
-        $headers = [
-            'Content-Type' => 'application/json'
-        ];
+            // Generate hash
+            $hashString = $req_time . $merchantId . $tran_id;
+            $hash       = $this->payWayService->getHash($hashString);
 
-        $body = json_encode([
-            'req_time'    => $req_time,
-            'merchant_id' => $merchantId,
-            'tran_id'     => $tran_id,
-            'hash'        => $hash,
-        ]);
+            $client = new Client();
 
-        $guzzleRequest = new GuzzleRequest(
-            'POST',
-            config('payway.base_api_domain') . '/api/payment-gateway/v1/payments/check-transaction-2',
-            $headers,
-            $body
-        );
+            $res = $client->post(
+                config('payway.base_api_domain') . '/api/payment-gateway/v1/payments/check-transaction-2',
+                [
+                    'headers' => ['Content-Type' => 'application/json'],
+                    'json' => [
+                        'req_time'    => $req_time,
+                        'merchant_id' => $merchantId,
+                        'tran_id'     => $tran_id,
+                        'hash'        => $hash,
+                    ],
+                    'timeout' => 10, // fail fast if ABA doesn’t respond
+                ]
+            );
 
-        $res    = $client->send($guzzleRequest);
-        $result = json_decode((string) $res->getBody(), true); // decode JSON
+            $result = json_decode((string) $res->getBody(), true);
 
-        // Save response into transaction_detail (json column)
-        $order_status =  $result['data']['payment_status'] == 'APPROVED' ? 'paid' : 'pending';
-        $order->update([
-            'transaction_detail' => $result,
-            'notes' => $request->json()->all(),
-            'status' => $order_status,
-            'payment_status' => $result['data']['payment_status'],
-        ]);
+            if (!is_array($result) || empty($result['data']['payment_status'])) {
+                Log::warning('ABA callback: invalid response', [
+                    'tran_id' => $tran_id,
+                    'result'  => $result,
+                ]);
 
-        return response()->json([
-            'message'   => 'Success',
-            'tran_id'   => $tran_id,
-            'status'    => $result['status']['message'] ?? null,
-            'response'  => $result, // optional: return full payload
-        ]);
+                return response()->json([
+                    'message' => 'Invalid response from payment gateway',
+                ], 502);
+            }
+
+            // Map payment_status → order status
+            $paymentStatus = $result['data']['payment_status'];
+            $orderStatus = match ($paymentStatus) {
+                'APPROVED' => 'paid',
+                'FAILED', 'VOIDED', 'DECLINED' => 'cancelled',
+                default => 'pending',
+            };
+
+            // Update order safely
+            $order->update([
+                'transaction_detail' => $result,
+                'notes' => $request->all(), // capture full payload
+                'status' => $orderStatus,
+                'payment_status' => $paymentStatus,
+            ]);
+
+            return response()->json([
+                'message'   => 'Success',
+                'tran_id'   => $tran_id,
+                'status'    => $result['status']['message'] ?? null,
+                'response'  => $result,
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'message' => 'Validation failed',
+                'errors'  => $e->errors(),
+            ], 422);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json([
+                'message' => 'Order not found',
+            ], 404);
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            Log::error('ABA callback: HTTP request failed', [
+                'tran_id' => $request->tran_id,
+                'error'   => $e->getMessage(),
+            ]);
+
+            return response()->json([
+                'message' => 'Failed to verify payment with gateway',
+            ], 502);
+        } catch (\Throwable $e) {
+            Log::error('ABA callback: unexpected error', [
+                'tran_id' => $request->tran_id,
+                'error'   => $e->getMessage(),
+            ]);
+
+            return response()->json([
+                'message' => 'Internal server error',
+            ], 500);
+        }
     }
+
     public function cancel(Request $request)
     {
         $order = Order::where('tran_id', $request->tran_id)->firstOrFail();

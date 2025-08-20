@@ -8,9 +8,12 @@ import { useEffect, useState } from 'react';
 // pick icons from lucide-react
 import MyNoData from '@/components/my-no-data';
 import StatusBadge from '@/pages/nokor-tech/components/StatusBadge';
+import { TransactionDetailDialog } from '@/pages/nokor-tech/components/TransactionDetailDialog';
 import OrderItemCard from '@/pages/user-dashboard/orders/components/OrderItemCard';
 import { usePage } from '@inertiajs/react';
 import { CheckCircle2, Clock, CreditCard, Loader2, ShoppingCart, Truck } from 'lucide-react';
+import { ShopHoverCard } from './components/ShopHoverCard';
+import { UserHoverCard } from './components/UserHoverCard';
 
 const Show = () => {
     const { order_detail } = usePage().props;
@@ -117,12 +120,24 @@ const Show = () => {
                 </StepperNav>
                 <p className="text-muted-foreground mb-4 text-lg font-bold">Order Detail</p>
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                    <div className="space-y-2 border p-4">
+                    <div className="space-y-2 rounded-2xl border p-4">
                         <div className="flex items-center gap-2">
-                            Buyer :<Badge variant="outline">{order_detail?.buyer?.name}</Badge>
+                            Order Number : <span className="font-bold">{order_detail?.order_number.split('-').slice(1).join('-')}</span>
                         </div>
                         <div className="flex items-center gap-2">
-                            Shop :<Badge variant="outline">{order_detail?.shop?.name}</Badge>
+                            Order Date :{' '}
+                            <span className="text-base">
+                                {order_detail?.created_at
+                                    ? new Date(order_detail?.created_at).toLocaleString('en-UK', {
+                                          year: 'numeric',
+                                          month: 'short',
+                                          day: '2-digit',
+                                          hour: 'numeric',
+                                          minute: 'numeric',
+                                          hour12: true, // 👈 forces AM/PM
+                                      })
+                                    : '---'}
+                            </span>
                         </div>
                         <div className="flex items-center gap-2">
                             Order Status :
@@ -131,24 +146,34 @@ const Show = () => {
                             </span>
                         </div>
                         <div className="flex items-center gap-2">
-                            Total Amount : <span className="text-xl font-bold capitalize">$ {order_detail?.total_amount}</span>
+                            Shop : <ShopHoverCard shop={order_detail?.shop} />
+                        </div>
+                        <div className="flex items-center gap-2">
+                            Buyer : <UserHoverCard user={order_detail?.buyer} />
+                        </div>
+                        <div className="flex items-center gap-2">
+                            Buyer Note : <span className="text-base">{order_detail?.notes || '---'}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            Shipping Address : <span className="text-base">{order_detail?.shipping_address || '---'}</span>
                         </div>
                     </div>
-                    <div className="space-y-2 border p-4">
-                        <div className="flex items-center gap-2">
-                            Buyer :<Badge variant="outline">{order_detail?.buyer?.name}</Badge>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            Shop :<Badge variant="outline">{order_detail?.shop?.name}</Badge>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            Order Status :
-                            <span className="capitalize">
-                                <StatusBadge status={order_detail?.status} />
+                    <div className="space-y-2 rounded-2xl border p-4">
+                        <div className="flex">
+                            <span className="rounded-md border">
+                                <TransactionDetailDialog tranId={order_detail?.tran_id} detail={order_detail?.transaction_detail} />
                             </span>
                         </div>
+                        <div className="flex items-center gap-2">Transaction ID : {order_detail?.tran_id}</div>
+                        <div className="flex items-center gap-2">Pyament Method : {order_detail?.payment_method}</div>
                         <div className="flex items-center gap-2">
-                            Total Amount : <span className="text-xl font-bold capitalize">$ {order_detail?.total_amount}</span>
+                            Pyament Status : <StatusBadge status={order_detail?.payment_status} />
+                        </div>
+                        <div className="flex items-center gap-2">
+                            Shipping Price : <span className="text-xl">$ {order_detail?.shipping_price}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            Total Amount : <span className="text-xl font-bold">$ {order_detail?.total_amount}</span>
                         </div>
                     </div>
                 </div>
