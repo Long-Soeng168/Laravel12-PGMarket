@@ -11,7 +11,6 @@ import { TransactionDetailDialog } from '@/pages/nokor-tech/components/Transacti
 import { Link, router, usePage } from '@inertiajs/react';
 import { ArrowUpDown, ScanEyeIcon } from 'lucide-react';
 import { useState } from 'react';
-import { ShopHoverCard } from './ShopHoverCard';
 import { UserHoverCard } from './UserHoverCard';
 
 const MyTableData = () => {
@@ -70,21 +69,11 @@ const MyTableData = () => {
                                 </span>
                             </TableHead>
 
-                            {item?.buyer && (
-                                <TableHead onClick={() => handleSort('user_id')}>
-                                    <span className="flex cursor-pointer items-center">
-                                        <ArrowUpDown size={16} /> {t('Buyer')}
-                                    </span>
-                                </TableHead>
-                            )}
-
-                            {item?.shop && (
-                                <TableHead onClick={() => handleSort('shop_id')}>
-                                    <span className="flex cursor-pointer items-center">
-                                        <ArrowUpDown size={16} /> {t('Shop')}
-                                    </span>
-                                </TableHead>
-                            )}
+                            <TableHead onClick={() => handleSort('user_id')}>
+                                <span className="flex cursor-pointer items-center">
+                                    <ArrowUpDown size={16} /> {t('Buyer')}
+                                </span>
+                            </TableHead>
 
                             <TableHead onClick={() => handleSort('payment_method')}>
                                 <span className="flex cursor-pointer items-center">
@@ -165,11 +154,6 @@ const MyTableData = () => {
                                     <TableCell className="font-medium whitespace-nowrap capitalize">
                                         {/* <Badge variant="outline">{item.buyer?.name}</Badge> */}
                                         <UserHoverCard user={item?.buyer} />
-                                    </TableCell>
-                                )}
-                                {item?.shop && (
-                                    <TableCell className="font-medium whitespace-nowrap capitalize">
-                                        <ShopHoverCard shop={item?.shop} />
                                     </TableCell>
                                 )}
 
