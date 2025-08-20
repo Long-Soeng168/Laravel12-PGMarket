@@ -31,7 +31,6 @@ const PaymentMethods = () => {
         lifetime,
         additional_params,
         google_pay_token,
-        skip_success_page,
         hash,
         api_url,
     } = usePage<any>().props;
