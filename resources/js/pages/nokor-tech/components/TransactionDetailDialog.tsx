@@ -77,10 +77,13 @@ export function TransactionDetailDialog({ detail, tranId }: { detail: string; tr
                 </pre>
 
                 <DialogFooter>
-                    <Button onClick={handleRecheck} disabled={loading}>
-                        {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                        Recheck Transaction
-                    </Button>
+                    <div className="flex flex-col items-end gap-2">
+                        <Button onClick={handleRecheck} disabled={loading} className="flex items-center gap-2">
+                            {loading && <Loader2 className="h-4 w-4 animate-spin" />}
+                            Recheck Transaction
+                        </Button>
+                        <p className="text-xs text-gray-500">Only for transactions within 7 days</p>
+                    </div>
                 </DialogFooter>
             </DialogContent>
         </Dialog>
