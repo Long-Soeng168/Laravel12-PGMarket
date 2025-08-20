@@ -181,11 +181,9 @@ class ABAPaywayCheckout extends Controller
 
             $statusCode = $result['status']['code'] ?? null;
 
-            if ($statusCode == '00') {
+            if ($statusCode === '00') {
                 $paymentStatus = $result['data']['payment_status'] ?? null;
                 $order_status  = $paymentStatus === 'APPROVED' ? 'paid' : 'pending';
-
-                
 
                 $order->update([
                     'status'            => $order->status == 'pending' ? $order_status : $order->status,
@@ -196,7 +194,6 @@ class ABAPaywayCheckout extends Controller
                     'response' => $order,
                 ], 500);
             } else {
-
                 Log::warning('ABA callback returned error', [
                     'tran_id' => $order->tran_id,
                     'response' => $result,
