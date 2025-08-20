@@ -183,7 +183,7 @@ class ABAPaywayCheckout extends Controller
 
                 $order->update([
                     'transaction_detail' => $result,
-                    'status'            => $order_status,
+                    'status'            => $order->status == 'pending' ? $order_status : $order->status,
                     'payment_status'    => $paymentStatus,
                 ]);
             } else {
