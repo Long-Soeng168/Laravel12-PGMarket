@@ -398,18 +398,6 @@ export function AppSidebar() {
         //     icon: LayoutDashboardIcon,
         // },
         {
-            title: t('Shop Settings'),
-            permission: 'Shop',
-            url: '/user-shops/update',
-            icon: StoreIcon,
-        },
-        {
-            title: t('Items'),
-            permission: 'Shop',
-            url: '/user-items',
-            icon: ListTodoIcon,
-        },
-        {
             title: t('Shop Orders'),
             permission: 'Shop',
             url: '/shop-orders',
@@ -421,6 +409,19 @@ export function AppSidebar() {
             url: '/user-orders',
             icon: ClipboardListIcon,
         },
+        {
+            title: t('Shop Settings'),
+            permission: 'Shop',
+            url: '/user-shops/update',
+            icon: StoreIcon,
+        },
+        {
+            title: t('Items'),
+            permission: 'Shop',
+            url: '/user-items',
+            icon: ListTodoIcon,
+        },
+
         // {
         //     title: t('Your Garage'),
         //     permission: 'Garage',
