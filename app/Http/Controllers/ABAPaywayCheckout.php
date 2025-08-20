@@ -142,7 +142,7 @@ class ABAPaywayCheckout extends Controller
 
     public function callback(Request $request)
     {
-        return $request->all();
+        // return $request->all();
         try {
             // Validate incoming request
             $request->validate([
