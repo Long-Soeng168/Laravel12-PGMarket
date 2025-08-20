@@ -43,7 +43,7 @@ class UserOrderController extends Controller implements HasMiddleware
 
         $query = Order::query();
 
-        // $query->with('order_items');
+        $query->with('shop');
 
         if ($status) {
             $query->where('status', $status);
@@ -92,7 +92,7 @@ class UserOrderController extends Controller implements HasMiddleware
         }
 
         return Inertia::render('user-dashboard/orders/Show', [
-            'order_detail' => $user_order->load('order_items.item.images'),
+            'order_detail' => $user_order->load('order_items.item.images', 'shop'),
             'readOnly' => true,
         ]);
     }

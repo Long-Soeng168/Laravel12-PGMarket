@@ -7,13 +7,13 @@ import { useEffect, useState } from 'react';
 
 // pick icons from lucide-react
 import MyNoData from '@/components/my-no-data';
+import { ShopHoverCard } from '@/pages/admin/orders/components/ShopHoverCard';
+import { UserHoverCard } from '@/pages/admin/orders/components/UserHoverCard';
 import StatusBadge from '@/pages/nokor-tech/components/StatusBadge';
 import { TransactionDetailDialog } from '@/pages/nokor-tech/components/TransactionDetailDialog';
 import OrderItemCard from '@/pages/user-dashboard/orders/components/OrderItemCard';
 import { usePage } from '@inertiajs/react';
 import { CheckCircle2, Clock, CreditCard, Loader2, ShoppingCart, Truck } from 'lucide-react';
-import { ShopHoverCard } from '@/pages/admin/orders/components/ShopHoverCard';
-import { UserHoverCard } from '@/pages/admin/orders/components/UserHoverCard';
 
 const Show = () => {
     const { order_detail } = usePage().props;
@@ -163,11 +163,11 @@ const Show = () => {
                         </div>
                     </div>
                     <div className="space-y-2 rounded-2xl border p-4">
-                        {/* <div className="flex">
+                        <div className="flex">
                             <span className="rounded-md border">
                                 <TransactionDetailDialog tranId={order_detail?.tran_id} detail={order_detail?.transaction_detail || '---'} />
                             </span>
-                        </div> */}
+                        </div>
                         <div className="flex items-center gap-2">Transaction ID : {order_detail?.tran_id}</div>
                         <div className="flex items-center gap-2">Pyament Method : {order_detail?.payment_method}</div>
                         <div className="flex items-center gap-2">
