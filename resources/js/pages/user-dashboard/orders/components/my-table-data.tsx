@@ -11,6 +11,8 @@ import { TransactionDetailDialog } from '@/pages/nokor-tech/components/Transacti
 import { Link, router, usePage } from '@inertiajs/react';
 import { ArrowUpDown, ScanEyeIcon } from 'lucide-react';
 import { useState } from 'react';
+import { UserHoverCard } from '../../shop_orders/components/UserHoverCard';
+import { ShopHoverCard } from '../../shop_orders/components/ShopHoverCard';
 
 const MyTableData = () => {
     const { t } = useTranslation();
@@ -67,9 +69,31 @@ const MyTableData = () => {
                                     <ArrowUpDown size={16} /> {t('Total Amount')}
                                 </span>
                             </TableHead>
+
+                            {item?.buyer && (
+                                <TableHead onClick={() => handleSort('user_id')}>
+                                    <span className="flex cursor-pointer items-center">
+                                        <ArrowUpDown size={16} /> {t('Buyer')}
+                                    </span>
+                                </TableHead>
+                            )}
+
+                            {item?.shop && (
+                                <TableHead onClick={() => handleSort('shop_id')}>
+                                    <span className="flex cursor-pointer items-center">
+                                        <ArrowUpDown size={16} /> {t('Shop')}
+                                    </span>
+                                </TableHead>
+                            )}
+
                             <TableHead onClick={() => handleSort('payment_method')}>
                                 <span className="flex cursor-pointer items-center">
                                     <ArrowUpDown size={16} /> {t('Payment Method')}
+                                </span>
+                            </TableHead>
+                            <TableHead>
+                                <span className="flex cursor-pointer items-center">
+                                    <ArrowUpDown size={16} /> {t('Transaction ID')}
                                 </span>
                             </TableHead>
                             <TableHead onClick={() => handleSort('payment_status')}>
@@ -78,11 +102,6 @@ const MyTableData = () => {
                                 </span>
                             </TableHead>
 
-                            <TableHead onClick={() => handleSort('created_at')}>
-                                <span className="flex cursor-pointer items-center">
-                                    <ArrowUpDown size={16} /> {t('Order Date')}
-                                </span>
-                            </TableHead>
                             {/* <TableHead onClick={() => handleSort('updated_at')}>
                                 <span className="flex cursor-pointer items-center">
                                     <ArrowUpDown size={16} /> {t('Updated at')}
@@ -107,9 +126,9 @@ const MyTableData = () => {
                                         </Link> */}
 
                                         {/* Show Transaction Detail */}
-                                        {/* <span className="rounded-md border">
-                                            <TransactionDetailDialog detail={item.transaction_detail || ''} />
-                                        </span> */}
+                                        <span className="rounded-md border">
+                                            <TransactionDetailDialog tranId={item?.tran_id} detail={item.transaction_detail || '---'} />
+                                        </span>
                                         {/* End Show Transaction Detail */}
                                         {item?.status == 'pending' && (
                                             <span className="rounded-md border p-0.5">
@@ -121,15 +140,44 @@ const MyTableData = () => {
                                 <TableCell className="font-medium whitespace-nowrap capitalize">
                                     <StatusBadge status={item.status} />
                                 </TableCell>
-                                <TableCell className="font-medium whitespace-nowrap">{item.order_number.split('-').slice(1).join('-')}</TableCell>
+                                <TableCell className="font-medium whitespace-nowrap">
+                                    <div>
+                                        <p className="font-bold">{item.order_number.split('-').slice(1).join('-')}</p>
+                                        <p className="text-muted-foreground">
+                                            {item.created_at
+                                                ? new Date(item.created_at).toLocaleString('en-UK', {
+                                                      year: 'numeric',
+                                                      month: 'short',
+                                                      day: '2-digit',
+                                                      hour: 'numeric',
+                                                      minute: 'numeric',
+                                                      hour12: true, // 👈 forces AM/PM
+                                                  })
+                                                : '---'}
+                                        </p>
+                                    </div>
+                                </TableCell>
                                 <TableCell className="font-medium whitespace-nowrap capitalize">
                                     {item.currency == 'KHR' ? '៛ ' : '$ '} {item.total_amount}
                                 </TableCell>
+
+                                {item?.buyer && (
+                                    <TableCell className="font-medium whitespace-nowrap capitalize">
+                                        {/* <Badge variant="outline">{item.buyer?.name}</Badge> */}
+                                        <UserHoverCard user={item?.buyer} />
+                                    </TableCell>
+                                )}
+                                {item?.shop && (
+                                    <TableCell className="font-medium whitespace-nowrap capitalize">
+                                        <ShopHoverCard shop={item?.shop} />
+                                    </TableCell>
+                                )}
+
                                 <TableCell className="font-medium whitespace-nowrap">{item.payment_method}</TableCell>
+                                <TableCell className="font-medium whitespace-nowrap">{item.tran_id}</TableCell>
                                 <TableCell className="font-medium whitespace-nowrap capitalize">
                                     <StatusBadge status={item.payment_status} />
                                 </TableCell>
-
                                 {/* <TableCell>
                                     {item.images[0] ? (
                                         <button
@@ -179,18 +227,6 @@ const MyTableData = () => {
                                     )}
                                 </TableCell> */}
 
-                                <TableCell className="whitespace-nowrap">
-                                    {item.created_at
-                                        ? new Date(item.created_at).toLocaleString('en-UK', {
-                                              year: 'numeric',
-                                              month: 'short',
-                                              day: '2-digit',
-                                              hour: 'numeric',
-                                              minute: 'numeric',
-                                              hour12: true, // 👈 forces AM/PM
-                                          })
-                                        : '---'}
-                                </TableCell>
                                 {/* <TableCell>{item.created_by?.name || '---'}</TableCell> */}
                                 {/* <TableCell className="whitespace-nowrap">
                                     {item.updated_at

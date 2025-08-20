@@ -70,16 +70,21 @@ const MyTableData = () => {
                                 </span>
                             </TableHead>
 
-                            <TableHead onClick={() => handleSort('user_id')}>
-                                <span className="flex cursor-pointer items-center">
-                                    <ArrowUpDown size={16} /> {t('Buyer')}
-                                </span>
-                            </TableHead>
-                            <TableHead onClick={() => handleSort('shop_id')}>
-                                <span className="flex cursor-pointer items-center">
-                                    <ArrowUpDown size={16} /> {t('Shop')}
-                                </span>
-                            </TableHead>
+                            {item?.buyer && (
+                                <TableHead onClick={() => handleSort('user_id')}>
+                                    <span className="flex cursor-pointer items-center">
+                                        <ArrowUpDown size={16} /> {t('Buyer')}
+                                    </span>
+                                </TableHead>
+                            )}
+
+                            {item?.shop && (
+                                <TableHead onClick={() => handleSort('shop_id')}>
+                                    <span className="flex cursor-pointer items-center">
+                                        <ArrowUpDown size={16} /> {t('Shop')}
+                                    </span>
+                                </TableHead>
+                            )}
 
                             <TableHead onClick={() => handleSort('payment_method')}>
                                 <span className="flex cursor-pointer items-center">
@@ -127,7 +132,7 @@ const MyTableData = () => {
                                         {/* End Show Transaction Detail */}
                                         {item?.status == 'pending' && (
                                             <span className="rounded-md border p-0.5">
-                                                <DeleteButton deletePath="/admin/orders/" id={item.id} />
+                                                <DeleteButton deletePath="/shop-orders/" id={item.id} />
                                             </span>
                                         )}
                                     </span>
@@ -156,13 +161,17 @@ const MyTableData = () => {
                                     {item.currency == 'KHR' ? '៛ ' : '$ '} {item.total_amount}
                                 </TableCell>
 
-                                <TableCell className="font-medium whitespace-nowrap capitalize">
-                                    {/* <Badge variant="outline">{item.buyer?.name}</Badge> */}
-                                    <UserHoverCard user={item?.buyer} />
-                                </TableCell>
-                                <TableCell className="font-medium whitespace-nowrap capitalize">
-                                    <ShopHoverCard shop={item?.shop} />
-                                </TableCell>
+                                {item?.buyer && (
+                                    <TableCell className="font-medium whitespace-nowrap capitalize">
+                                        {/* <Badge variant="outline">{item.buyer?.name}</Badge> */}
+                                        <UserHoverCard user={item?.buyer} />
+                                    </TableCell>
+                                )}
+                                {item?.shop && (
+                                    <TableCell className="font-medium whitespace-nowrap capitalize">
+                                        <ShopHoverCard shop={item?.shop} />
+                                    </TableCell>
+                                )}
 
                                 <TableCell className="font-medium whitespace-nowrap">{item.payment_method}</TableCell>
                                 <TableCell className="font-medium whitespace-nowrap">{item.tran_id}</TableCell>
