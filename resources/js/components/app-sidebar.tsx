@@ -369,6 +369,12 @@ export function AppSidebar() {
             url: '/admin/types',
             icon: ShapesIcon,
         },
+        {
+            title: t('All Orders'),
+            permission: 'order view',
+            url: '/admin/orders',
+            icon: ClipboardListIcon,
+        },
     ];
 
     const footerNavItems: NavItem[] = [
@@ -404,14 +410,8 @@ export function AppSidebar() {
             icon: ListTodoIcon,
         },
         {
-            title: t('All Orders'),
-            permission: 'order view',
-            url: '/admin/orders',
-            icon: ClipboardListIcon,
-        },
-        {
             title: t('Shop Orders'),
-            permission: 'Shop',
+            permission: '',
             url: '/shop-orders',
             icon: ClipboardListIcon,
         },

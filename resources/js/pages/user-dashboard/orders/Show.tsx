@@ -19,7 +19,7 @@ const Show = () => {
     const { order_detail } = usePage().props;
     const { t } = useTranslation();
     const breadcrumbs: BreadcrumbItem[] = [
-        { title: t('Orders'), href: '/admin/orders' },
+        { title: t('Your Orders'), href: '/user-orders' },
         { title: order_detail?.order_number.split('-').slice(1).join('-'), href: '#' },
     ];
 
