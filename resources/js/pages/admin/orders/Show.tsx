@@ -145,12 +145,16 @@ const Show = () => {
                                 <StatusBadge status={order_detail?.status} />
                             </span>
                         </div>
-                        <div className="flex items-center gap-2">
-                            Shop : <ShopHoverCard shop={order_detail?.shop} />
-                        </div>
-                        <div className="flex items-center gap-2">
-                            Buyer : <UserHoverCard user={order_detail?.buyer} />
-                        </div>
+                        {order_detail?.shop && (
+                            <div className="flex items-center gap-2">
+                                Shop : <ShopHoverCard shop={order_detail?.shop} />
+                            </div>
+                        )}
+                        {order_detail?.buyer && (
+                            <div className="flex items-center gap-2">
+                                Buyer : <UserHoverCard user={order_detail?.buyer} />
+                            </div>
+                        )}
                         <div className="flex items-center gap-2">
                             Buyer Note : <span className="text-base">{order_detail?.notes || '---'}</span>
                         </div>

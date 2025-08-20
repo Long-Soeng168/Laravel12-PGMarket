@@ -7,16 +7,19 @@ import { useEffect, useState } from 'react';
 
 // pick icons from lucide-react
 import MyNoData from '@/components/my-no-data';
+import StatusBadge from '@/pages/nokor-tech/components/StatusBadge';
+import { TransactionDetailDialog } from '@/pages/nokor-tech/components/TransactionDetailDialog';
+import OrderItemCard from '@/pages/user-dashboard/orders/components/OrderItemCard';
 import { usePage } from '@inertiajs/react';
 import { CheckCircle2, Clock, CreditCard, Loader2, ShoppingCart, Truck } from 'lucide-react';
-import OrderItemCard from './components/OrderItemCard';
-import StatusBadge from '@/pages/nokor-tech/components/StatusBadge';
+import { ShopHoverCard } from '@/pages/admin/orders/components/ShopHoverCard';
+import { UserHoverCard } from '@/pages/admin/orders/components/UserHoverCard';
 
 const Show = () => {
     const { order_detail } = usePage().props;
     const { t } = useTranslation();
     const breadcrumbs: BreadcrumbItem[] = [
-        { title: t('Orders'), href: '/user-orders' },
+        { title: t('Orders'), href: '/admin/orders' },
         { title: order_detail?.order_number.split('-').slice(1).join('-'), href: '#' },
     ];
 
@@ -61,7 +64,7 @@ const Show = () => {
         if (order_detail?.status == 'cancelled') {
             setCurrentStep(0);
         }
-    }, []);
+    }, [order_detail?.status]);
 
     const getBadge = (stepIndex: number) => {
         if (stepIndex + 1 < currentStep) {
@@ -88,7 +91,7 @@ const Show = () => {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Stepper value={currentStep} className="space-y-8 p-4 lg:p-6">
-                <StepperNav className="mb-15 gap-4 gap-y-8 grid grid-cols-1 items-start lg:grid-cols-4 border-primary max-lg:pl-6 border-l-2 lg:border-none">
+                <StepperNav className="border-primary mb-15 grid grid-cols-1 items-start gap-4 gap-y-8 border-l-2 max-lg:pl-6 lg:grid-cols-4 lg:border-none">
                     {steps.map((step, index) => {
                         const badge = getBadge(index);
                         const Icon = step.icon;
@@ -96,7 +99,7 @@ const Show = () => {
                             <StepperItem key={index} step={index + 1} className="relative w-full">
                                 <StepperTrigger className="flex grow flex-col items-start gap-3.5">
                                     <StepperIndicator
-                                        className={`h-1 lg:w-full rounded-full ${index + 1 <= currentStep ? '!bg-primary' : '!bg-border'}`}
+                                        className={`h-1 rounded-full lg:w-full ${index + 1 <= currentStep ? '!bg-primary' : '!bg-border'}`}
                                     />
                                     <div className="flex flex-col items-start gap-1">
                                         <div className="text-muted-foreground text-[10px] font-semibold">Step {index + 1}</div>
@@ -115,20 +118,72 @@ const Show = () => {
                         );
                     })}
                 </StepperNav>
-                <div>
-                    <div className="flex items-center gap-2">
-                        Order Status :{' '}
-                        <span className="capitalize">
-                            <StatusBadge status={order_detail?.status} />
-                        </span>
+                <p className="text-muted-foreground mb-4 text-lg font-bold">Order Detail</p>
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                    <div className="space-y-2 rounded-2xl border p-4">
+                        <div className="flex items-center gap-2">
+                            Order Number : <span className="font-bold">{order_detail?.order_number.split('-').slice(1).join('-')}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            Order Date :{' '}
+                            <span className="text-base">
+                                {order_detail?.created_at
+                                    ? new Date(order_detail?.created_at).toLocaleString('en-UK', {
+                                          year: 'numeric',
+                                          month: 'short',
+                                          day: '2-digit',
+                                          hour: 'numeric',
+                                          minute: 'numeric',
+                                          hour12: true, // 👈 forces AM/PM
+                                      })
+                                    : '---'}
+                            </span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            Order Status :
+                            <span className="capitalize">
+                                <StatusBadge status={order_detail?.status} />
+                            </span>
+                        </div>
+                        {order_detail?.shop && (
+                            <div className="flex items-center gap-2">
+                                Shop : <ShopHoverCard shop={order_detail?.shop} />
+                            </div>
+                        )}
+                        {order_detail?.buyer && (
+                            <div className="flex items-center gap-2">
+                                Buyer : <UserHoverCard user={order_detail?.buyer} />
+                            </div>
+                        )}
+                        <div className="flex items-center gap-2">
+                            Buyer Note : <span className="text-base">{order_detail?.notes || '---'}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            Shipping Address : <span className="text-base">{order_detail?.shipping_address || '---'}</span>
+                        </div>
                     </div>
-                    <div className="flex items-center gap-2 mt-2">
-                        Total Amount : <span className="text-xl font-bold capitalize">$ {order_detail?.total_amount}</span>
+                    <div className="space-y-2 rounded-2xl border p-4">
+                        <div className="flex">
+                            <span className="rounded-md border">
+                                <TransactionDetailDialog tranId={order_detail?.tran_id} detail={order_detail?.transaction_detail || '---'} />
+                            </span>
+                        </div>
+                        <div className="flex items-center gap-2">Transaction ID : {order_detail?.tran_id}</div>
+                        <div className="flex items-center gap-2">Pyament Method : {order_detail?.payment_method}</div>
+                        <div className="flex items-center gap-2">
+                            Pyament Status : <StatusBadge status={order_detail?.payment_status} />
+                        </div>
+                        <div className="flex items-center gap-2">
+                            Shipping Price : <span className="text-xl">$ {order_detail?.shipping_price}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            Total Amount : <span className="text-xl font-bold">$ {order_detail?.total_amount}</span>
+                        </div>
                     </div>
                 </div>
 
                 <StepperPanel className="text-sm">
-                    <p className="mb-4 text-lg font-bold text-muted-foreground">Order Items</p>
+                    <p className="text-muted-foreground mb-4 text-lg font-bold">Order Items</p>
                     {order_detail?.order_items?.length > 0 ? (
                         <div className="grid grid-cols-1 gap-6 md:grid-cols-1 xl:grid-cols-2">
                             {order_detail?.order_items?.map((order_item) => <OrderItemCard key={order_item.id} order_item={order_item} />)}
