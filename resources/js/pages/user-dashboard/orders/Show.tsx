@@ -163,11 +163,11 @@ const Show = () => {
                         </div>
                     </div>
                     <div className="space-y-2 rounded-2xl border p-4">
-                        <div className="flex">
+                        {/* <div className="flex">
                             <span className="rounded-md border">
                                 <TransactionDetailDialog tranId={order_detail?.tran_id} detail={order_detail?.transaction_detail || '---'} />
                             </span>
-                        </div>
+                        </div> */}
                         <div className="flex items-center gap-2">Transaction ID : {order_detail?.tran_id}</div>
                         <div className="flex items-center gap-2">Pyament Method : {order_detail?.payment_method}</div>
                         <div className="flex items-center gap-2">
