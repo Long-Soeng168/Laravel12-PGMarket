@@ -46,7 +46,7 @@ class ABAPaywayCheckout extends Controller
         $tran_id = uniqid();
         $amount = '0.01';
         $items = '';
-        $shipping = '0';
+        $shipping = '2';
         $firstname = 'Long';
         $lastname = 'Soeng';
         $email = 'long.soeng@example.com';
