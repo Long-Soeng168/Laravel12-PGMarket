@@ -52,7 +52,7 @@ class UserOrderController extends Controller implements HasMiddleware
 
         if ($search) {
             $query->where(function ($sub_query) use ($search) {
-                return $sub_query->where('order_id', 'LIKE', "%{$search}%");
+                return $sub_query->where('order_number', 'LIKE', "%{$search}%");
             });
         }
 
