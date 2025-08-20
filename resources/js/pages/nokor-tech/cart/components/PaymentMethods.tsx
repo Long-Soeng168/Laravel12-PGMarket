@@ -59,7 +59,7 @@ const PaymentMethods = () => {
                 sub_total: itemTotal,
             };
         }) || [];
-    const total_amount = cartItemsSubmit.reduce((sum, item) => sum + item.sub_total, 0);
+    const total_amount = cartItemsSubmit.reduce((sum, item) => sum + item.sub_total, 0) + shipping;
 
     useEffect(() => {
         if (typeof window === 'undefined') return; // no-op on server
