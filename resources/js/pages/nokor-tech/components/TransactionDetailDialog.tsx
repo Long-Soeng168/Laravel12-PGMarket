@@ -26,7 +26,7 @@ export function TransactionDetailDialog({ detail, tranId }: { detail: string; tr
             const response = await fetch(`/aba/callback?tran_id=${tranId}`, {
                 method: 'GET', // or POST if your callback expects POST
                 headers: {
-                    'Accept': 'application/json',
+                    Accept: 'application/json',
                 },
             });
 
@@ -65,7 +65,16 @@ export function TransactionDetailDialog({ detail, tranId }: { detail: string; tr
                     <DialogDescription></DialogDescription>
                 </DialogHeader>
 
-                <pre className="rounded bg-gray-100 p-4 text-sm whitespace-pre-wrap">{transaction}</pre>
+                <pre className="rounded bg-gray-100 p-4 text-sm whitespace-pre-wrap">
+                    {(() => {
+                        try {
+                            const parsed = typeof transaction === 'string' && transaction.trim() !== '' ? JSON.parse(transaction) : transaction;
+                            return JSON.stringify(parsed, null, 2);
+                        } catch (e) {
+                            return transaction;
+                        }
+                    })()}{' '}
+                </pre>
 
                 <DialogFooter>
                     <Button onClick={handleRecheck} disabled={loading}>

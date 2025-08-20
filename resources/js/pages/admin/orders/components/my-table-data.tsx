@@ -122,7 +122,7 @@ const MyTableData = () => {
 
                                         {/* Show Transaction Detail */}
                                         <span className="rounded-md border">
-                                            <TransactionDetailDialog tranId={item?.tran_id} detail={item.transaction_detail || ''} />
+                                            <TransactionDetailDialog tranId={item?.tran_id} detail={item.transaction_detail || '---'} />
                                         </span>
                                         {/* End Show Transaction Detail */}
                                         {item?.status == 'pending' && (
