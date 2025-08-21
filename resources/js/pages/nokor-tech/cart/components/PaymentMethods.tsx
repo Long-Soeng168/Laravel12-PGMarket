@@ -20,7 +20,7 @@ const PaymentMethods = () => {
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
     const [type, setType] = useState('purchase');
-    const [paymentOption, setPaymentOption] = useState(''); // abapay_khqr
+    const [paymentOption, setPaymentOption] = useState('abapay_khqr'); // abapay_khqr
 
     const [returnUrl, setReturnUrl] = useState(`${app_url}/aba/callback?tran_id=${tran_id}`);
     const [cancelUrl, setCancelUrl] = useState(`${app_url}/aba/cancel?tran_id=${tran_id}`);
