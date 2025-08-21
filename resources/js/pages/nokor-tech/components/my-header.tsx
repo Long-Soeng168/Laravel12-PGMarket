@@ -186,9 +186,9 @@ const MyHeader = () => {
                             <MySearchProductsDialog />
                         </div>
 
-                        <Link prefetch href="/shopping-cart">
+                        {/* <Link prefetch href="/shopping-cart"> */}
                             <CartButton />
-                        </Link>
+                        {/* </Link> */}
                         <div className="min-md:hidden">
                             <HomeUserButton />
                         </div>
