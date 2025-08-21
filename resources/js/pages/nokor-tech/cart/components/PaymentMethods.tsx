@@ -8,17 +8,17 @@ import { toast } from 'sonner';
 
 const PaymentMethods = () => {
     // console.log(usePage<any>().props);
-    const { req_time, merchant_id, tran_id, api_url, app_url } = usePage<any>().props;
+    const { req_time, merchant_id, tran_id, api_url, app_url, auth } = usePage<any>().props;
 
     const [error, setError] = useState('');
 
     // Start ABA Payload
     const [hash, setHash] = useState('');
-    const [shipping, setShipping] = useState('2');
-    const [firstname, setFirstname] = useState('Long');
-    const [lastname, setLastname] = useState('Soeng');
-    const [email, setEmail] = useState('long.soeng@example.com');
-    const [phone, setPhone] = useState('012345678');
+    const [shipping, setShipping] = useState(2);
+    const [firstname, setFirstname] = useState('');
+    const [lastname, setLastname] = useState('');
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
     const [type, setType] = useState('purchase');
     const [paymentOption, setPaymentOption] = useState('abapay_khqr');
 
@@ -52,7 +52,7 @@ const PaymentMethods = () => {
                 sub_total: itemTotal,
             };
         }) || [];
-    const total_amount = cartItemsSubmit.reduce((sum, item) => sum + item.sub_total, 0) + shipping;
+    const total_amount = +shipping + cartItemsSubmit.reduce((sum, item) => sum + item.sub_total, 0);
 
     useEffect(() => {
         if (typeof window === 'undefined') return; // no-op on server
@@ -76,6 +76,11 @@ const PaymentMethods = () => {
             }
         };
         checkAbaPayway();
+    }, []);
+
+    useEffect(() => {
+        setEmail(auth?.user?.email || '');
+        setPhone(auth?.user?.phone || '');
     }, []);
 
     const handleGetHash = async () => {
