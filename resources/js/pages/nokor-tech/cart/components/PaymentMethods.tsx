@@ -1,39 +1,33 @@
 import MyLoadingAnimationOne from '@/components/MyLoadingAnimationOne';
 import { useCart } from '@/contexts/cart-contexts';
 import { useForm, usePage } from '@inertiajs/react';
+import axios from 'axios';
 import { ChevronRight } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 const PaymentMethods = () => {
     // console.log(usePage<any>().props);
-    const {
-        req_time,
-        merchant_id,
-        tran_id,
-        amount,
-        items,
-        shipping,
-        firstname,
-        lastname,
-        email,
-        phone,
-        type,
-        payment_option,
-        return_url,
-        cancel_url,
-        continue_success_url,
-        return_deeplink,
-        currency,
-        custom_fields,
-        return_params,
-        payout,
-        lifetime,
-        additional_params,
-        google_pay_token,
-        hash,
-        api_url,
-    } = usePage<any>().props;
+    const { req_time, merchant_id, tran_id, api_url, app_url } = usePage<any>().props;
+
+    const [error, setError] = useState('');
+
+    // Start ABA Payload
+    const [hash, setHash] = useState('');
+    const [shipping, setShipping] = useState('2');
+    const [firstname, setFirstname] = useState('Long');
+    const [lastname, setLastname] = useState('Soeng');
+    const [email, setEmail] = useState('long.soeng@example.com');
+    const [phone, setPhone] = useState('012345678');
+    const [type, setType] = useState('purchase');
+    const [paymentOption, setPaymentOption] = useState('abapay_khqr');
+
+    const [returnUrl, setReturnUrl] = useState(`${app_url}/aba/callback?tran_id=${tran_id}`);
+    const [cancelUrl, setCancelUrl] = useState(`${app_url}/aba/cancel?tran_id=${tran_id}`);
+    const [continueSuccessUrl, setContinueSuccessUrl] = useState(`${app_url}/aba/success?tran_id=${tran_id}`);
+    const [skipSuccessPage, setSkipSuccessPage] = useState(1);
+    const [currency, setCurrency] = useState('USD');
+    // End ABA Payload
 
     const { post, progress, processing, transform, errors } = useForm();
 
@@ -42,7 +36,7 @@ const PaymentMethods = () => {
 
     const { cartItems, clearCart } = useCart();
     const cartItemsSubmit =
-        cartItems?.map((item) => {
+        cartItems?.map((item: any) => {
             const itemPrice = parseFloat(item.price);
             const discount_percent = parseFloat(item.discount_percent);
             const discountAmount = (itemPrice * discount_percent) / 100;
@@ -84,14 +78,47 @@ const PaymentMethods = () => {
         checkAbaPayway();
     }, []);
 
+    const handleGetHash = async () => {
+        const hashString =
+            req_time +
+            merchant_id +
+            tran_id +
+            total_amount +
+            shipping +
+            firstname +
+            lastname +
+            email +
+            phone +
+            type +
+            paymentOption +
+            returnUrl +
+            cancelUrl +
+            continueSuccessUrl +
+            currency +
+            skipSuccessPage;
+        console.log(hashString);
+        try {
+            const response = await axios.post('/aba/get-hash', { hash_string: hashString });
+            if (response.data.code === '00') {
+                setHash(response.data.hash);
+                console.log('Hash received:', response.data.hash);
+            } else {
+                setError(response.data.message || 'Failed to get hash');
+            }
+        } catch (err: any) {
+            setError(err.response?.data?.message || err.message || 'Something went wrong');
+        }
+    };
+
     const handleCheckout = () => {
+        console.log('hash : ' + hash);
         if (typeof window === 'undefined') return; // safety no-op on server
 
         const orderData = {
             shop_id: cartItems[0]?.shop_id || null,
             note: '',
             total_amount: total_amount,
-            payment_method: payment_option,
+            payment_method: paymentOption,
             currency: currency,
             tran_id: tran_id,
             req_time: req_time,
@@ -101,7 +128,6 @@ const PaymentMethods = () => {
             items: cartItemsSubmit,
         };
 
-        setIsLoading(true);
         transform(() => orderData);
         post(`/orders`, {
             preserveScroll: true,
@@ -139,40 +165,35 @@ const PaymentMethods = () => {
             <div className={'text-primary mb-4 text-lg leading-none font-bold'}>
                 <p>Choose Payment Method</p>
             </div>
-            <h2 className="my-4">TOTAL(Testing): ${amount}</h2>
+            <h2 className="my-4">TOTAL(Testing): ${total_amount}</h2>
             <form method="POST" target="aba_webservice" action={api_url} id="aba_merchant_request">
-                {/* CSRF handled outside React */}
                 <input type="hidden" name="req_time" value={req_time} />
                 <input type="hidden" name="merchant_id" value={merchant_id} />
                 <input type="hidden" name="tran_id" value={tran_id} />
-                <input type="hidden" name="amount" value={amount} />
-                <input type="hidden" name="items" value={items} />
+                <input type="hidden" name="amount" value={total_amount} />
                 <input type="hidden" name="shipping" value={shipping} />
                 <input type="hidden" name="firstname" value={firstname} />
                 <input type="hidden" name="lastname" value={lastname} />
                 <input type="hidden" name="email" value={email} />
                 <input type="hidden" name="phone" value={phone} />
                 <input type="hidden" name="type" value={type} />
-                <input type="hidden" name="payment_option" value={payment_option} />
-                <input type="hidden" name="return_url" value={return_url} />
-                <input type="hidden" name="cancel_url" value={cancel_url} />
-                <input type="hidden" name="continue_success_url" value={continue_success_url} />
-                <input type="hidden" name="return_deeplink" value={return_deeplink} />
+                <input type="hidden" name="payment_option" value={paymentOption} />
+                <input type="hidden" name="return_url" value={returnUrl} />
+                <input type="hidden" name="cancel_url" value={cancelUrl} />
+                <input type="hidden" name="continue_success_url" value={continueSuccessUrl} />
                 <input type="hidden" name="currency" value={currency} />
-                <input type="hidden" name="custom_fields" value={custom_fields} />
-                <input type="hidden" name="return_params" value={return_params} />
-                <input type="hidden" name="payout" value={payout} />
-                <input type="hidden" name="lifetime" value={lifetime} />
-                <input type="hidden" name="additional_params" value={additional_params} />
-                <input type="hidden" name="google_pay_token" value={google_pay_token} />
-                <input type="hidden" name="skip_success_page" value={1} />
+                <input type="hidden" name="skip_success_page" value={skipSuccessPage} />
                 <input type="hidden" name="hash" value={hash} />
             </form>
 
             {paywayReady ? (
                 <button
                     id="checkout_button"
-                    onClick={handleCheckout}
+                    onClick={async () => {
+                        setIsLoading(true);
+                        await handleGetHash();
+                        handleCheckout();
+                    }}
                     disabled={!paywayReady}
                     className="bg-background flex w-full cursor-pointer items-center gap-[10px] rounded-[8px] border border-transparent p-[10px] text-start shadow-[0_1px_5px_rgb(0,0,0,0.1)] transition-all duration-300 hover:scale-105 hover:shadow-[0_3px_10px_rgb(0,0,0,0.2)] dark:bg-white/20 dark:hover:bg-white/25"
                 >
@@ -190,6 +211,7 @@ const PaymentMethods = () => {
             ) : (
                 <MyLoadingAnimationOne />
             )}
+            {error && <p className="text-red-500">{error}</p>}
             {isLoading && <MyLoadingAnimationOne />}
         </div>
     );
