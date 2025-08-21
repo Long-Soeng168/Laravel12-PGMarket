@@ -13,7 +13,7 @@ const CartItemList = () => {
     const total = subtotal + shipping;
     return (
         <div>
-            <div className="mx-auto w-full max-w-7xl p-6">
+            <div className="mx-auto w-full max-w-7xl p-4 md:p-6">
                 <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
                     {/* Main Cart Section */}
                     <div className="space-y-6 lg:col-span-7">
@@ -96,12 +96,12 @@ const CartItemList = () => {
 
                     {/* Order Summary */}
                     <div className="space-y-6 lg:col-span-5">
-                        <Card>
-                            <CardHeader>
+                        <Card className='p-4 md:p-6 m-0'>
+                            <CardHeader className='p-0 m-0'>
                                 <CardTitle>Order Summary</CardTitle>
                                 <CardDescription>Review your order details and shipping information</CardDescription>
                             </CardHeader>
-                            <CardContent className="space-y-6">
+                            <CardContent className="space-y-6 p-0 m-0">
                                 {/* Promo Code */}
                                 {/* <div className="space-y-2">
                                     <Label>Promo Code</Label>

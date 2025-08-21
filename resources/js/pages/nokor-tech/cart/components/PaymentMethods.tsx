@@ -52,7 +52,7 @@ const PaymentMethods = () => {
                 sub_total: itemTotal,
             };
         }) || [];
-    const total_amount = +shipping + cartItemsSubmit.reduce((sum, item) => sum + item.sub_total, 0);
+    const total_amount = +cartItemsSubmit.reduce((sum, item) => sum + item.sub_total, 0);
 
     useEffect(() => {
         if (typeof window === 'undefined') return; // no-op on server
@@ -122,7 +122,7 @@ const PaymentMethods = () => {
         const orderData = {
             shop_id: cartItems[0]?.shop_id || null,
             note: '',
-            total_amount: total_amount,
+            total_amount: +total_amount + shipping,
             payment_method: paymentOption,
             currency: currency,
             tran_id: tran_id,
@@ -170,7 +170,7 @@ const PaymentMethods = () => {
             <div className={'text-primary mb-4 text-lg leading-none font-bold'}>
                 <p>Choose Payment Method</p>
             </div>
-            <h2 className="my-4">TOTAL(Testing): ${total_amount}</h2>
+            {/* <h2 className="my-4">TOTAL(Testing): ${total_amount}</h2> */}
             <form method="POST" target="aba_webservice" action={api_url} id="aba_merchant_request">
                 <input type="hidden" name="req_time" value={req_time} />
                 <input type="hidden" name="merchant_id" value={merchant_id} />
@@ -200,7 +200,7 @@ const PaymentMethods = () => {
                         handleCheckout();
                     }}
                     disabled={!paywayReady}
-                    className="bg-background flex w-full cursor-pointer items-center gap-[10px] rounded-[8px] border border-transparent p-[10px] text-start shadow-[0_1px_5px_rgb(0,0,0,0.1)] transition-all duration-300 hover:scale-105 hover:shadow-[0_3px_10px_rgb(0,0,0,0.2)] dark:bg-white/20 dark:hover:bg-white/25"
+                    className="bg-background flex w-full cursor-pointer items-center gap-[10px] rounded-[8px] border border-transparent p-[6px] text-start shadow-[0_1px_5px_rgb(0,0,0,0.1)] transition-all duration-300 hover:scale-105 hover:shadow-[0_3px_10px_rgb(0,0,0,0.2)] md:p-[10px] dark:bg-white/20 dark:hover:bg-white/25"
                 >
                     <img className="size-[50px] rounded-[4px]" src="/assets/ABA_BANK.svg" alt="" />
                     <div className="flex w-full items-center justify-between">
