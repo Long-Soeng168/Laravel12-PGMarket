@@ -55,14 +55,51 @@ export default function PWAInstallPrompt() {
         return (
             <div className="flex w-full flex-col border-t py-2">
                 <span className="mb-2 text-sm font-medium">Install this app for quick access</span>
-                <Button
+                {/* <Button
                     className="text-primary flex w-fit items-center gap-2 bg-white font-semibold transition-all duration-300 hover:scale-105 hover:bg-gray-100"
                     variant="secondary"
                     onClick={handleInstall}
                 >
                     <img className="size-5" src="/assets/icons/app-download-icon.png" alt="Install" />
                     Install
+                </Button> */}
+                <Button
+                    className="text-primary flex w-fit items-center gap-2 bg-white font-semibold transition-all duration-300 hover:scale-105 hover:bg-gray-100"
+                    variant="secondary"
+                    onClick={() => setOpenDialog(true)}
+                >
+                    <img className="size-5" src="/assets/icons/app-download-icon.png" alt="Install" />
+                    Install
                 </Button>
+                <Dialog open={openDialog} onOpenChange={setOpenDialog}>
+                    <DialogContent className="space-y-4 sm:max-w-[425px]">
+                        <DialogHeader>
+                            <DialogTitle>Install App</DialogTitle>
+                            <DialogDescription>Follow these steps to add this app to your iPhone or iPad home screen:</DialogDescription>
+                        </DialogHeader>
+
+                        <div className="flex flex-col gap-3">
+                            <div>
+                                1. Tap the
+                                <Badge variant="outline" className="mx-2 inline-flex items-center gap-1 text-sm">
+                                    Share <img className="size-5" src="/assets/icons/ios-share.png" alt="Share" />
+                                </Badge>
+                                at the bottom in Safari
+                            </div>
+
+                            <div>
+                                2. Scroll down and tap
+                                <Badge variant="outline" className="mx-2 inline-flex items-center gap-1 text-sm">
+                                    Add to Home Screen <PlusSquare className="ml-0.5" />
+                                </Badge>
+                            </div>
+
+                            <div className="text-muted-foreground mt-2 text-sm">
+                                After adding, the app will appear on your home screen like a native app.
+                            </div>
+                        </div>
+                    </DialogContent>
+                </Dialog>
             </div>
         );
     }
