@@ -1,10 +1,10 @@
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import useTranslation from '@/hooks/use-translation';
+import StatusBadge from '@/pages/nokor-tech/components/StatusBadge';
 import { Link, usePage } from '@inertiajs/react';
 import { ClipboardListIcon, ScanEyeIcon } from 'lucide-react';
-import DeleteButton from './delete-button';
-import StatusBadge from '@/pages/nokor-tech/components/StatusBadge';
+import PaymentMethodLabel from './PaymentMethodLabel';
 
 export function UserOrdersFloatButton() {
     const { user_orders } = usePage().props;
@@ -13,7 +13,7 @@ export function UserOrdersFloatButton() {
     return (
         <Sheet>
             <SheetTrigger asChild>
-                <button className={`fixed right-6 bottom-22 sm:bottom-6 z-50 ${(user_orders?.length ?? 0) === 0 ? 'hidden' : ''}`}>
+                <button className={`fixed right-6 bottom-22 z-50 sm:bottom-6 ${(user_orders?.length ?? 0) === 0 ? 'hidden' : ''}`}>
                     <div className="rainbow-button rounded-full transition-all duration-300">
                         <div className="bg-background/50 rounded-full p-1 transition-all duration-300">
                             <span className="group border-foreground bg-background text-foreground relative flex h-16 w-16 cursor-pointer items-center justify-center overflow-hidden rounded-full border-[1.5px] text-base font-semibold transition-all duration-[600ms] ease-[cubic-bezier(0.23,1,0.32,1)] hover:border-white hover:text-white active:scale-[0.95]">
@@ -85,7 +85,7 @@ export function UserOrdersFloatButton() {
 
                                     <div className="flex justify-between">
                                         <span className="text-muted-foreground">Payment</span>
-                                        <span className="">{item.payment_method}</span>
+                                        <PaymentMethodLabel value={item.payment_method} />
                                     </div>
                                     <div className="flex justify-between">
                                         <span className="text-muted-foreground">Payment Status</span>

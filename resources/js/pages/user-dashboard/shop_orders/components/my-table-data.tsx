@@ -2,6 +2,7 @@ import DeleteButton from '@/components/delete-button';
 import MyImageGallery from '@/components/my-image-gallery';
 import MyNoData from '@/components/my-no-data';
 import { MyTooltipButton } from '@/components/my-tooltip-button';
+import PaymentMethodLabel from '@/components/PaymentMethodLabel';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import useRole from '@/hooks/use-role';
@@ -157,7 +158,9 @@ const MyTableData = () => {
                                     </TableCell>
                                 )}
 
-                                <TableCell className="font-medium whitespace-nowrap">{item.payment_method}</TableCell>
+                                <TableCell className="font-medium whitespace-nowrap">
+                                    <PaymentMethodLabel value={item?.payment_method} />
+                                </TableCell>
                                 <TableCell className="font-medium whitespace-nowrap">{item.tran_id}</TableCell>
                                 <TableCell className="font-medium whitespace-nowrap capitalize">
                                     <StatusBadge status={item.payment_status} />

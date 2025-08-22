@@ -12,6 +12,7 @@ import { Link, router, usePage } from '@inertiajs/react';
 import { ArrowUpDown, ScanEyeIcon } from 'lucide-react';
 import { useState } from 'react';
 import { ShopHoverCard } from '../../shop_orders/components/ShopHoverCard';
+import PaymentMethodLabel from '@/components/PaymentMethodLabel';
 
 const MyTableData = () => {
     const { t } = useTranslation();
@@ -156,7 +157,7 @@ const MyTableData = () => {
                                     </TableCell>
                                 )}
 
-                                <TableCell className="font-medium whitespace-nowrap">{item.payment_method}</TableCell>
+                                <TableCell className="font-medium whitespace-nowrap"><PaymentMethodLabel value={item?.payment_method} /></TableCell>
                                 <TableCell className="font-medium whitespace-nowrap">{item.tran_id}</TableCell>
                                 <TableCell className="font-medium whitespace-nowrap capitalize">
                                     <StatusBadge status={item.payment_status} />

@@ -13,6 +13,7 @@ import { ArrowUpDown, ScanEyeIcon } from 'lucide-react';
 import { useState } from 'react';
 import { ShopHoverCard } from './ShopHoverCard';
 import { UserHoverCard } from './UserHoverCard';
+import PaymentMethodLabel from '@/components/PaymentMethodLabel';
 
 const MyTableData = () => {
     const { t } = useTranslation();
@@ -165,7 +166,7 @@ const MyTableData = () => {
                                     <ShopHoverCard shop={item?.shop} />
                                 </TableCell>
 
-                                <TableCell className="font-medium whitespace-nowrap">{item.payment_method}</TableCell>
+                                <TableCell className="font-medium whitespace-nowrap"><PaymentMethodLabel value={item?.payment_method} /></TableCell>
                                 <TableCell className="font-medium whitespace-nowrap">{item.tran_id}</TableCell>
                                 <TableCell className="font-medium whitespace-nowrap capitalize">
                                     <StatusBadge status={item.payment_status} />

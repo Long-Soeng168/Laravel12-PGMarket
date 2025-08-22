@@ -54,19 +54,6 @@ const Index = () => {
                             <SeeMoreProducts />
                         </div>
 
-                        {/* {categoriesWithItems
-                            .filter((category: any) => category.all_items.length > 0)
-                            .map((category: any) => (
-                                <div key={category.id}>
-                                    <MyProductListHeader
-                                        link={`/products?category_code=${category?.code}`}
-                                        title={category.name}
-                                        image={`/assets/images/item_categories/thumb/${category.image}`}
-                                    />
-                                    <MyProductList items={category.all_items} />
-                                </div>
-                            ))} */}
-
                         {posts?.length > 0 && (
                             <>
                                 <MyProductListHeader title="Blogs" />

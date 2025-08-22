@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 
 // pick icons from lucide-react
 import MyNoData from '@/components/my-no-data';
+import PaymentMethodLabel from '@/components/PaymentMethodLabel';
 import { ShopHoverCard } from '@/pages/admin/orders/components/ShopHoverCard';
 import { UserHoverCard } from '@/pages/admin/orders/components/UserHoverCard';
 import StatusBadge from '@/pages/nokor-tech/components/StatusBadge';
@@ -169,7 +170,9 @@ const Show = () => {
                             </span>
                         </div>
                         <div className="flex items-center gap-2">Transaction ID : {order_detail?.tran_id}</div>
-                        <div className="flex items-center gap-2">Pyament Method : {order_detail?.payment_method}</div>
+                        <div className="flex items-center gap-2">
+                            Pyament Method : <PaymentMethodLabel value={order_detail?.payment_method} />
+                        </div>
                         <div className="flex items-center gap-2">
                             Pyament Status : <StatusBadge status={order_detail?.payment_status} />
                         </div>

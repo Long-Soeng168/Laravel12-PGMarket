@@ -14,6 +14,7 @@ import { usePage } from '@inertiajs/react';
 import { CheckCircle2, Clock, CreditCard, Loader2, ShoppingCart, Truck } from 'lucide-react';
 import { ShopHoverCard } from './components/ShopHoverCard';
 import { UserHoverCard } from './components/UserHoverCard';
+import PaymentMethodLabel from '@/components/PaymentMethodLabel';
 
 const Show = () => {
     const { order_detail } = usePage().props;
@@ -169,7 +170,7 @@ const Show = () => {
                             </span>
                         </div>
                         <div className="flex items-center gap-2">Transaction ID : {order_detail?.tran_id}</div>
-                        <div className="flex items-center gap-2">Pyament Method : {order_detail?.payment_method}</div>
+                        <div className="flex items-center gap-2">Pyament Method : <PaymentMethodLabel value={order_detail?.payment_method} /></div>
                         <div className="flex items-center gap-2">
                             Pyament Status : <StatusBadge status={order_detail?.payment_status} />
                         </div>
