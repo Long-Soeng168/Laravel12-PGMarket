@@ -120,6 +120,7 @@ const MyHeader = () => {
                                 <SheetHeader>
                                     <SheetTitle className="text-2xl font-bold">{t('Menu')}</SheetTitle>
                                 </SheetHeader>
+
                                 <div className="flex flex-col gap-6 px-4 font-semibold">
                                     <hr />
                                     {navItems2.map(renderNavLink)}
