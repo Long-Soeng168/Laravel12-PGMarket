@@ -55,16 +55,25 @@ export default function PWAInstallPrompt() {
         return (
             <div className="flex w-full flex-col border-t py-2">
                 <span className="mb-2 text-sm font-medium">Install this app for quick access</span>
-                {/* <Button
-                    className="text-primary flex w-fit items-center gap-2 bg-white font-semibold transition-all duration-300 hover:scale-105 hover:bg-gray-100"
+                <Button
+                    className="text-true-primary flex w-fit items-center gap-2 bg-white font-semibold transition-all duration-300 hover:scale-105 hover:bg-gray-100"
                     variant="secondary"
                     onClick={handleInstall}
                 >
                     <img className="size-5" src="/assets/icons/app-download-icon.png" alt="Install" />
                     Install
-                </Button> */}
+                </Button>
+            </div>
+        );
+    }
+
+    // iOS Safari flow → show hint
+    if (isIOS && !isStandalone) {
+        return (
+            <div className="flex w-full flex-col border-t py-3">
+                <span className="mb-2 text-sm font-medium">Install this app for quick access</span>
                 <Button
-                    className="text-primary flex w-fit items-center gap-2 bg-white font-semibold transition-all duration-300 hover:scale-105 hover:bg-gray-100"
+                    className="text-true-primary flex w-fit items-center gap-2 bg-white font-semibold transition-all duration-300 hover:scale-105 hover:bg-gray-100"
                     variant="secondary"
                     onClick={() => setOpenDialog(true)}
                 >
@@ -92,54 +101,6 @@ export default function PWAInstallPrompt() {
                                 <Badge variant="outline" className="mx-2 inline-flex items-center gap-1 text-sm">
                                     Add to Home Screen <PlusSquare className="ml-0.5" />
                                 </Badge>
-                            </div>
-
-                            <div className="text-muted-foreground mt-2 text-sm">
-                                After adding, the app will appear on your home screen like a native app.
-                            </div>
-                        </div>
-                    </DialogContent>
-                </Dialog>
-            </div>
-        );
-    }
-
-    // iOS Safari flow → show hint
-    if (isIOS && !isStandalone) {
-        return (
-            <div className="flex w-full flex-col border-t py-3">
-                <span className="mb-2 text-sm font-medium">Install this app for quick access</span>
-                <Button
-                    className="text-primary flex w-fit items-center gap-2 bg-white font-semibold transition-all duration-300 hover:scale-105 hover:bg-gray-100"
-                    variant="secondary"
-                    onClick={() => setOpenDialog(true)}
-                >
-                    <img className="size-5" src="/assets/icons/app-download-icon.png" alt="Install" />
-                    Install
-                </Button>
-                <Dialog open={openDialog} onOpenChange={setOpenDialog}>
-                    <DialogContent className="space-y-4 sm:max-w-[425px]">
-                        <DialogHeader>
-                            <DialogTitle>Install App</DialogTitle>
-                            <DialogDescription>Follow these steps to add this app to your iPhone or iPad home screen:</DialogDescription>
-                        </DialogHeader>
-
-                        <div className="flex flex-col gap-3">
-                            <div className="flex items-center gap-2">
-                                <span>1. Tap the</span>
-                                <Badge variant="outline" className="inline-flex items-center gap-1 text-sm">
-                                    Share <img className="size-5" src="/assets/icons/ios-share.png" alt="Share" />
-                                </Badge>
-                                <span>at the bottom in Safari</span>
-                            </div>
-
-                            <div className="flex flex-wrap items-start gap-2">
-                                <span>2. Scroll down and tap</span>
-                                <div>
-                                    <Badge variant="outline" className="font-semibold">
-                                        Add to Home Screen <PlusSquare className="ml-0.5" />
-                                    </Badge>
-                                </div>
                             </div>
 
                             <div className="text-muted-foreground mt-2 text-sm">
