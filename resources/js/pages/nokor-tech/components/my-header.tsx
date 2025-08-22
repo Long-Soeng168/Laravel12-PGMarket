@@ -1,5 +1,6 @@
 import { BottomMobileNav } from '@/components/BottomMobileNav';
 import MySelectLanguageSwitch from '@/components/my-select-language-switch';
+import PWAInstallPrompt from '@/components/PWAInstallPrompt';
 import ToggleModeSwitch from '@/components/toggle-mode-switch';
 import { TopDesktopNav } from '@/components/TopDesktopNav';
 import { Separator } from '@/components/ui/separator';
@@ -171,6 +172,8 @@ const MyHeader = () => {
                                     <MySelectLanguageSwitch />
                                     <ToggleModeSwitch />
                                 </div>
+                                <Separator className="my-4" />
+                                <PWAInstallPrompt />
                             </SheetContent>
                         </Sheet>
                     </div>
@@ -187,7 +190,7 @@ const MyHeader = () => {
                         </div>
 
                         {/* <Link prefetch href="/shopping-cart"> */}
-                            <CartButton />
+                        <CartButton />
                         {/* </Link> */}
                         <div className="min-md:hidden">
                             <HomeUserButton />

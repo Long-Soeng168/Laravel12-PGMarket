@@ -21,6 +21,7 @@ const NokorTechLayout = ({ children }: NokorTechLayoutProps) => {
                 <div className={`min-h-[50vh]`}>{children}</div>
                 <Toaster />
                 <MyFooter />
+                
                 <UserOrdersFloatButton />
                 <ScrollToTopButton />
             </CartProvider>

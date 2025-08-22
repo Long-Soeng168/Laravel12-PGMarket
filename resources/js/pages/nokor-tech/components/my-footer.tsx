@@ -1,3 +1,4 @@
+import PWAInstallPrompt from '@/components/PWAInstallPrompt';
 import useTranslation from '@/hooks/use-translation';
 import { Link, usePage } from '@inertiajs/react';
 import { Separator } from './ui/separator';
@@ -58,6 +59,9 @@ export default function MyFooter() {
                                 </a>
                             </li>
                         </ul>
+                        <div className='mt-8 w-auto'>
+                            <PWAInstallPrompt />
+                        </div>
                     </div>
 
                     {/* Quick Links */}
@@ -129,7 +133,7 @@ export default function MyFooter() {
                     {/* <a className="text-sm" href="#">
                         {t('Developed by')} : <strong></strong>
                     </a> */}
-                    <div className="flex items-center space-x-[10px] font-semibold text-[18px]">
+                    <div className="flex items-center space-x-[10px] text-[18px] font-semibold">
                         <p>We accept:</p>
                         <div className="flex gap-[10px]">
                             <img className="h-[40px]" src="/assets/ABA_PAY.svg" alt="" />
