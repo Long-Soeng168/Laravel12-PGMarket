@@ -65,7 +65,7 @@ class UserShopController extends Controller implements HasMiddleware
             'short_description' => 'nullable|string|max:500',
             'short_description_kh' => 'nullable|string|max:500',
             'order_index' => 'nullable|numeric|max:255',
-            'status' => 'nullable|string|in:active,inactive',
+            'status' => 'nullable|string|in:active,inactive,pending,reject',
             'logo' => 'required|image|mimes:jpeg,png,jpg,gif,webp,svg,webp|max:2048',
             'banner' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg,webp|max:2048',
         ]);
@@ -140,7 +140,7 @@ class UserShopController extends Controller implements HasMiddleware
             'short_description_kh' => 'nullable|string|max:500',
             'parent_code' => 'nullable|string|max:255',
             'order_index' => 'nullable|numeric|max:255',
-            'status' => 'nullable|string|in:active,inactive',
+            'status' => 'nullable|string|in:active,inactive,pending,reject',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg,webp|max:2048',
             'banner' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg,webp|max:2048',
         ]);
@@ -189,17 +189,17 @@ class UserShopController extends Controller implements HasMiddleware
     }
 
 
-    public function update_status(Request $request, Shop $user_shop)
-    {
-        $request->validate([
-            'status' => 'required|string|in:active,inactive',
-        ]);
-        $user_shop->update([
-            'status' => $request->status,
-        ]);
+    // public function update_status(Request $request, Shop $user_shop)
+    // {
+    //     $request->validate([
+    //         'status' => 'required|string|in:active,inactive',
+    //     ]);
+    //     $user_shop->update([
+    //         'status' => $request->status,
+    //     ]);
 
-        return redirect()->back()->with('success', 'Status updated successfully!');
-    }
+    //     return redirect()->back()->with('success', 'Status updated successfully!');
+    // }
 
     /**
      * Remove the specified resource from storage.
