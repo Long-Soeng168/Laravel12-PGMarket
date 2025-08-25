@@ -109,7 +109,7 @@ class ShopController extends Controller implements HasMiddleware
             ->where('shop_id', null)
             ->get();
         $itemCategories = ItemCategory::where('parent_code', null)->where('status', 'active')->orderBy('name')->orderBy('name')->get();
-        
+
         // return ($all_users);
         return Inertia::render('admin/shops/Create', [
             'all_users' => $all_users,
@@ -198,7 +198,7 @@ class ShopController extends Controller implements HasMiddleware
             'short_description_kh' => 'nullable|string|max:500',
             'parent_code' => 'nullable|string|max:255',
             'order_index' => 'nullable|numeric|max:255',
-            'status' => 'nullable|string|in:active,inactive',
+            'status' => 'nullable|string|in:active,inactive,pending,reject',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg,webp|max:2048',
             'banner' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg,webp|max:2048',
         ]);
@@ -265,7 +265,7 @@ class ShopController extends Controller implements HasMiddleware
     public function update_status(Request $request, Shop $shop)
     {
         $request->validate([
-            'status' => 'required|string|in:active,inactive',
+            'status' => 'required|string|in:active,inactive,pending,reject',
         ]);
         $shop->update([
             'status' => $request->status,

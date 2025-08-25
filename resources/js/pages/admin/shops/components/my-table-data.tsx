@@ -223,7 +223,7 @@ const MyTableData = () => {
                                             id={item.id}
                                             pathName="/admin/shops"
                                             currentStatus={item.status}
-                                            statuses={['active', 'inactive']}
+                                            statuses={['active', 'inactive', 'pending', 'reject']}
                                         />
                                     ) : (
                                         <span className="capitalize">{item.status}</span>

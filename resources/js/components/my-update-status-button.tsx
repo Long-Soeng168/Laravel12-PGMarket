@@ -16,7 +16,8 @@ interface UpdateStatusButtonProps {
 
 const statusVariants: Record<string, string> = {
     active: 'text-white hover:bg-green-600/85 bg-green-600',
-    inactive: 'text-white hover:bg-red-400/85 bg-red-400',
+    inactive: 'text-white hover:bg-gray-400/85 bg-gray-400',
+    reject: 'text-white hover:bg-red-400/85 bg-red-400',
     pending: 'text-white hover:bg-yellow-600/85 bg-yellow-600',
     public: 'text-white hover:bg-blue-500/85 bg-blue-500',
     private: 'text-white hover:bg-gray-500/85 bg-gray-500',
@@ -25,7 +26,8 @@ const statusVariants: Record<string, string> = {
 };
 const statusVariantsText: Record<string, string> = {
     active: 'text-green-600',
-    inactive: 'text-red-400',
+    inactive: 'text-gray-400',
+    reject: 'text-red-400',
     pending: 'text-yellow-600',
     public: 'text-blue-500',
     private: 'text-gray-500',
@@ -96,7 +98,7 @@ const MyUpdateStatusButton = ({ id, pathName, currentStatus, statuses }: UpdateS
                             onClick={() => handleChangeStatus(status)}
                             disabled={processing}
                             autoFocus={currentStatus === status}
-                            className={`${statusVariants[status] || 'text-gray-600'} ring-primary m-0 focus:ring-2 focus:ring-offset-2`}
+                            className={`${statusVariants[status] || 'text-white'} ring-primary m-0 focus:ring-2 focus:ring-offset-2`}
                         >
                             {status.charAt(0).toUpperCase() + status.slice(1)}
                         </Button>

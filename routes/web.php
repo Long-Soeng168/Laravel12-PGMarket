@@ -57,8 +57,9 @@ Route::post('/live', 'App\Http\Controllers\StripeController@live');
 Route::get('/success/{id}', 'App\Http\Controllers\StripeController@success')->name('success');
 
 // ABA Payemnt Route
-Route::get('/normal_blade', function () {
-   return view('normalblade');
+
+Route::get('/aba_merchant_payout', function () {
+   return view('aba_merchant_payout');
 });
 
 Route::get('/pdf_viewer', function () {

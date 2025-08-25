@@ -60,14 +60,13 @@ class UserShopController extends Controller implements HasMiddleware
         $validated = $request->validate([
             'category_code' => 'required|string|exists:item_categories,code',
             'name' => 'required|string|max:255',
-            'address' => 'nullable|string|max:255',
-            'phone' => 'nullable|string',
+            'address' => 'required|string|max:255',
+            'phone' => 'required|string',
             'short_description' => 'nullable|string|max:500',
             'short_description_kh' => 'nullable|string|max:500',
-            'parent_code' => 'nullable|string|max:255',
             'order_index' => 'nullable|numeric|max:255',
             'status' => 'nullable|string|in:active,inactive',
-            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg,webp|max:2048',
+            'logo' => 'required|image|mimes:jpeg,png,jpg,gif,webp,svg,webp|max:2048',
             'banner' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg,webp|max:2048',
         ]);
 

@@ -1,4 +1,3 @@
-// resources/js/components/PWAInstallPrompt.tsx
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { PlusSquare } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -9,19 +8,29 @@ export default function PWAInstallPrompt() {
     const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
     const [visible, setVisible] = useState(false);
     const [isIOS, setIsIOS] = useState(false);
+    const [isMacSafari, setIsMacSafari] = useState(false);
     const [isStandalone, setIsStandalone] = useState(false);
     const [openDialog, setOpenDialog] = useState(false);
 
     useEffect(() => {
         if (typeof window === 'undefined') return;
 
-        // iOS detection
         const ua = window.navigator.userAgent.toLowerCase();
-        const ios = /iphone|ipad|ipod/.test(ua) || (navigator.userAgent.includes('Mac') && 'ontouchend' in document);
+
+        // iOS detection
+        const ios =
+            /iphone|ipad|ipod/.test(ua) ||
+            (ua.includes('mac') && 'ontouchend' in document); // iPadOS reports as Mac sometimes
         setIsIOS(ios);
 
-        // already installed? (standalone mode)
-        const standalone = window.matchMedia('(display-mode: standalone)').matches || (window.navigator as any).standalone === true;
+        // macOS Safari detection
+        const macSafari = ua.includes('macintosh') && ua.includes('safari') && !ua.includes('chrome');
+        setIsMacSafari(macSafari);
+
+        // standalone mode (already installed)
+        const standalone =
+            window.matchMedia('(display-mode: standalone)').matches ||
+            (window.navigator as any).standalone === true;
         setIsStandalone(standalone);
 
         // Android/Chrome beforeinstallprompt
@@ -51,7 +60,7 @@ export default function PWAInstallPrompt() {
     if (isStandalone) return null;
 
     // Android/Chrome flow
-    if (visible && deferredPrompt && !isIOS) {
+    if (visible && deferredPrompt && !isIOS && !isMacSafari) {
         return (
             <div className="flex w-full flex-col border-t py-2">
                 <span className="mb-2 text-sm font-medium">Install this app for quick access</span>
@@ -67,7 +76,7 @@ export default function PWAInstallPrompt() {
         );
     }
 
-    // iOS Safari flow → show hint
+    // iOS Safari flow
     if (isIOS && !isStandalone) {
         return (
             <div className="flex w-full flex-col border-t py-3">
@@ -84,7 +93,9 @@ export default function PWAInstallPrompt() {
                     <DialogContent className="space-y-4 sm:max-w-[425px]">
                         <DialogHeader>
                             <DialogTitle>Install App</DialogTitle>
-                            <DialogDescription>Follow these steps to add this app to your iPhone or iPad home screen:</DialogDescription>
+                            <DialogDescription>
+                                Follow these steps to add this app to your iPhone or iPad home screen:
+                            </DialogDescription>
                         </DialogHeader>
 
                         <div className="flex flex-col gap-3">
@@ -107,6 +118,33 @@ export default function PWAInstallPrompt() {
                                 After adding, the app will appear on your home screen like a native app.
                             </div>
                         </div>
+                    </DialogContent>
+                </Dialog>
+            </div>
+        );
+    }
+
+    // macOS Safari flow
+    if (isMacSafari && !isStandalone) {
+        return (
+            <div className="flex w-full flex-col border-t py-3">
+                <span className="mb-2 text-sm font-medium">Install this app for quick access</span>
+                <Button
+                    className="text-true-primary flex w-fit items-center gap-2 bg-white font-semibold"
+                    variant="secondary"
+                    onClick={() => setOpenDialog(true)}
+                >
+                    <img className="size-5" src="/assets/icons/app-download-icon.png" alt="Install" />
+                    Install
+                </Button>
+                <Dialog open={openDialog} onOpenChange={setOpenDialog}>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Install on Mac</DialogTitle>
+                            <DialogDescription>
+                                In Safari, go to the menu bar → <b>File</b> → <b>Add to Dock</b>.
+                            </DialogDescription>
+                        </DialogHeader>
                     </DialogContent>
                 </Dialog>
             </div>

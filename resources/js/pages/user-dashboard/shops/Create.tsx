@@ -4,11 +4,9 @@ import { Button } from '@/components/ui/button';
 import { FileInput, FileUploader, FileUploaderContent, FileUploaderItem } from '@/components/ui/file-upload';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Popover, PopoverTrigger } from '@/components/ui/popover';
 import { ProgressWithValue } from '@/components/ui/progress-with-value';
 import useTranslation from '@/hooks/use-translation';
 import AppLayout from '@/layouts/app-layout';
-import { cn } from '@/lib/utils';
 import { BreadcrumbItem } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm as inertiaUseForm, usePage } from '@inertiajs/react';
@@ -19,16 +17,18 @@ import { toast } from 'sonner';
 import * as z from 'zod';
 import ContactUsButton from '../components/contact-us-button';
 import CategorySelect from './components/category-select';
-import UserSuspended from './components/user-suspended';
+import ShopSuspended from './components/shop-inactive';
+import ShopPending from './components/shop-pending';
+import ShopReject from './components/shop-reject';
 
 const formSchema = z.object({
     owner_user_id: z.string(),
     name: z.string().min(1).max(255),
-    phone: z.string().max(255).optional(),
-    address: z.string().max(255).optional(),
+    phone: z.string().max(255),
+    address: z.string().max(255),
     status: z.string().max(255).optional(),
     order_index: z.string().max(255).optional(),
-    short_description: z.string().max(500).optional(),
+    short_description: z.string().max(500),
     short_description_kh: z.string().max(500).optional(),
     logo: z.string().optional(),
     banner: z.string().optional(),
@@ -73,7 +73,7 @@ export default function Create({
             name: editData?.name || '',
             address: editData?.address || '',
             phone: editData?.phone || '',
-            status: editData?.status || 'active',
+            status: editData?.status || 'pending',
             short_description: editData?.short_description || '',
             short_description_kh: editData?.short_description_kh || '',
             order_index: editData?.order_index?.toString() || '',
@@ -164,12 +164,9 @@ export default function Create({
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            {editData?.status == 'inactive' && (
-                <UserSuspended
-                    title={t('Shop Suspended!')}
-                    subTitle="Your shop has been temporarily suspended. Please contact our support team to resolve this issue."
-                />
-            )}
+            {editData?.status == 'inactive' && <ShopSuspended />}
+            {editData?.status == 'pending' && <ShopPending />}
+            {editData?.status == 'reject' && <ShopReject />}
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 p-4">
                     <div className="grid gap-4 md:grid-cols-12">
@@ -179,7 +176,9 @@ export default function Create({
                                 name="name"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>{t('Name')}</FormLabel>
+                                        <FormLabel>
+                                            {t('Shop Name')} <span className="text-red-500">*</span>
+                                        </FormLabel>
                                         <FormControl>
                                             <Input placeholder={t('Name')} type="text" {...field} />
                                         </FormControl>
@@ -195,91 +194,30 @@ export default function Create({
                                 name="phone"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>{t('Phone')}</FormLabel>
+                                        <FormLabel>
+                                            {t('Shop Phone Number')} <span className="text-red-500">*</span>
+                                        </FormLabel>
                                         <FormControl>
-                                            <Input placeholder={t('Phone')} type="text" {...field} />
+                                            <Input placeholder={t('Phone')} type="number" {...field} />
                                         </FormControl>
                                         <FormMessage>{errors.phone && <div>{errors.phone}</div>}</FormMessage>
                                     </FormItem>
                                 )}
                             />
                         </div>
-                        <div className="col-span-6">
+                        <div className="col-span-12">
                             <FormField
                                 control={form.control}
                                 name="address"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>{t('Address')}</FormLabel>
+                                        <FormLabel>
+                                            {t('Shop Address')} <span className="text-red-500">*</span>
+                                        </FormLabel>
                                         <FormControl>
                                             <Input placeholder={t('Address')} type="text" {...field} />
                                         </FormControl>
                                         <FormMessage>{errors.address && <div>{errors.address}</div>}</FormMessage>
-                                    </FormItem>
-                                )}
-                            />
-                        </div>
-                        {/* <div className="col-span-6">
-                            <FormField
-                                control={form.control}
-                                name="status"
-                                render={({ field }) => (
-                                    <FormItem key={field.value}>
-                                        <FormLabel>{t('Status')}</FormLabel>
-                                        <Select key={field.value} onValueChange={field.onChange} defaultValue={field.value}>
-                                            <FormControl>
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder="Select Status" />
-                                                </SelectTrigger>
-                                            </FormControl>
-                                            <SelectContent>
-                                                <SelectItem value="active">{t('Active')}</SelectItem>
-                                                <SelectItem value="inactive">{t('Inactive')}</SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                        <FormMessage>{errors.status && <div>{errors.status}</div>}</FormMessage>
-                                    </FormItem>
-                                )}
-                            />
-                        </div> */}
-                        {/* <div className="col-span-6">
-                            <FormField
-                                control={form.control}
-                                name="order_index"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>{t('Order Index')}</FormLabel>
-                                        <FormControl>
-                                            <Input placeholder="ex: 1" type="text" {...field} />
-                                        </FormControl>
-                                        <FormDescription>{t('Lower number is priority')}</FormDescription>
-                                        <FormMessage>{errors.order_index && <div>{errors.order_index}</div>}</FormMessage>
-                                    </FormItem>
-                                )}
-                            />
-                        </div> */}
-
-                        <div className="col-span-6">
-                            <FormField
-                                control={form.control}
-                                name="owner_user_id"
-                                render={({ field }) => (
-                                    <FormItem className="flex flex-col" key={field.value}>
-                                        <FormLabel>{t('Owner')}</FormLabel>
-                                        <Popover>
-                                            <PopoverTrigger asChild>
-                                                <FormControl>
-                                                    <Button
-                                                        variant="secondary"
-                                                        role="combobox"
-                                                        className={cn('w-full cursor-auto justify-between', !field.value && 'text-muted-foreground')}
-                                                    >
-                                                        {editData?.owner && editData?.owner.name}
-                                                    </Button>
-                                                </FormControl>
-                                            </PopoverTrigger>
-                                        </Popover>
-                                        <FormMessage>{errors.owner_user_id && <div>{errors.owner_user_id}</div>}</FormMessage>
                                     </FormItem>
                                 )}
                             />
@@ -291,9 +229,9 @@ export default function Create({
                         name="short_description"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>{t('Short Description')}</FormLabel>
+                                <FormLabel>{t('Shop Description')}</FormLabel>
                                 <FormControl>
-                                    <AutosizeTextarea placeholder={t('Short Description')} className="resize-none" {...field} />
+                                    <AutosizeTextarea placeholder={t('Description')} className="resize-none" {...field} />
                                 </FormControl>
                                 <FormMessage>{errors.short_description && <div>{errors.short_description}</div>}</FormMessage>
                             </FormItem>
@@ -301,9 +239,11 @@ export default function Create({
                     />
 
                     <div className="col-span-6 flex flex-col justify-start gap-2">
-                        <FormLabel className="p-0">{t('Category')}</FormLabel>
+                        <FormLabel className="p-0">
+                            {t('Shop Category')} <span className="text-red-500">*</span>
+                        </FormLabel>
                         <CategorySelect finalCategorySelect={finalCategorySelect} setFinalCategorySelect={setFinalCategorySelect} />
-                        <FormDescription>{t('Select the shop category.')}</FormDescription>
+                        <FormDescription>{t('Choose the category that represents your shop’s focus.')}</FormDescription>
                         <FormMessage>{errors.category_code && <div>{errors.category_code}</div>}</FormMessage>
                     </div>
 
@@ -326,7 +266,9 @@ export default function Create({
                         name="logo"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>{t('Logo')}</FormLabel>
+                                <FormLabel>
+                                    {t('Logo')} <span className="text-red-500">*</span>
+                                </FormLabel>
                                 <FormControl>
                                     <FileUploader
                                         value={files}
@@ -437,22 +379,36 @@ export default function Create({
                     {progress && <ProgressWithValue value={progress.percentage} position="start" />}
                     {setIsOpen && <MyDialogCancelButton onClick={() => setIsOpen(false)} />}
 
-                    {!editData || editData?.status == 'active' ? (
+                    {!editData ||
+                        (editData?.status == 'active' && (
+                            <>
+                                {!readOnly && (
+                                    <Button disabled={processing} type="submit">
+                                        {processing && (
+                                            <span className="size-6 animate-spin">
+                                                <Loader />
+                                            </span>
+                                        )}
+                                        {processing ? t('Submitting') : t('Submit')}
+                                    </Button>
+                                )}
+                            </>
+                        ))}
+                    {editData && editData?.status == 'reject' && (
                         <>
-                            {!readOnly && (
-                                <Button disabled={processing} type="submit">
-                                    {processing && (
-                                        <span className="size-6 animate-spin">
-                                            <Loader />
-                                        </span>
-                                    )}
-                                    {processing ? t('Submitting') : t('Submit')}
-                                </Button>
-                            )}
+                            <p className="font-bold text-red-400">{t('Shop Registration Rejected.')}</p>
+                            <ContactUsButton />
                         </>
-                    ) : (
+                    )}
+                    {editData && editData?.status == 'pending' && (
                         <>
-                            <p className="text-red-400">{t('Shop Suspended!')}</p>
+                            <p className="font-bold text-yellow-500">{t('Shop Pending Approval.')}</p>
+                            <ContactUsButton />
+                        </>
+                    )}
+                    {editData && editData?.status == 'inactive' && (
+                        <>
+                            <p className="font-bold text-gray-500">{t('Shop Suspended.')}</p>
                             <ContactUsButton />
                         </>
                     )}

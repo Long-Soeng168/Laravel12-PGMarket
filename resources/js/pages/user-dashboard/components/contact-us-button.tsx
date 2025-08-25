@@ -7,7 +7,7 @@ const ContactUsButton = () => {
     const { t } = useTranslation();
     return (
         <Link href="/contact-us">
-            <Button variant="default">
+            <Button variant="outline">
                 <PhoneCallIcon /> {t('Contact Support')}
             </Button>
         </Link>

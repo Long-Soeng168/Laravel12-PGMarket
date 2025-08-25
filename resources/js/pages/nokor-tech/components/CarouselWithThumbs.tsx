@@ -45,7 +45,7 @@ export default function CarouselWithThumbs({ images }: { images: any }) {
                                             setCurrentIndex(index);
                                             setOpen(true);
                                         }}
-                                        src={`/assets/images/items/thumb/${item?.image}`}
+                                        src={`/assets/images/items/${item?.image}`}
                                         className="h-full w-full object-cover"
                                         alt=""
                                     />
