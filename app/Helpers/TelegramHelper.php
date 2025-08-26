@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Models\OrderItem;
 use App\Models\Item;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -40,9 +41,14 @@ class TelegramHelper
 
                 if ($index === 0) {
                     $caption  = "🚀 <b>New order ID: {$order->id} placed!</b>\n\n";
-                    $caption .= "<b>Name:</b> " . ($order->name ?? '-') . "\n";
-                    $caption .= "<b>Phone:</b> " . $order->phone . "\n";
-                    $caption .= "<b>Note:</b> " . ($order->note ?? '-') . "\n";
+                    $caption .= "<b>Name:</b> " . (Auth::user()->name ?? '-') . "\n";
+                    $caption .= "<b>Phone:</b> " . Auth::user()->phone . "\n";
+                    $caption .= "<b>Note:</b> " . ($order->note ?? '-') . "\n\n";
+
+                    $caption .= "<b>Amount:</b> " .  '$ ' .($order->total_amount ?? '-') . "\n";
+                    $caption .= "<b>Status:</b> " . 'Pending' . "\n";
+
+                    $caption .= "<b>Shop:</b> " . ($order->shop?->name ?? '-') . "\n";
 
                     $photo['caption']     = $caption;
                     $photo['parse_mode']  = 'HTML';
