@@ -379,21 +379,20 @@ export default function Create({
                     {progress && <ProgressWithValue value={progress.percentage} position="start" />}
                     {setIsOpen && <MyDialogCancelButton onClick={() => setIsOpen(false)} />}
 
-                    {!editData ||
-                        (editData?.status == 'active' && (
-                            <>
-                                {!readOnly && (
-                                    <Button disabled={processing} type="submit">
-                                        {processing && (
-                                            <span className="size-6 animate-spin">
-                                                <Loader />
-                                            </span>
-                                        )}
-                                        {processing ? t('Submitting') : t('Submit')}
-                                    </Button>
-                                )}
-                            </>
-                        ))}
+                    {(!editData || editData?.status == 'active') && (
+                        <>
+                            {!readOnly && (
+                                <Button disabled={processing} type="submit">
+                                    {processing && (
+                                        <span className="size-6 animate-spin">
+                                            <Loader />
+                                        </span>
+                                    )}
+                                    {processing ? t('Submitting') : t('Submit')}
+                                </Button>
+                            )}
+                        </>
+                    )}
                     {editData && editData?.status == 'reject' && (
                         <>
                             <p className="font-bold text-red-400">{t('Shop Registration Rejected.')}</p>

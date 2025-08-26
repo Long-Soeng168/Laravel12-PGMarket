@@ -1,4 +1,5 @@
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import useTranslation from '@/hooks/use-translation';
 import { Clock } from 'lucide-react';
 import { useState } from 'react';
@@ -20,7 +21,7 @@ const ShopPending: React.FC<ShopPendingProps> = ({ title, subTitle }) => {
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
-            <DialogContent className="max-w-sm space-y-4 rounded-2xl p-6 text-center">
+            <DialogContent showCloseButton className="max-w-sm space-y-4 rounded-2xl p-6 text-center">
                 <div className="mx-auto flex items-center justify-center rounded-full bg-yellow-100 p-4">
                     <Clock className="size-14 text-yellow-500" />
                 </div>
@@ -32,9 +33,12 @@ const ShopPending: React.FC<ShopPendingProps> = ({ title, subTitle }) => {
                     </DialogDescription>
                 </DialogHeader>
 
-                <span>
+                <DialogFooter className='justify-center flex w-full md:justify-center'>
                     <ContactUsButton />
-                </span>
+                    {/* <DialogClose asChild>
+                        <Button variant="outline" className='border border-foreground'>Close</Button>
+                    </DialogClose> */}
+                </DialogFooter>
             </DialogContent>
         </Dialog>
     );

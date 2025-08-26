@@ -48,7 +48,7 @@ const Index = () => {
                     {auth?.shop?.status == 'pending' && (
                         <>
                             <p className="font-bold text-yellow-500">{t('Shop Pending Approval.')}</p>
-                            <ContactUsButton />
+                            {/* <ContactUsButton /> */}
                         </>
                     )}
                     {auth?.shop?.status == 'inactive' && (
