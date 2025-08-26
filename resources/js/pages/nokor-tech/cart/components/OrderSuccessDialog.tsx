@@ -16,7 +16,7 @@ export function OrderSuccessDialog({
 }) {
     const { url } = usePage(); // SSR-safe
     const [open, setOpen] = useState(false);
-    const { cartItems, removeFromCart } = useCart();
+    const { cartItems, clearCart } = useCart();
     const [orderId, setOrderId] = useState<string | null>('');
 
     useEffect(() => {
@@ -26,7 +26,7 @@ export function OrderSuccessDialog({
         const queryParams = new URL(url, typeof window !== 'undefined' ? window.location.origin : 'http://localhost').searchParams;
         if (queryParams.get('order_success') === '1') {
             setOpen(true);
-            cartItems?.length > 0 && removeFromCart();
+            cartItems?.length > 0 && clearCart();
         }
         if (queryParams.get('order_id')) {
             setOrderId(queryParams.get('order_id'));
