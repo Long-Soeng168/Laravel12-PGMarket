@@ -25,7 +25,7 @@ const CartItemList = () => {
                         </div>
 
                         <div className="space-y-4">
-                            {cartItems.map((item) => (
+                            {cartItems?.length > 0 && cartItems.map((item) => (
                                 <Card key={item.id} className="overflow-hidden p-0">
                                     <CardContent className="p-0">
                                         <div className="flex h-full flex-row md:flex-row">
