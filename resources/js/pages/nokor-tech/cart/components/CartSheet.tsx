@@ -11,7 +11,7 @@ export function CartSheet({ openCartDialog = false, setOpeCartDialog }) {
     const { t } = useTranslation();
     return (
         <Sheet open={openCartDialog} onOpenChange={setOpeCartDialog}>
-            <SheetContent>
+            <SheetContent className="max-sm:w-full">
                 <SheetHeader>
                     <SheetTitle className="flex items-center gap-2">
                         <ShoppingCartIcon /> Shopping Cart
@@ -19,17 +19,14 @@ export function CartSheet({ openCartDialog = false, setOpeCartDialog }) {
                     <SheetDescription>{cartItems?.length || '0'} items in your cart.</SheetDescription>
                 </SheetHeader>
                 <div className="h-full overflow-y-scroll px-4">
-                    {
-                        cartItems?.length < 1 &&
-                        <MyNoData />
-                    }
+                    {cartItems?.length < 1 && <MyNoData />}
                     {cartItems?.map((item: any, index: number) => (
                         <div
                             key={item.id}
                             className="bg-card mb-4 flex items-center gap-2 rounded-2xl border p-2 shadow-sm transition-all hover:shadow-md"
                         >
                             {/* Product image */}
-                            <div className="bg-accent size-20 sm:size-28 shrink-0 overflow-hidden rounded-lg">
+                            <div className="bg-accent size-20 shrink-0 overflow-hidden rounded-lg sm:size-28">
                                 <img
                                     className="h-full w-full object-cover"
                                     src={`/assets/images/items/thumb/${item?.images[0]?.image}`}
@@ -38,11 +35,11 @@ export function CartSheet({ openCartDialog = false, setOpeCartDialog }) {
                             </div>
 
                             {/* Content */}
-                            <div className="flex h-20 sm:h-28 flex-1 flex-col justify-between">
+                            <div className="flex h-20 flex-1 flex-col justify-between sm:h-28">
                                 {/* Product name + price */}
                                 <div className="flex items-start justify-between">
                                     <div>
-                                        <h3 className="line-clamp-2 text-base leading-tight font-semibold">{item.name}</h3>
+                                        <h3 className="line-clamp-2 text-sm leading-tight font-semibold md:text-base">{item.name}</h3>
                                         <Link href={`/shops/${item?.shop_id}`}>
                                             <p className="text-primary line-clamp-1 text-sm font-medium underline">{item.shop?.name}</p>
                                         </Link>
@@ -61,11 +58,9 @@ export function CartSheet({ openCartDialog = false, setOpeCartDialog }) {
 
                                 {/* Quantity row */}
                                 <div>
-                                    <div className="mt-2 flex items-center justify-start gap-1 text-xs">
+                                    <div className="mt-2 flex items-center justify-start gap-4 text-xs">
                                         <span className="text-primary">Price : ${item.price}</span>
-                                    </div>
-                                    <div className="flex items-center justify-start gap-1 text-xs">
-                                        <span className="text-muted-foreground">Quantity : {item.cartQuantity}</span>
+                                        <span className="text-muted-foreground">Qty : {item.cartQuantity}</span>
                                     </div>
                                 </div>
                             </div>
