@@ -36,6 +36,9 @@ export default function MyFooter() {
                                 <p className="mt-2 text-2xl font-bold">{application_info?.name}</p>
                             </div>
                         )}
+                        <div className='mt-8 w-auto '>
+                            <PWAInstallPrompt />
+                        </div>
                     </div>
                     {/* Company Info */}
                     <div className="lg:justify-self-center">
@@ -59,9 +62,7 @@ export default function MyFooter() {
                                 </a>
                             </li>
                         </ul>
-                        <div className='mt-8 w-auto'>
-                            <PWAInstallPrompt />
-                        </div>
+                        
                     </div>
 
                     {/* Quick Links */}

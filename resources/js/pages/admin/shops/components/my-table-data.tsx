@@ -89,14 +89,14 @@ const MyTableData = () => {
                                     <ArrowUpDown size={16} /> {t('Owner')}
                                 </span>
                             </TableHead>
-                            <TableHead onClick={() => handleSort('order_index')}>
-                                <span className="flex cursor-pointer items-center">
-                                    <ArrowUpDown size={16} /> {t('Order Index')}
-                                </span>
-                            </TableHead>
                             <TableHead onClick={() => handleSort('status')}>
                                 <span className="flex cursor-pointer items-center">
                                     <ArrowUpDown size={16} /> {t('Status')}
+                                </span>
+                            </TableHead>
+                             <TableHead onClick={() => handleSort('order_index')}>
+                                <span className="flex cursor-pointer items-center">
+                                    <ArrowUpDown size={16} /> {t('Order Index')}
                                 </span>
                             </TableHead>
                             <TableHead onClick={() => handleSort('created_at')}>
@@ -215,8 +215,6 @@ const MyTableData = () => {
                                         <Badge variant="outline">{item.owner?.email || '---'}</Badge>
                                     </div>
                                 </TableCell>
-                                <TableCell>{item.order_index || '---'}</TableCell>
-                                {/* <TableCell>{item.order_index || '---'}</TableCell> */}
                                 <TableCell>
                                     {hasPermission('shop update') ? (
                                         <MyUpdateStatusButton
@@ -229,6 +227,8 @@ const MyTableData = () => {
                                         <span className="capitalize">{item.status}</span>
                                     )}
                                 </TableCell>
+                                <TableCell>{item.order_index || '---'}</TableCell>
+
                                 <TableCell>
                                     {item.created_at
                                         ? new Date(item.created_at).toLocaleDateString('en-UK', {

@@ -62,7 +62,7 @@ export default function PWAInstallPrompt() {
     // Android/Chrome flow
     if (visible && deferredPrompt && !isIOS && !isMacSafari) {
         return (
-            <div className="flex w-full flex-col border-t py-2">
+            <div className="flex w-full flex-col items-center border-t border-white/50 border-dashed py-2">
                 <span className="mb-2 text-sm font-medium">Install this app for quick access</span>
                 <Button
                     className="text-true-primary flex w-fit items-center gap-2 bg-white font-semibold transition-all duration-300 hover:scale-105 hover:bg-gray-100"
@@ -79,7 +79,7 @@ export default function PWAInstallPrompt() {
     // iOS Safari flow
     if (isIOS && !isStandalone) {
         return (
-            <div className="flex w-full flex-col border-t py-3">
+            <div className="flex w-full flex-col items-center border-t border-white/50 border-dashed py-3">
                 <span className="mb-2 text-sm font-medium">Install this app for quick access</span>
                 <Button
                     className="text-true-primary flex w-fit items-center gap-2 bg-white font-semibold transition-all duration-300 hover:scale-105 hover:bg-gray-100"
@@ -127,7 +127,7 @@ export default function PWAInstallPrompt() {
     // macOS Safari flow
     if (isMacSafari && !isStandalone) {
         return (
-            <div className="flex w-full flex-col border-t py-3">
+            <div className="flex w-full flex-col items-center border-t border-white/50 border-dashed py-3">
                 <span className="mb-2 text-sm font-medium">Install this app for quick access</span>
                 <Button
                     className="text-true-primary flex w-fit items-center gap-2 bg-white font-semibold"

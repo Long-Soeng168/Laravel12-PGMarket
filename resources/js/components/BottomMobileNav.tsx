@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils';
 import { Link } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-import { HomeIcon, MonitorSmartphone, PhoneCallIcon, TagsIcon } from 'lucide-react';
+import { GripIcon, HomeIcon, MonitorSmartphone, PhoneCallIcon, StoreIcon, TagsIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 export function BottomMobileNav({ className }: { className?: any }) {
@@ -12,8 +12,8 @@ export function BottomMobileNav({ className }: { className?: any }) {
 
     const items = [
         { name: 'Home', url: '/', icon: HomeIcon },
-        { name: 'Products', url: '/products', icon: MonitorSmartphone },
-        { name: 'Special Offer', url: '/products?specialOffer=1', icon: TagsIcon },
+        { name: 'Products', url: '/products', icon: GripIcon },
+        { name: 'Shops', url: '/shops', icon: StoreIcon },
         { name: 'Contact', url: '/contact-us', icon: PhoneCallIcon },
     ];
 
@@ -47,7 +47,7 @@ export function BottomMobileNav({ className }: { className?: any }) {
 
     return (
         <div className={cn('fixed bottom-0 left-1/2 z-50 mb-4 -translate-x-1/2 sm:top-0 sm:pt-4', className)}>
-            <div className="border-border flex items-center rounded-full border bg-white/40 px-1 py-1 shadow-lg backdrop-blur-lg sm:hidden">
+            <div className="border-border flex items-center rounded-full border bg-background/40 px-1 py-1 shadow-lg backdrop-blur-lg sm:hidden">
                 {items.map((item) => {
                     const Icon = item.icon;
                     const isActive = isCurrent(item);

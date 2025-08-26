@@ -51,7 +51,7 @@ export default function ComboboxDemo() {
     return (
         <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
-                <Button variant="outline" role="combobox" aria-expanded={open} className="w-[200px] justify-between">
+                <Button variant="outline" role="combobox" aria-expanded={open} className="w-full justify-between">
                     {value ? item_categories.find((item) => item.code == selectedCategoryCode)?.name : 'Select Category...'}
                     <ChevronsUpDown className="opacity-50" />
                 </Button>

@@ -1,4 +1,6 @@
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Link } from '@inertiajs/react';
+import { ImageIcon, ImageOffIcon } from 'lucide-react';
 
 const ShopCard = ({ shop }) => {
     return (
@@ -8,18 +10,28 @@ const ShopCard = ({ shop }) => {
         >
             {/* Banner */}
             <div>
-                <img src={`/assets/images/shops/${shop.banner}`} alt={`${shop.name} Banner`} className="aspect-[21/9] w-full bg-white object-cover" />
+                <Avatar className="aspect-[21/9] size-full rounded-none">
+                    <AvatarImage src={`/assets/images/shops/thumb/${shop.banner}`} alt="" className="w-full bg-white object-cover" />
+                    <AvatarFallback className="rounded-none">
+                        <ImageOffIcon size={32} className="text-muted-foreground" />
+                    </AvatarFallback>
+                </Avatar>
             </div>
 
             {/* Content */}
             <div className="flex items-start gap-4 p-2">
                 {/* Logo */}
                 <div className="shrink-0">
-                    <img
-                        src={`/assets/images/shops/${shop.logo}`}
-                        alt={`${shop.name} Logo`}
-                        className="size-14 rounded-full border-4 bg-white border-white object-cover shadow-md"
-                    />
+                    <Avatar className="aspect-[1/1] size-14 rounded-none">
+                        <AvatarImage
+                            src={`/assets/images/shops/${shop.logo}`}
+                            alt=""
+                            className="size-14 rounded-full border-4 border-white bg-white object-cover shadow-none"
+                        />
+                        <AvatarFallback className="rounded-none">
+                            <ImageOffIcon size={22} className="text-muted-foreground" />
+                        </AvatarFallback>
+                    </Avatar>
                 </div>
 
                 {/* Details */}

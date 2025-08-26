@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { useCart } from '@/contexts/cart-contexts';
 import { Link, router, usePage } from '@inertiajs/react';
 import { CheckCircle2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -15,6 +16,7 @@ export function OrderSuccessDialog({
 }) {
     const { url } = usePage(); // SSR-safe
     const [open, setOpen] = useState(false);
+    const { removeFromCart } = useCart();
     const [orderId, setOrderId] = useState<string | null>('');
 
     useEffect(() => {
@@ -24,6 +26,7 @@ export function OrderSuccessDialog({
         const queryParams = new URL(url, typeof window !== 'undefined' ? window.location.origin : 'http://localhost').searchParams;
         if (queryParams.get('order_success') === '1') {
             setOpen(true);
+            removeFromCart();
         }
         if (queryParams.get('order_id')) {
             setOrderId(queryParams.get('order_id'));

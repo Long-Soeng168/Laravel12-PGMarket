@@ -153,12 +153,12 @@ class OrderController extends Controller implements HasMiddleware
 
             // return back()->with('success', 'Order placed successfully!');
 
-            // $result = TelegramHelper::sendOrderItems($order);
+            $result = TelegramHelper::sendOrderItems($order);
             // Normal Process
-            if ($order->id) {
+            if ($result['success']) {
                 return back()->with('success', 'Order placed successfully!');
             } else {
-                return back()->with('error', 'Order fail to create.');
+                return back()->with('error', 'Order fail to push notification.');
             }
 
             // Payment Process

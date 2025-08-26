@@ -1,3 +1,4 @@
+import MyNoData from '@/components/my-no-data';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { useCart } from '@/contexts/cart-contexts';
@@ -18,6 +19,10 @@ export function CartSheet({ openCartDialog = false, setOpeCartDialog }) {
                     <SheetDescription>{cartItems?.length || '0'} items in your cart.</SheetDescription>
                 </SheetHeader>
                 <div className="h-full overflow-y-scroll px-4">
+                    {
+                        cartItems?.length < 1 &&
+                        <MyNoData />
+                    }
                     {cartItems?.map((item: any, index: number) => (
                         <div
                             key={item.id}
@@ -68,11 +73,13 @@ export function CartSheet({ openCartDialog = false, setOpeCartDialog }) {
                     ))}
                 </div>
                 <SheetFooter>
-                    <Link href={`/shopping-cart`} className="w-full">
-                        <Button type="button" className="w-full">
-                            Checkout
-                        </Button>
-                    </Link>
+                    {cartItems?.length > 0 && (
+                        <Link href={`/shopping-cart`} className="w-full">
+                            <Button type="button" className="w-full">
+                                Checkout
+                            </Button>
+                        </Link>
+                    )}
                     <SheetClose asChild>
                         <Button variant="outline">Close</Button>
                     </SheetClose>
