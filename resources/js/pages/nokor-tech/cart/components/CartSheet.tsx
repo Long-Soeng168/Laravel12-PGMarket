@@ -29,7 +29,7 @@ export function CartSheet({ openCartDialog = false, setOpeCartDialog }) {
                             className="bg-card mb-4 flex items-center gap-2 rounded-2xl border p-2 shadow-sm transition-all hover:shadow-md"
                         >
                             {/* Product image */}
-                            <div className="bg-accent size-28 shrink-0 overflow-hidden rounded-lg">
+                            <div className="bg-accent size-20 sm:size-28 shrink-0 overflow-hidden rounded-lg">
                                 <img
                                     className="h-full w-full object-cover"
                                     src={`/assets/images/items/thumb/${item?.images[0]?.image}`}
@@ -38,7 +38,7 @@ export function CartSheet({ openCartDialog = false, setOpeCartDialog }) {
                             </div>
 
                             {/* Content */}
-                            <div className="flex h-28 flex-1 flex-col justify-between">
+                            <div className="flex h-20 sm:h-28 flex-1 flex-col justify-between">
                                 {/* Product name + price */}
                                 <div className="flex items-start justify-between">
                                     <div>
