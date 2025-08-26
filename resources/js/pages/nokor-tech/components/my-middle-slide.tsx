@@ -1,4 +1,5 @@
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselApi } from '@/components/ui/carousel';
+import Autoplay from 'embla-carousel-autoplay';
 import React from 'react';
 
 interface SlideItem {
@@ -13,9 +14,16 @@ interface MyMiddleSlideProps {
     path?: string;
 }
 
-const MyMiddleSlide: React.FC<MyMiddleSlideProps> = ({ slides, path }) => {
+const MyMiddleSlide: React.FC<MyMiddleSlideProps> = ({ slides, path = '' }) => {
+    const [api, setApi] = React.useState<CarouselApi | null>(null);
+
     return (
-        <Carousel className="relative my-10 px-2">
+        <Carousel
+            plugins={[Autoplay({ delay: 4000, stopOnInteraction: false })]}
+            opts={{ align: 'start', loop: true }}
+            setApi={setApi}
+            className="relative my-10 px-2"
+        >
             <CarouselContent>
                 {slides.map((slide) => (
                     <CarouselItem
