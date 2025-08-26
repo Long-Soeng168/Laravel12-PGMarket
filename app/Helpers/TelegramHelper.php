@@ -45,7 +45,7 @@ class TelegramHelper
                     $caption .= "<b>Phone:</b> " . Auth::user()->phone . "\n";
                     $caption .= "<b>Note:</b> " . ($order->note ?? '-') . "\n\n";
 
-                    $caption .= "<b>Amount:</b> " .  '$ ' .($order->total_amount ?? '-') . "\n";
+                    $caption .= "<b>Amount:</b> " .  '$ ' . ($order->total_amount ?? '-') . "\n";
                     $caption .= "<b>Status:</b> " . 'Pending' . "\n";
 
                     $caption .= "<b>Shop:</b> " . ($order->shop?->name ?? '-') . "\n";
@@ -64,6 +64,19 @@ class TelegramHelper
             $response = Http::post("https://api.telegram.org/bot{$token}/sendMediaGroup", [
                 'chat_id' => $chatId,
                 'media'   => json_encode($media),
+            ]);
+
+            // Send button message
+            Http::post("https://api.telegram.org/bot{$token}/sendMessage", [
+                'chat_id' => $chatId,
+                'text' => "View Order Detail!",
+                'reply_markup' => json_encode([
+                    'inline_keyboard' => [
+                        [
+                            ['text' => 'View Order', 'url' => config('app.url') . "/admin/orders/" . $order->id]
+                        ]
+                    ]
+                ])
             ]);
 
             if ($response->successful()) {
