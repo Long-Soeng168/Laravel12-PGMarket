@@ -44,9 +44,12 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::middleware('auth')->group(function () {
+ 
 
     // === Testing Spatie Role & Permission ===
     Route::group(['middleware' => ['role:admin']], function () {
+
+
         Route::get('/admin_test', function () {
             return 'Admin Login Success';
         });
@@ -61,6 +64,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware(['admin.only', 'auth'])->group(function () {
         Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     });
+
 
     // Item Route
     Route::resource('admin/items', ItemController::class);

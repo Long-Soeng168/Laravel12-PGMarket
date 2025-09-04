@@ -45,8 +45,8 @@ $merchant_key = config('payway.merchant_id');
 $merchant_tran_id = 'A' . (microtime(true) * 10000);
 
 $merchant_data_info = json_encode([
-    ['account' => '1234567890123456', 'amount' => 0.5],
-    ['account' => '325042213412481', 'amount' => 0.5],
+    ['account' => '500000001', 'amount' => 0.5],
+    ['account' => '500000002', 'amount' => 0.5],
 ]);
 
 $currency = 'USD';

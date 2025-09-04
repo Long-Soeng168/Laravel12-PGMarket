@@ -1,11 +1,13 @@
 <?php
 
+use App\Http\Controllers\ABAPayoutController;
 use App\Http\Controllers\ABAPaywayCheckout;
 use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
 
 
 Route::post('/orders', [OrderController::class, 'store']);
+Route::post('/orders/{id}/payout', [ABAPayoutController::class, 'payout']);
 
 
 // Testing

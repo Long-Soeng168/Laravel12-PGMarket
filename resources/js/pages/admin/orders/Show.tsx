@@ -7,14 +7,15 @@ import { useEffect, useState } from 'react';
 
 // pick icons from lucide-react
 import MyNoData from '@/components/my-no-data';
+import PaymentMethodLabel from '@/components/PaymentMethodLabel';
 import StatusBadge from '@/pages/nokor-tech/components/StatusBadge';
 import { TransactionDetailDialog } from '@/pages/nokor-tech/components/TransactionDetailDialog';
 import OrderItemCard from '@/pages/user-dashboard/orders/components/OrderItemCard';
 import { usePage } from '@inertiajs/react';
 import { CheckCircle2, Clock, CreditCard, Loader2, ShoppingCart, Truck } from 'lucide-react';
 import { ShopHoverCard } from './components/ShopHoverCard';
+import UpdatePayoutStatus from './components/UpdatePayoutStatus';
 import { UserHoverCard } from './components/UserHoverCard';
-import PaymentMethodLabel from '@/components/PaymentMethodLabel';
 
 const Show = () => {
     const { order_detail } = usePage().props;
@@ -170,7 +171,9 @@ const Show = () => {
                             </span>
                         </div>
                         <div className="flex items-center gap-2">Transaction ID : {order_detail?.tran_id}</div>
-                        <div className="flex items-center gap-2">Pyament Method : <PaymentMethodLabel value={order_detail?.payment_method} /></div>
+                        <div className="flex items-center gap-2">
+                            Pyament Method : <PaymentMethodLabel value={order_detail?.payment_method} />
+                        </div>
                         <div className="flex items-center gap-2">
                             Pyament Status : <StatusBadge status={order_detail?.payment_status} />
                         </div>
@@ -179,6 +182,9 @@ const Show = () => {
                         </div>
                         <div className="flex items-center gap-2">
                             Total Amount : <span className="text-xl font-bold">$ {order_detail?.total_amount}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            Payout Status : <UpdatePayoutStatus />
                         </div>
                     </div>
                 </div>

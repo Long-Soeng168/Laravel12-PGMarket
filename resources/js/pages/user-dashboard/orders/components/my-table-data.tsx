@@ -2,6 +2,7 @@ import DeleteButton from '@/components/delete-button';
 import MyImageGallery from '@/components/my-image-gallery';
 import MyNoData from '@/components/my-no-data';
 import { MyTooltipButton } from '@/components/my-tooltip-button';
+import PaymentMethodLabel from '@/components/PaymentMethodLabel';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import useRole from '@/hooks/use-role';
@@ -12,7 +13,6 @@ import { Link, router, usePage } from '@inertiajs/react';
 import { ArrowUpDown, ScanEyeIcon } from 'lucide-react';
 import { useState } from 'react';
 import { ShopHoverCard } from '../../shop_orders/components/ShopHoverCard';
-import PaymentMethodLabel from '@/components/PaymentMethodLabel';
 
 const MyTableData = () => {
     const { t } = useTranslation();
@@ -151,13 +151,13 @@ const MyTableData = () => {
                                     {item.currency == 'KHR' ? '៛ ' : '$ '} {item.total_amount}
                                 </TableCell>
 
-                                {item?.shop && (
-                                    <TableCell className="font-medium whitespace-nowrap capitalize">
-                                        <ShopHoverCard shop={item?.shop} />
-                                    </TableCell>
-                                )}
+                                <TableCell className="font-medium whitespace-nowrap capitalize">
+                                    {item?.shop ? <ShopHoverCard shop={item?.shop} /> : ''}
+                                </TableCell>
 
-                                <TableCell className="font-medium whitespace-nowrap"><PaymentMethodLabel value={item?.payment_method} /></TableCell>
+                                <TableCell className="font-medium whitespace-nowrap">
+                                    <PaymentMethodLabel value={item?.payment_method} />
+                                </TableCell>
                                 <TableCell className="font-medium whitespace-nowrap">{item.tran_id}</TableCell>
                                 <TableCell className="font-medium whitespace-nowrap capitalize">
                                     <StatusBadge status={item.payment_status} />
