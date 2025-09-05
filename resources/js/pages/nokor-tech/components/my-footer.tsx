@@ -36,7 +36,7 @@ export default function MyFooter() {
                                 <p className="mt-2 text-2xl font-bold">{application_info?.name}</p>
                             </div>
                         )}
-                        <div className='mt-8 w-auto '>
+                        <div className="mt-8 w-auto">
                             <PWAInstallPrompt />
                         </div>
                     </div>
@@ -62,7 +62,6 @@ export default function MyFooter() {
                                 </a>
                             </li>
                         </ul>
-                        
                     </div>
 
                     {/* Quick Links */}
@@ -111,7 +110,7 @@ export default function MyFooter() {
                         <ul className="space-y-3">
                             {links?.map((item) => (
                                 <li key={item?.id}>
-                                    <Link prefetch href="/" className="flex items-center gap-2 hover:underline">
+                                    <Link prefetch href={item?.link || '#'} className="flex items-center gap-2 hover:underline">
                                         <img
                                             width={28}
                                             height={28}
