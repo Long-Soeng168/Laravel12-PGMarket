@@ -14,6 +14,7 @@ import OrderItemCard from '@/pages/user-dashboard/orders/components/OrderItemCar
 import { usePage } from '@inertiajs/react';
 import { CheckCircle2, Clock, CreditCard, Loader2, ShoppingCart, Truck } from 'lucide-react';
 import { ShopHoverCard } from './components/ShopHoverCard';
+import UpdateOrderStatus from './components/UpdateOrderStatus';
 import UpdatePayoutStatus from './components/UpdatePayoutStatus';
 import { UserHoverCard } from './components/UserHoverCard';
 
@@ -93,12 +94,15 @@ const Show = () => {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Stepper value={currentStep} className="space-y-8 p-4 lg:p-6">
-                <StepperNav className="border-primary mb-15 grid grid-cols-1 items-start gap-4 gap-y-8 border-l-2 max-lg:pl-6 lg:grid-cols-4 lg:border-none">
+                <StepperNav
+                    key={`${order_detail?.status}`}
+                    className="border-primary mb-15 grid grid-cols-1 items-start gap-4 gap-y-8 border-l-2 max-lg:pl-6 lg:grid-cols-4 lg:border-none"
+                >
                     {steps.map((step, index) => {
                         const badge = getBadge(index);
                         const Icon = step.icon;
                         return (
-                            <StepperItem key={index} step={index + 1} className="relative w-full">
+                            <StepperItem key={step.title} step={index + 1} className="relative w-full">
                                 <StepperTrigger className="flex grow flex-col items-start gap-3.5">
                                     <StepperIndicator
                                         className={`h-1 rounded-full lg:w-full ${index + 1 <= currentStep ? '!bg-primary' : '!bg-border'}`}
@@ -144,7 +148,8 @@ const Show = () => {
                         <div className="flex items-center gap-2">
                             Order Status :
                             <span className="capitalize">
-                                <StatusBadge status={order_detail?.status} />
+                                <UpdateOrderStatus />
+                                {/* <StatusBadge status={order_detail?.status} /> */}
                             </span>
                         </div>
                         {order_detail?.shop && (

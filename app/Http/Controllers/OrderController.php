@@ -66,6 +66,26 @@ class OrderController extends Controller implements HasMiddleware
         return redirect()->back()->with('error', 'Order cannot deleted, Please Contact Developer.');
     }
 
+    public function updateStatus(Request $request, $id)
+    {
+        // return $request->all();
+        $request->validate([
+            'status' => 'required|in:pending,paid,shipped,completed,cancelled,refunded',
+        ]);
+
+        $order = Order::findOrFail($id);
+
+        try {
+            $order->status = $request->status;
+            $order->save();
+
+            return back()->with('success', "Order status updated to {$order->status}");
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to update order status: ' . $e->getMessage());
+        }
+    }
+
+
     public function store(Request $request)
     {
         // return response()->json([
