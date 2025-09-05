@@ -26,6 +26,7 @@ const formSchema = z.object({
     name: z.string().min(1).max(255),
     phone: z.string().max(255),
     address: z.string().max(255),
+    bank_account: z.string().max(255),
     status: z.string().max(255).optional(),
     order_index: z.string().max(255).optional(),
     short_description: z.string().max(500),
@@ -73,6 +74,7 @@ export default function Create({
             name: editData?.name || '',
             address: editData?.address || '',
             phone: editData?.phone || '',
+            bank_account: editData?.bank_account || '',
             status: editData?.status || 'pending',
             short_description: editData?.short_description || '',
             short_description_kh: editData?.short_description_kh || '',
@@ -218,6 +220,23 @@ export default function Create({
                                             <Input placeholder={t('Address')} type="text" {...field} />
                                         </FormControl>
                                         <FormMessage>{errors.address && <div>{errors.address}</div>}</FormMessage>
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                        <div className="col-span-12">
+                            <FormField
+                                control={form.control}
+                                name="bank_account"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>
+                                            {t('ABA Bank Account')} <span className="text-red-500">*</span>
+                                        </FormLabel>
+                                        <FormControl>
+                                            <Input placeholder={t('bank_account')} type="text" {...field} />
+                                        </FormControl>
+                                        <FormMessage>{errors.bank_account && <div>{errors.bank_account}</div>}</FormMessage>
                                     </FormItem>
                                 )}
                             />

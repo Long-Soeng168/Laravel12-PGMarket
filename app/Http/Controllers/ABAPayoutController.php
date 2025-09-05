@@ -69,13 +69,17 @@ class ABAPayoutController extends Controller
             return back()->with('warning', 'Order not completed.');
         }
 
+        if (empty($order->shop?->bank_account)) {
+            return back()->with('warning', 'Shop has invalid ABA Bank Account!');
+        }
+
         // PayWay config
         $apiKey     = config('payway.api_key');
         $merchantId = config('payway.merchant_id');
         $publicKey  = config('payway.rsa_public_key');
 
         // Bank info
-        $shop_bank_account     = '500000001'; // replace with shop account if dynamic
+        $shop_bank_account     = $order->shop?->bank_account; // replace with shop account if dynamic
         $shipping_bank_account = '500000002';
         $currency              = 'USD';
 
@@ -156,6 +160,7 @@ class ABAPayoutController extends Controller
             // Update order payout status
             $order->update(['payout_status' => 'paid']);
         } else {
+            dd($decodedResponse);
             return back()->with('error', 'Payout Error');
         }
         return back()->with('success', 'Payout Successfully');

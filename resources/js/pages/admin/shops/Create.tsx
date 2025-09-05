@@ -26,6 +26,7 @@ const formSchema = z.object({
     name: z.string().min(1).max(255),
     phone: z.string().max(255).optional(),
     address: z.string().max(255).optional(),
+    bank_account: z.string().max(255).optional(),
     status: z.string().max(255).optional(),
     order_index: z.string().max(255).optional(),
     short_description: z.string().max(500).optional(),
@@ -67,6 +68,7 @@ export default function Create({
             phone: editData?.phone || '',
             status: editData?.status || 'active',
             short_description: editData?.short_description || '',
+            bank_account: editData?.bank_account || '',
             short_description_kh: editData?.short_description_kh || '',
             order_index: editData?.order_index?.toString() || '',
             owner_user_id: editData?.owner_user_id?.toString() || '',
@@ -76,7 +78,7 @@ export default function Create({
     });
 
     const { all_users } = usePage().props;
-    
+
     const [finalCategorySelect, setFinalCategorySelect] = useState<any>(null);
     useEffect(() => {
         setFinalCategorySelect(editData?.category);
@@ -205,6 +207,21 @@ export default function Create({
                                             <Input placeholder={t('Address')} type="text" {...field} />
                                         </FormControl>
                                         <FormMessage>{errors.address && <div>{errors.address}</div>}</FormMessage>
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                        <div className="col-span-6">
+                            <FormField
+                                control={form.control}
+                                name="bank_account"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>{t('ABA Bank Account')}</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder={t('bank_account')} type="text" {...field} />
+                                        </FormControl>
+                                        <FormMessage>{errors.bank_account && <div>{errors.bank_account}</div>}</FormMessage>
                                     </FormItem>
                                 )}
                             />
