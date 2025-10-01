@@ -370,6 +370,12 @@ export function AppSidebar() {
             icon: ShapesIcon,
         },
         {
+            title: t('Queue Jobs'),
+            permission: 'order update',
+            url: '/queue_jobs',
+            icon: ShapesIcon,
+        },
+        {
             title: t('All Orders'),
             permission: 'order view',
             url: '/admin/orders',

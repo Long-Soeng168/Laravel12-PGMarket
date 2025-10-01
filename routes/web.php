@@ -39,6 +39,15 @@ require __DIR__ . '/file_manager.php';
 require __DIR__ . '/order.php';
 
 
+// ========= Queues Jobs =========
+use App\Http\Controllers\QueueJobController;
+
+Route::get('/queue_jobs', [QueueJobController::class, 'index']);
+Route::post('/queue_job/start', [QueueJobController::class, 'start']);
+Route::get('/queue_job/{queueJob}', [QueueJobController::class, 'show']);
+
+
+
 // ========= Telegram Testing Route =========
 require __DIR__ . '/telegram.php';
 
@@ -57,7 +66,6 @@ Route::post('/live', 'App\Http\Controllers\StripeController@live');
 Route::get('/success/{id}', 'App\Http\Controllers\StripeController@success')->name('success');
 
 // ABA Payemnt Route
-
 Route::get('/aba_merchant_payout', function () {
    return view('aba_merchant_payout');
 });

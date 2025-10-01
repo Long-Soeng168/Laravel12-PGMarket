@@ -57,6 +57,18 @@ html {
     animation-duration: 4.4s;
 }
 
+@keyframes rainbow {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
 @keyframes toast-progress {
     from {
         width: 100%;
@@ -65,6 +77,7 @@ html {
         width: 0%;
     }
 }
+
 /* Start Long Soeng Font */
 @font-face {
     font-family: KantumruyPro;
@@ -397,8 +410,16 @@ html {
     cursor: pointer;
 
     background:
-        /* linear-gradient(#fffffff3), */
-        linear-gradient(90deg, var(--orange), var(--yellow), var(--green), var(--blue), var(--purple), var(--pink), var(--red));
+        /* linear-gradient(#fffffff3), */ linear-gradient(
+        90deg,
+        var(--orange),
+        var(--yellow),
+        var(--green),
+        var(--blue),
+        var(--purple),
+        var(--pink),
+        var(--red)
+    );
     background-origin: border-box;
     background-clip: padding-box, border-box, border-box;
     background-size: 200%;
