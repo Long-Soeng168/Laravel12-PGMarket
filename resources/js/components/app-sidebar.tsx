@@ -11,6 +11,7 @@ import {
     BriefcaseBusinessIcon,
     CarIcon,
     ClipboardListIcon,
+    ClockIcon,
     FilePenLineIcon,
     FilesIcon,
     FolderTreeIcon,
@@ -373,7 +374,7 @@ export function AppSidebar() {
             title: t('Queue Jobs'),
             permission: 'order update',
             url: '/queue_jobs',
-            icon: ShapesIcon,
+            icon: ClockIcon,
         },
         {
             title: t('All Orders'),
