@@ -1,9 +1,9 @@
 import MyAddNewButton from '@/components/my-add-new-button';
 import MyDialogCloseButton from '@/components/my-dialog-close-button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import useTranslation from '@/hooks/use-translation';
 import { useState } from 'react';
 import Create from '../Create';
-import useTranslation from '@/hooks/use-translation';
 const AddNewButton = () => {
     const { t } = useTranslation();
     const [isOpen, setIsOpen] = useState(false);
