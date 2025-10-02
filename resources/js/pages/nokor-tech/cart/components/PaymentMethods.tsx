@@ -96,6 +96,9 @@ const PaymentMethods = () => {
 
             if (elapsed > maxTime) {
                 console.log('QR expired, stop timer');
+                toast.warning('Warning', {
+                    description: 'QR expired',
+                });
                 AbaPayway.closeCheckout();
                 return;
             }
