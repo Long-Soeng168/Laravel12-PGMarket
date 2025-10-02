@@ -151,9 +151,11 @@ class ABAPaywayCheckout extends Controller
                 }
 
                 return response()->json([
+                    'message'  => 'Success',
+                    'payment_status' => $paymentStatus,
                     'tran_id'  => $tran_id,
                     'response' => $order,
-                ], 500);
+                ], 200);
             } else {
                 Log::warning('ABA callback returned error', [
                     'tran_id' => $order->tran_id,

@@ -83,6 +83,39 @@ const PaymentMethods = () => {
         setPhone(auth?.user?.phone || '');
     }, []);
 
+    useEffect(() => {
+        if (!paywayReady || !tran_id) return;
+
+        let elapsed = 0;
+        const interval = 10000; // 10s
+        const maxTime = 5 * 60 * 1000; // 5 min
+
+        const timer = setInterval(async () => {
+            elapsed += interval;
+
+            if (elapsed > maxTime) {
+                toast.error('QR expired, please try again.');
+                clearInterval(timer);
+                return;
+            }
+
+            try {
+                const res = await fetch(`/aba/callback?tran_id=${tran_id}`);
+                const data = await res.json();
+
+                if (data.payment_status === 'APPROVED') {
+                    toast.success('Payment Approved!');
+                    clearInterval(timer);
+                    // Optionally update UI / redirect
+                }
+            } catch (err: any) {
+                console.error('Check transaction failed', err);
+            }
+        }, interval);
+
+        return () => clearInterval(timer);
+    }, [paywayReady, tran_id]);
+
     const handleGetHash = async () => {
         const hashString =
             req_time +
