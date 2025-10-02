@@ -90,31 +90,47 @@ const PaymentMethods = () => {
         const interval = 10000; // 10s
         const maxTime = 5 * 60 * 1000; // 5 min
 
-        const timer = setInterval(async () => {
+        const checkTransaction = async () => {
             elapsed += interval;
 
             if (elapsed > maxTime) {
-                toast.error('QR expired, please try again.');
-                clearInterval(timer);
+                console.log('QR expired, stop timer');
                 return;
             }
 
-            try {
-                const res = await fetch(`/aba/callback?tran_id=${tran_id}`);
-                const data = await res.json();
+            await handleRecheck();
+            console.log(`Checking transaction... elapsed: ${elapsed / 1000}s`);
 
-                if (data.payment_status === 'APPROVED') {
-                    toast.success('Payment Approved!');
-                    clearInterval(timer);
-                    // Optionally update UI / redirect
-                }
-            } catch (err: any) {
-                console.error('Check transaction failed', err);
-            }
-        }, interval);
+            setTimeout(checkTransaction, interval);
+        };
 
-        return () => clearInterval(timer);
+        checkTransaction(); // start polling
     }, [paywayReady, tran_id]);
+
+    const handleRecheck = async () => {
+        try {
+            const response = await fetch(`/aba/callback?tran_id=${tran_id}`, {
+                method: 'GET', // or POST if your callback expects POST
+                headers: {
+                    Accept: 'application/json',
+                },
+            });
+
+            const data = await response.json();
+
+            if (data.response) {
+                console.log(JSON.stringify(data.response, null, 2));
+                toast.success('Transaction rechecked successfully');
+            } else {
+                console.log(JSON.stringify(data, null, 2));
+                toast.warning('Recheck completed but no transaction data returned');
+            }
+        } catch (err: any) {
+            toast.error(err.message || 'Something went wrong while rechecking');
+        } finally {
+            // router.reload();
+        }
+    };
 
     const handleGetHash = async () => {
         const hashString =
