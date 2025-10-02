@@ -6,8 +6,8 @@ import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import usePermission from '@/hooks/use-permission';
 import useTranslation from '@/hooks/use-translation';
-import { router, usePage } from '@inertiajs/react';
-import { ArrowUpDown, ListIcon } from 'lucide-react';
+import { Link, router, usePage } from '@inertiajs/react';
+import { ArrowUpDown, EyeIcon, ListIcon } from 'lucide-react';
 import { useState } from 'react';
 
 const MyTableData = () => {
@@ -49,6 +49,7 @@ const MyTableData = () => {
                         <TableRow>
                             <TableHead className="w-[50px]">{t('ID')}</TableHead>
                             <TableHead className="text-left">{t('Action')}</TableHead> {/* could be "Job Type" */}
+                            <TableHead>{t('Type')}</TableHead>
                             <TableHead>{t('Status')}</TableHead>
                             <TableHead onClick={() => handleSort('created_at')}>
                                 <span className="flex cursor-pointer items-center">
@@ -74,6 +75,13 @@ const MyTableData = () => {
                         {tableData?.data?.map((job: any) => (
                             <TableRow key={job.id}>
                                 <TableCell className="font-medium">{job.id}</TableCell>
+                                <TableCell>
+                                    <Link href={`/queue_job/${job.id}`}>
+                                        <Button>
+                                            <EyeIcon /> View
+                                        </Button>
+                                    </Link>
+                                </TableCell>
                                 <TableCell>{job.job_type}</TableCell>
                                 <TableCell>
                                     {job.status === 'pending' && <span className="text-yellow-600">⏳ Pending</span>}

@@ -5,9 +5,10 @@ import useTranslation from '@/hooks/use-translation';
 import AppLayout from '@/layouts/app-layout';
 import { formatToKhmerDateTime } from '@/lib/utils';
 import { BreadcrumbItem } from '@/types';
-import { Link, router, usePoll } from '@inertiajs/react';
-import { ArrowLeftIcon } from 'lucide-react';
+import { Link, useForm, usePoll } from '@inertiajs/react';
+import { ArrowLeftIcon, RefreshCwIcon } from 'lucide-react';
 import { useRef, useState } from 'react';
+import { toast } from 'sonner';
 
 export default function Create({ job }: { job?: any }) {
     const [loading, setLoading] = useState(false);
@@ -35,10 +36,35 @@ export default function Create({ job }: { job?: any }) {
             }
         },
     });
+    const { post, processing, errors } = useForm();
 
-    const startJob = () => {
-        router.post('/queue_job/start');
+    const handleExecute = () => {
+        post(`/queue_job/${job.id}/execute`, {
+            preserveScroll: true,
+            onSuccess: (page: any) => {
+                if (page.props.flash?.success) {
+                    toast.success('Success', {
+                        id: 'job-toast',
+                        description: page.props.flash.success,
+                    });
+                }
+                if (page.props.flash?.warning) {
+                    toast.warning('Warning', {
+                        description: page.props.flash.warning,
+                    });
+                }
+            },
+            onError: (err: any) => {
+                // Show server validation errors or general error
+                const message = err?.message || 'Failed to execute job';
+                toast.error('Error', { id: 'job-toast', description: message });
+            },
+            onFinish: () => {
+                // Optional: stop spinner, do cleanup
+            },
+        });
     };
+
     const { t } = useTranslation();
     const breadcrumbs: BreadcrumbItem[] = [
         {
@@ -54,11 +80,11 @@ export default function Create({ job }: { job?: any }) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <div className="space-y-4 p-6">
-                <h1 className="text-xl font-bold">Queue Job Demo</h1>
+                <h1 className="text-xl font-bold">Queue Job</h1>
 
                 <div className="flex gap-2">
                     <Link href={`/queue_jobs`}>
-                        <Button>
+                        <Button variant="outline">
                             <ArrowLeftIcon /> Back to Queues Jobs
                         </Button>
                     </Link>
@@ -71,6 +97,9 @@ export default function Create({ job }: { job?: any }) {
 
                 {job && (
                     <div className="relative space-y-2 rounded border p-4">
+                        <Button onClick={handleExecute} className="mb-4">
+                            <RefreshCwIcon className={processing ? 'animate-spin' : ''} /> Execute Now
+                        </Button>
                         <p>
                             <strong>Job ID:</strong> {job.id}
                         </p>

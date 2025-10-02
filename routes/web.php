@@ -45,6 +45,7 @@ use App\Http\Controllers\QueueJobController;
 Route::get('/queue_jobs', [QueueJobController::class, 'index']);
 Route::post('/queue_job/start', [QueueJobController::class, 'start']);
 Route::get('/queue_job/{queueJob}', [QueueJobController::class, 'show']);
+Route::post('/queue_job/{queueJob}/execute', [QueueJobController::class, 'execute']);
 
 
 

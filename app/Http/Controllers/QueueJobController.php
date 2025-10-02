@@ -57,6 +57,29 @@ class QueueJobController extends Controller
 
 
     // Show job details (polled by Inertia)
+    public function execute(QueueJob $queueJob)
+    {
+        try {
+            // Prevent executing already completed jobs
+            if ($queueJob->status === 'completed') {
+                return redirect()->back()->with('warning', 'This job has already been completed.');
+            }
+
+            // Dispatch the job
+            ProcessQueueJob::dispatch($queueJob);
+
+            // Update the status immediately if needed
+            $queueJob->update(['status' => 'running', 'run_at' => now()]);
+
+            return redirect()->back()->with('success', 'Job dispatched successfully.');
+        } catch (\Exception $e) {
+            // Log the error for debugging
+            \Log::error('Failed to execute QueueJob ID ' . $queueJob->id . ': ' . $e->getMessage());
+
+            return redirect()->back()->with('error', 'Failed to dispatch the job. Please try again.');
+        }
+    }
+
     public function show(QueueJob $queueJob)
     {
         return Inertia::render('admin/queue_jobs/Create', [

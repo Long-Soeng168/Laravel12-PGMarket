@@ -23,6 +23,8 @@ class ProcessQueueJob implements ShouldQueue
     public function handle(): void
     {
         // Mark as running
+        if ($this->queueJob->status == 'completed') return;
+
         $this->queueJob->update([
             'status' => 'running',
             'run_at' => now(),
@@ -37,7 +39,7 @@ class ProcessQueueJob implements ShouldQueue
                 $client = new \GuzzleHttp\Client();
 
                 $response = $client->post(
-                    url("/orders/{$order_id}/payout"), // internal endpoint
+                    url("/api/orders/{$order_id}/payout"), // internal endpoint
                     [
                         'headers' => ['Accept' => 'application/json'],
                         'timeout' => 60,
