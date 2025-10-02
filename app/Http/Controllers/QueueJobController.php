@@ -69,7 +69,7 @@ class QueueJobController extends Controller
             $queueJob->update(['status' => 'running', 'run_at' => now()]);
 
             // Dispatch the job
-            ProcessQueueJob::dispatch($queueJob);
+            ProcessQueueJob::dispatch($queueJob)->delay(1);
 
 
 
