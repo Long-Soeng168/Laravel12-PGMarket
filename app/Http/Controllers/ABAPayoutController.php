@@ -53,7 +53,7 @@ class ABAPayoutController extends Controller
         return $response;
     }
 
-    public function payout(Request $request, $id)
+    public function payout($id)
     {
         $order = Order::where('id', $id)->with('shop')->first();
 

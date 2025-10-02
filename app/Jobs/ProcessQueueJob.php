@@ -48,12 +48,10 @@ class ProcessQueueJob implements ShouldQueue
                 //         'timeout' => 60,
                 //     ]
                 // );
-                // Create a fake request (can be empty)
-                $request = Request::create("/orders/{$order_id}/payout", 'POST');
 
                 // Call the payout method directly
                 $controller = app(ABAPayoutController::class);
-                $response = $controller->payout($request, $order_id);
+                $response = $controller->payout($order_id);
 
                 $statusCode = $response->getStatusCode();
                 $result     = json_decode((string) $response->getBody(), true);
