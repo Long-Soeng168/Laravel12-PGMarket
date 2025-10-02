@@ -10,6 +10,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
 use App\Http\Controllers\ABAPayoutController;
+use App\Models\Order;
 use Illuminate\Http\Request;
 
 class ProcessQueueJob implements ShouldQueue
@@ -51,20 +52,19 @@ class ProcessQueueJob implements ShouldQueue
 
                 // Call the payout method directly
                 $payoutController = new ABAPayoutController();
-                $response = $payoutController->payout($order_id, true); // true = $isCallFromOtherClass
+                $payoutController->payout($order_id); // just call it, let it run
 
-                // ✅ Read JSON properly
-                $result = json_decode($response->getContent(), true);
-                $statusCode = $response->getStatusCode();
+                // Check if payout succeeded
+                $orderDetail = Order::find($order_id); // simpler than where()->first()
 
-                if ($statusCode === 200 && ($result['is_success'] ?? false)) {
+                if ($orderDetail->payout_status === 'paid') {
                     $this->queueJob->update([
                         'status'       => 'completed',
                         'completed_at' => now(),
                         'note'         => "Payout done for order {$order_id}",
                     ]);
                 } else {
-                    throw new \Exception("Payout failed: " . json_encode($result));
+                    throw new \Exception("Payout failed");
                 }
             }
 

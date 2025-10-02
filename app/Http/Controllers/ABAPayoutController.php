@@ -53,7 +53,7 @@ class ABAPayoutController extends Controller
         return $response;
     }
 
-    public function payout($id, $isCallFromOtherClass = false)
+    public function payout($id)
     {
         $order = Order::where('id', $id)->with('shop')->first();
 
@@ -167,11 +167,6 @@ class ABAPayoutController extends Controller
             dd($decodedResponse);
             return back()->with('error', 'Payout Error');
         }
-
-        if ($isCallFromOtherClass == true) {
-            return response()->json(['is_success' => true], 200);
-        }
-
         return back()->with('success', 'Payout Successfully');
         // Log::info('PayWay Payout Response', [
         //     'url'      => $url,
