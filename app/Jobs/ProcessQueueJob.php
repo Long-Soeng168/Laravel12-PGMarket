@@ -69,7 +69,6 @@ class ProcessQueueJob implements ShouldQueue
             }
 
             // If no matching type or order_id missing
-            throw new \Exception("Unsupported job type or missing order_id.");
         } catch (\Throwable $e) {
             // ❌ Mark as failed
             $this->queueJob->update([

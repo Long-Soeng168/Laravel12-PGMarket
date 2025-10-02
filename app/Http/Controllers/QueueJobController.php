@@ -65,13 +65,8 @@ class QueueJobController extends Controller
                 return redirect()->back()->with('warning', 'This job has already been completed.');
             }
 
-            // Update the status immediately if needed
-            $queueJob->update(['status' => 'running', 'run_at' => now()]);
-
             // Dispatch the job
-            ProcessQueueJob::dispatch($queueJob)->delay(1);
-
-
+            ProcessQueueJob::dispatch($queueJob)->delay(0);
 
             return redirect()->back()->with('success', 'Job dispatched successfully.');
         } catch (\Exception $e) {
