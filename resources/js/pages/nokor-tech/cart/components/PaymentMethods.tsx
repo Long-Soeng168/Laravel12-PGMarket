@@ -98,8 +98,8 @@ const PaymentMethods = () => {
                 return;
             }
 
-            await handleRecheck();
             console.log(`Checking transaction... elapsed: ${elapsed / 1000}s`);
+            await handleRecheck();
 
             setTimeout(checkTransaction, interval);
         };
