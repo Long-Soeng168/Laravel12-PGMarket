@@ -26,7 +26,7 @@ class ProcessQueueJob implements ShouldQueue
     public function handle(): void
     {
         // Mark as running
-        if (!($this->queueJob->status == 'pending') || !($this->queueJob->status == 'failed')) return;
+        if (!($this->queueJob->status == 'pending') || !($this->queueJob->status == 'failed') || !($this->queueJob->status == 'running')) return;
 
         $this->queueJob->update([
             'status' => 'running',
