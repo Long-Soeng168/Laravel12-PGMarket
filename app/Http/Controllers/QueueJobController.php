@@ -65,14 +65,19 @@ class QueueJobController extends Controller
                 return redirect()->back()->with('warning', 'This job has already been completed.');
             }
 
+            // Update the status immediately if needed
+            $queueJob->update(['status' => 'running', 'run_at' => now()]);
+
             // Dispatch the job
             ProcessQueueJob::dispatch($queueJob);
+
+
 
             return redirect()->back()->with('success', 'Job dispatched successfully.');
         } catch (\Exception $e) {
             // Log the error for debugging
 
-            $queueJob->update(['status' => 'failed', 'note' => $e->getMessage()]);
+            // $queueJob->update(['status' => 'failed', 'note' => $e->getMessage()]);
 
             return redirect()->back()->with('error', 'Failed to dispatch the job. Please try again.');
         }
