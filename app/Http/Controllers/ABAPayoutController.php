@@ -64,10 +64,14 @@ class ABAPayoutController extends Controller
         if ($order->payout_status === 'paid') {
             return back()->with('warning', 'Order already payout.');
         }
+        if ($order->status !== 'paid') {
+            return back()->with('warning', 'Order not paid.');
+        }
 
         // if ($order->status !== 'completed') {
         //     return back()->with('warning', 'Order not completed.');
         // }
+
 
         if (empty($order->shop?->bank_account)) {
             return back()->with('warning', 'Shop has invalid ABA Bank Account!');
