@@ -39,6 +39,16 @@ class ProcessQueueJob implements ShouldQueue
             $order_id = $payload['order_id'] ?? null;
 
             if ($this->queueJob->job_type === 'payout_to_shop' && $order_id) {
+
+                $orderDetailOld = Order::find($order_id);
+                if ($orderDetailOld->payout_status === 'paid') {
+                    $this->queueJob->update([
+                        'status'       => 'completed',
+                        'completed_at' => now(),
+                        'note'         => "Payout already done.",
+                    ]);
+                    return;
+                }
                 // Call your payout endpoint (internal API)
                 // $client = new \GuzzleHttp\Client();
 
