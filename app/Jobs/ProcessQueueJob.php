@@ -51,9 +51,9 @@ class ProcessQueueJob implements ShouldQueue
 
                 // Call the payout method directly
                 $payoutController = new ABAPayoutController();
-                $response = $payoutController->payout($order_id, true); // $isCallFromOtherClass = true
+                $response = $payoutController->payout($order_id, true); // true = $isCallFromOtherClass
 
-                // ✅ Read JSON content properly
+                // ✅ Read JSON properly
                 $result = json_decode($response->getContent(), true);
                 $statusCode = $response->getStatusCode();
 

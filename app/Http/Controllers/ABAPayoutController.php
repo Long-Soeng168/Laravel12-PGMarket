@@ -168,11 +168,10 @@ class ABAPayoutController extends Controller
             return back()->with('error', 'Payout Error');
         }
 
-        if ($isCallFromOtherClass) {
-            return response()->json([
-                'is_success' => true
-            ], 200);
+        if ($isCallFromOtherClass == true) {
+            return response()->json(['is_success' => true], 200);
         }
+
         return back()->with('success', 'Payout Successfully');
         // Log::info('PayWay Payout Response', [
         //     'url'      => $url,
