@@ -84,6 +84,7 @@ const PaymentMethods = () => {
     }, []);
 
     const startTransactionPolling = () => {
+        // console.log(AbaPayway);
         if (!tran_id) return;
 
         let elapsed = 0;
@@ -95,6 +96,7 @@ const PaymentMethods = () => {
 
             if (elapsed > maxTime) {
                 console.log('QR expired, stop timer');
+                AbaPayway.closeCheckout();
                 return;
             }
 
