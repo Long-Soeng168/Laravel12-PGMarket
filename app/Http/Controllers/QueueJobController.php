@@ -74,7 +74,8 @@ class QueueJobController extends Controller
             return redirect()->back()->with('success', 'Job dispatched successfully.');
         } catch (\Exception $e) {
             // Log the error for debugging
-            \Log::error('Failed to execute QueueJob ID ' . $queueJob->id . ': ' . $e->getMessage());
+
+            $queueJob->update(['status' => 'failed', 'note' => $e->getMessage()]);
 
             return redirect()->back()->with('error', 'Failed to dispatch the job. Please try again.');
         }
