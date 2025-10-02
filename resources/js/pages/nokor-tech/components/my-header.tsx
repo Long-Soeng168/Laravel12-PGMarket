@@ -15,6 +15,8 @@ import CartButton from './cart-button';
 import { HomeUserButton } from './home-user-button';
 import { MySearchProducts } from './my-search-products';
 import MySearchProductsDialog from './my-search-products-dialog';
+import NavLanguage from '@/components/NavLanguage';
+import { AnimatedThemeToggler } from '@/components/ui/animated-theme-toggler';
 
 const MyHeader = () => {
     const { application_info, auth } = usePage().props;
@@ -197,8 +199,10 @@ const MyHeader = () => {
                             <HomeUserButton />
                         </div>
                         <div className="mr-2 flex gap-4 max-md:hidden">
-                            <MySelectLanguageSwitch />
-                            <ToggleModeSwitch />
+                            {/* <MySelectLanguageSwitch /> */}
+                            <AnimatedThemeToggler />
+                            <NavLanguage />
+                            {/* <ToggleModeSwitch /> */}
                         </div>
                     </div>
                 </div>

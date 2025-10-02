@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\ProcessQueueJob;
 use App\Models\Order;
+use App\Models\QueueJob;
 use App\Services\PayWayService;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
@@ -48,6 +50,7 @@ class ABAPaywayCheckout extends Controller
             'api_url' => config('payway.api_url'), // Assuming this is defined elsewhere
         ]);
     }
+
     // End Payment Gateway
 
     // public function showTestCheckoutForm()
@@ -134,6 +137,19 @@ class ABAPaywayCheckout extends Controller
                     'status'            => $order->status == 'pending' ? $order_status : $order->status,
                     'payment_status'    => $paymentStatus,
                 ]);
+
+                if ($paymentStatus === 'APPROVED') {
+                    $queueJob = QueueJob::create([
+                        'job_type' => 'payout_to_shop',
+                        'payload' => ['order_id' => $order->id],
+                        'delay_second' => 5 * 60, // time delay to run after creation (48h =  48 * 3600)
+                        'run_at' => null,           // not started yet
+                    ]);
+
+                    // 2️⃣ Dispatch to Laravel queue with delay
+                    ProcessQueueJob::dispatch($queueJob)->delay($queueJob->delay_second);
+                }
+
                 return response()->json([
                     'tran_id'  => $tran_id,
                     'response' => $order,

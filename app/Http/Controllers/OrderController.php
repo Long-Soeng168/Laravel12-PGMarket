@@ -171,15 +171,14 @@ class OrderController extends Controller implements HasMiddleware
 
             DB::commit();
 
-            // return back()->with('success', 'Order placed successfully!');
+            return back()->with('success', 'Order placed successfully!');
 
-            $result = TelegramHelper::sendOrderItems($order->load('shop'));
-            // Normal Process
-            if ($result['success']) {
-                return back()->with('success', 'Order placed successfully!');
-            } else {
-                return back()->with('error', 'Order fail to push notification.');
-            }
+            // $result = TelegramHelper::sendOrderItems($order->load('shop'));
+            // if ($result['success']) {
+            //     return back()->with('success', 'Order placed successfully!');
+            // } else {
+            //     return back()->with('error', 'Order fail to push notification.');
+            // }
 
             // Payment Process
             // if ($result['success']) {

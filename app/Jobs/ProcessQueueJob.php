@@ -23,28 +23,50 @@ class ProcessQueueJob implements ShouldQueue
     public function handle(): void
     {
         // Mark as running
-        $this->queueJob->update(['status' => 'running', 'run_at' => now()]);
+        $this->queueJob->update([
+            'status' => 'running',
+            'run_at' => now(),
+        ]);
 
         try {
-            // Simulate Long Time process
-            sleep(10);
-            // Example: pretend we payout
-            $payload = $this->queueJob->payload;
+            $payload  = $this->queueJob->payload;
+            $order_id = $payload['order_id'] ?? null;
 
-            // Do actual logic here:
-            // PayoutService::pay($payload['order_id'], $payload['amount']);
+            if ($this->queueJob->job_type === 'payout_to_shop' && $order_id) {
+                // Call your payout endpoint (internal API)
+                $client = new \GuzzleHttp\Client();
 
-            // Mark as completed
-            $this->queueJob->update([
-                'status' => 'completed',
-                'completed_at' => now(),
-                'note' => 'Payout done for order ' . $payload['order_id'],
-            ]);
+                $response = $client->post(
+                    url("/orders/{$order_id}/payout"), // internal endpoint
+                    [
+                        'headers' => ['Accept' => 'application/json'],
+                        'timeout' => 60,
+                    ]
+                );
+
+                $statusCode = $response->getStatusCode();
+                $result     = json_decode((string) $response->getBody(), true);
+
+                if ($statusCode === 200 && ($result['success'] ?? false)) {
+                    // ✅ Mark as completed
+                    $this->queueJob->update([
+                        'status'       => 'completed',
+                        'completed_at' => now(),
+                        'note'         => "Payout done for order {$order_id}",
+                    ]);
+                    return;
+                } else {
+                    throw new \Exception("Payout failed: " . json_encode($result));
+                }
+            }
+
+            // If no matching type or order_id missing
+            throw new \Exception("Unsupported job type or missing order_id.");
         } catch (\Throwable $e) {
-            // Mark as failed
+            // ❌ Mark as failed
             $this->queueJob->update([
                 'status' => 'failed',
-                'note' => $e->getMessage(),
+                'note'   => $e->getMessage(),
             ]);
         }
     }
