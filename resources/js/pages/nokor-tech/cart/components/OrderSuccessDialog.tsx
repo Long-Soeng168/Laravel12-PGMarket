@@ -69,9 +69,11 @@ export function OrderSuccessDialog({
                     </div>
 
                     <div className="flex flex-wrap justify-center gap-2 pt-2">
-                        <Button onClick={handleClose} variant="outline">
-                            Close
-                        </Button>
+                        <Link href={`/`}>
+                            <Button variant="outline">
+                                Home Page
+                            </Button>
+                        </Link>
                         <Link href={`/user-orders/${orderId}`}>
                             <Button variant="default" className="bg-green-500 hover:bg-green-600">
                                 View Order
