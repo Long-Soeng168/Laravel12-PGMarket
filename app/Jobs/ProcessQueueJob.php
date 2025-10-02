@@ -26,7 +26,7 @@ class ProcessQueueJob implements ShouldQueue
     public function handle(): void
     {
         // Mark as running
-        if ($this->queueJob->status == 'completed') return;
+        if (!($this->queueJob->status == 'pending') || !($this->queueJob->status == 'failed')) return;
 
         $this->queueJob->update([
             'status' => 'running',
@@ -50,8 +50,9 @@ class ProcessQueueJob implements ShouldQueue
                 // );
 
                 // Call the payout method directly
-                $controller = app(ABAPayoutController::class);
-                $response = $controller->payout($order_id);
+                $payoutService = new ABAPayoutController();
+                $response = $payoutService->payout($order_id);
+
 
                 $statusCode = $response->getStatusCode();
                 $result     = json_decode((string) $response->getBody(), true);
