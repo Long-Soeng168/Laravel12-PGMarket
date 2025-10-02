@@ -68,9 +68,6 @@ class QueueJobController extends Controller
             // Dispatch the job
             ProcessQueueJob::dispatch($queueJob);
 
-            // Update the status immediately if needed
-            $queueJob->update(['status' => 'running', 'run_at' => now()]);
-
             return redirect()->back()->with('success', 'Job dispatched successfully.');
         } catch (\Exception $e) {
             // Log the error for debugging
