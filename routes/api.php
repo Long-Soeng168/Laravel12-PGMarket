@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ABAPaymentController;
+use App\Http\Controllers\ABAPayoutController;
 use App\Http\Controllers\Api\BannerController;
 use App\Http\Controllers\Api\BodyTypeController;
 use App\Http\Controllers\Api\BrandController;
@@ -19,6 +20,9 @@ use App\Http\Controllers\Api\ShopController;
 use App\Http\Controllers\Api\SlideController;
 use App\Http\Controllers\Api\VideoController;
 use Illuminate\Support\Facades\Route;
+
+Route::post('/api/orders/{id}/payout', [ABAPayoutController::class, 'payout']);
+
 
 Route::get('/links', [LinkController::class, 'index']);
 Route::get('/banners', [BannerController::class, 'index']);
