@@ -57,7 +57,7 @@ class ProcessQueueJob implements ShouldQueue
                 $statusCode = $response->getStatusCode();
                 $result     = json_decode((string) $response->getBody(), true);
 
-                if ($statusCode === 200 && ($result['is_success'] ?? false)) {
+                if ($statusCode === 200) {
                     // ✅ Mark as completed
                     $this->queueJob->update([
                         'status'       => 'completed',
