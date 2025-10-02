@@ -83,8 +83,8 @@ const PaymentMethods = () => {
         setPhone(auth?.user?.phone || '');
     }, []);
 
-    useEffect(() => {
-        if (!paywayReady || !tran_id) return;
+    const startTransactionPolling = () => {
+        if (!tran_id) return;
 
         let elapsed = 0;
         const interval = 10000; // 10s
@@ -105,7 +105,7 @@ const PaymentMethods = () => {
         };
 
         checkTransaction(); // start polling
-    }, [paywayReady, tran_id]);
+    };
 
     const handleRecheck = async () => {
         try {
@@ -119,14 +119,11 @@ const PaymentMethods = () => {
             const data = await response.json();
 
             if (data.response) {
-                console.log(JSON.stringify(data.response, null, 2));
-                toast.success('Transaction rechecked successfully');
-            } else {
-                console.log(JSON.stringify(data, null, 2));
-                toast.warning('Recheck completed but no transaction data returned');
+                console.log(JSON.stringify(data?.response?.payment_status, null, 2));
+                console.log('Transaction rechecked successfully');
             }
         } catch (err: any) {
-            toast.error(err.message || 'Something went wrong while rechecking');
+            console.error(err.message || 'Something went wrong while rechecking');
         } finally {
             // router.reload();
         }
@@ -188,6 +185,7 @@ const PaymentMethods = () => {
             onSuccess: (page: any) => {
                 if (paywayReady) {
                     AbaPayway.checkout();
+                    startTransactionPolling(); // ✅ start polling after showing QR
                 } else {
                     alert('Payment system not loaded yet, please wait.');
                 }
