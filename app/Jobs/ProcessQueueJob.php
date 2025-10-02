@@ -50,21 +50,20 @@ class ProcessQueueJob implements ShouldQueue
                 // );
 
                 // Call the payout method directly
-                $payoutService = new ABAPayoutController();
-                $response = $payoutService->payout($order_id, true);
+                $response = (new ABAPayoutController())->payout($order_id);
 
+                // Get JSON content
+                $result = json_decode($response->getContent(), true);
 
+                // Get status
                 $statusCode = $response->getStatusCode();
-                $result     = json_decode((string) $response->getBody(), true);
 
-                if ($statusCode === 200) {
-                    // ✅ Mark as completed
+                if ($statusCode === 200 && ($result['is_success'] ?? false)) {
                     $this->queueJob->update([
                         'status'       => 'completed',
                         'completed_at' => now(),
                         'note'         => "Payout done for order {$order_id}",
                     ]);
-                    return;
                 } else {
                     throw new \Exception("Payout failed: " . json_encode($result));
                 }
