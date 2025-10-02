@@ -9,6 +9,9 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
+use App\Http\Controllers\ABAPayoutController;
+use Illuminate\Http\Request;
+
 class ProcessQueueJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
@@ -36,15 +39,21 @@ class ProcessQueueJob implements ShouldQueue
 
             if ($this->queueJob->job_type === 'payout_to_shop' && $order_id) {
                 // Call your payout endpoint (internal API)
-                $client = new \GuzzleHttp\Client();
+                // $client = new \GuzzleHttp\Client();
 
-                $response = $client->post(
-                    url("/api/orders/{$order_id}/payout"), // internal endpoint
-                    [
-                        'headers' => ['Accept' => 'application/json'],
-                        'timeout' => 60,
-                    ]
-                );
+                // $response = $client->post(
+                //     url("/api/orders/{$order_id}/payout"), // internal endpoint
+                //     [
+                //         'headers' => ['Accept' => 'application/json'],
+                //         'timeout' => 60,
+                //     ]
+                // );
+                // Create a fake request (can be empty)
+                $request = Request::create("/orders/{$order_id}/payout", 'POST');
+
+                // Call the payout method directly
+                $controller = app(ABAPayoutController::class);
+                $response = $controller->payout($request, $order_id);
 
                 $statusCode = $response->getStatusCode();
                 $result     = json_decode((string) $response->getBody(), true);
