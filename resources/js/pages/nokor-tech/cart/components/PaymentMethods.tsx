@@ -196,7 +196,7 @@ const PaymentMethods = () => {
             onSuccess: (page: any) => {
                 if (paywayReady) {
                     AbaPayway.checkout();
-                    startTransactionPolling(); // ✅ start polling after showing QR
+                    // startTransactionPolling(); // ✅ start polling after showing QR
                 } else {
                     alert('Payment system not loaded yet, please wait.');
                 }
