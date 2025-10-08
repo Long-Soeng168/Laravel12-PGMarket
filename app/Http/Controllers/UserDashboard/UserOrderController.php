@@ -99,7 +99,7 @@ class UserOrderController extends Controller implements HasMiddleware
             abort(403, 'Unauthorized resource');
         }
 
-        $tran_id = 'TXN001234567';
+        $tran_id = $user_order->tran_id;
         $amount = $user_order->total_amount - $user_order->shipping_price;
         $shipping = $user_order->shipping_price;
         $currency = $user_order->currency;
