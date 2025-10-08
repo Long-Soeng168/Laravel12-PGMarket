@@ -48,17 +48,7 @@ class ProcessQueueJob implements ShouldQueue
                         'note'         => "Payout already done.",
                     ]);
                     return;
-                }
-                // Call your payout endpoint (internal API)
-                // $client = new \GuzzleHttp\Client();
-
-                // $response = $client->post(
-                //     url("/api/orders/{$order_id}/payout"), // internal endpoint
-                //     [
-                //         'headers' => ['Accept' => 'application/json'],
-                //         'timeout' => 60,
-                //     ]
-                // );
+                } 
 
                 // Call the payout method directly
                 $payoutController = new ABAPayoutController();
