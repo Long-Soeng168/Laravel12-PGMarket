@@ -146,7 +146,7 @@ class ABAPaywayCheckout extends Controller
                 if ($paymentStatus === 'APPROVED') {
                     $queueJob = QueueJob::create([
                         'job_type' => 'payout_to_shop',
-                        'payload' => ['order_id' => $order->id],
+                        'payload' => ['order_id' => $order->id, 'order_number' => $order->order_number],
                         'delay_second' => 2 * 60, // time delay to run after creation (48h =  48 * 3600)
                         'run_at' => null,           // not started yet
                     ]);

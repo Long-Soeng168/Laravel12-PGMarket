@@ -53,6 +53,11 @@ const MyTableData = () => {
                 <Table>
                     <TableHeader>
                         <TableRow>
+                             <TableHead onClick={() => handleSort('id')}>
+                                <span className="flex cursor-pointer items-center">
+                                    <ArrowUpDown size={16} /> {t('ID')}
+                                </span>
+                            </TableHead>
                             <TableHead className="text-left">{t('Action')}</TableHead>
                             <TableHead onClick={() => handleSort('status')}>
                                 <span className="flex cursor-pointer items-center">
@@ -109,6 +114,9 @@ const MyTableData = () => {
                     <TableBody>
                         {tableData?.data?.map((item: any, index: number) => (
                             <TableRow key={item.id}>
+                                <TableCell className="font-medium whitespace-nowrap capitalize">
+                                    {item.id}
+                                </TableCell>
                                 <TableCell>
                                     <span className="flex h-full items-center justify-start gap-1">
                                         <Link href={`/admin/orders/${item.id}`}>
