@@ -241,6 +241,7 @@ const PaymentMethods = () => {
                 <input name="continue_success_url" value={continueSuccessUrl} />
                 <input name="currency" value={currency} />
                 <input name="skip_success_page" value={skipSuccessPage} />
+
                 <input name="hash" value={hash} id="hash" />
             </form>
             <p>{api_url}</p>
@@ -251,7 +252,7 @@ const PaymentMethods = () => {
                     onClick={async () => {
                         setIsLoading(true);
                         await handleGetHash();
-                        
+
                         // wait 1 second before checkout
                         await new Promise((resolve) => setTimeout(resolve, 1000));
 
