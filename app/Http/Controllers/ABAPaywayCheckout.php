@@ -59,36 +59,34 @@ class ABAPaywayCheckout extends Controller
 
     public function showTestCheckoutForm()
     {
-        $item = [
-            ['name' => 'test1', 'quantity' => '1', 'price' => '10.00'],
-            ['name' => 'test2', 'quantity' => '1', 'price' => '10.00']
-        ];
-        $transactionId = 'TXN001234567';
+        $tran_id = 'TXN001234567';
         $amount = '1.00';
-        $firstName = 'Sokha';
-        $lastName = 'Tim';
-        $phone = '093630466';
+        $shipping = '2.00';
         $email = 'sokha.tim@ababank.com'; // or any default payment option if needed
         $req_time = date('YmdHis');
         $merchant_id = config('payway.merchant_id');
-        $payment_option = 'abapay'; // or any default payment option if needed
+        $payment_option = 'abapay_khqr'; // or any default payment option if needed
+        $return_url = env('APP_URL') . "/aba/callback/{$tran_id}";
+        $cancel_url = env('APP_URL') . "/aba/cancel?tran_id={$tran_id}";
+        $continue_success_url = env('APP_URL') . "/aba/success?tran_id={$tran_id}";
         // $return_params ='payment_success';
         $hash = $this->payWayService->getHash(
-            $req_time . $merchant_id . $transactionId . $amount .
-                $firstName . $lastName . $email . $phone . $payment_option
+            $req_time . $merchant_id . $tran_id . $amount . $shipping .
+                $email . $payment_option . $return_url . $cancel_url . $continue_success_url
         );
 
         return view('aba_test_checkout', compact(
             'hash',
-            'transactionId',
+            'tran_id',
             'amount',
-            'firstName',
-            'lastName',
-            'phone',
+            'shipping',
             'email',
             'payment_option',
             'merchant_id',
-            'req_time'
+            'req_time',
+            'return_url',
+            'cancel_url',
+            'continue_success_url',
         ));
     }
 
