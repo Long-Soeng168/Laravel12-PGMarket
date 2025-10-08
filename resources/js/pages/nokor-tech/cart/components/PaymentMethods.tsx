@@ -250,7 +250,7 @@ const PaymentMethods = () => {
                     id="checkout_button"
                     onClick={async () => {
                         setIsLoading(true);
-                        // await handleGetHash();
+                        await handleGetHash();
                         handleCheckout();
                     }}
                     disabled={!paywayReady}
