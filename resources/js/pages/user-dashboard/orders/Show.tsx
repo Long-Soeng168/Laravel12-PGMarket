@@ -126,7 +126,7 @@ const Show = () => {
                         <PaymentMethods />
                     </div>
                 )}
-                <OrderSuccessDialog />dd
+                <OrderSuccessDialog />
 
                 <p className="text-muted-foreground mb-4 text-lg font-bold">Order Detail</p>
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
