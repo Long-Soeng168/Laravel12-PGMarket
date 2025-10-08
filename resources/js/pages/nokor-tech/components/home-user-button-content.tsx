@@ -5,7 +5,7 @@ import useRole from '@/hooks/use-role';
 import useTranslation from '@/hooks/use-translation';
 import { type User } from '@/types';
 import { Link } from '@inertiajs/react';
-import { LayoutIcon, LogOut, Settings, StoreIcon } from 'lucide-react';
+import { ClipboardListIcon, LayoutIcon, LogOut, Settings, StoreIcon } from 'lucide-react';
 
 interface HomeUserButtonContentProps {
     user: User;
@@ -30,6 +30,12 @@ export function HomeUserButtonContent({ user }: HomeUserButtonContentProps) {
                     <Link className="block w-full" href={route('profile.edit')} as="button" prefetch onClick={cleanup}>
                         <Settings className="mr-2" />
                         {t('Settings')}
+                    </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                    <Link className="block w-full" href={`/user-orders`} as="button" prefetch onClick={cleanup}>
+                        <ClipboardListIcon className="mr-2" />
+                        {t('Your Orders')}
                     </Link>
                 </DropdownMenuItem>
                 {hasRole('Shop') && (
