@@ -141,8 +141,6 @@ const PaymentMethods = () => {
             tran_id +
             total_amount +
             shipping +
-            firstname +
-            lastname +
             email +
             phone +
             type +
@@ -229,8 +227,6 @@ const PaymentMethods = () => {
                 <input type="hidden" name="tran_id" value={tran_id} />
                 <input type="hidden" name="amount" value={total_amount} />
                 <input type="hidden" name="shipping" value={shipping} />
-                <input type="hidden" name="firstname" value={firstname} />
-                <input type="hidden" name="lastname" value={lastname} />
                 <input type="hidden" name="email" value={email} />
                 <input type="hidden" name="phone" value={phone} />
                 <input type="hidden" name="type" value={type} />
