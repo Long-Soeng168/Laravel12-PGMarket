@@ -39,7 +39,7 @@ export function OrderSuccessDialog({
         queryParams.delete('order_id');
         const newUrl = queryParams.toString() ? `${window.location.pathname}?${queryParams.toString()}` : window.location.pathname;
 
-        router.visit(newUrl, { replace: false, preserveState: true, preserveScroll: true });
+        router.visit(newUrl, { replace: true, preserveState: false, preserveScroll: true });
     };
 
     return (
