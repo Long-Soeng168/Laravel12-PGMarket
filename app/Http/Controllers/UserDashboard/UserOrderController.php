@@ -13,6 +13,7 @@ use App\Models\ItemDailyView;
 use App\Models\ItemImage;
 use App\Models\Order;
 use App\Models\Shop;
+use App\Services\PayWayService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -32,6 +33,13 @@ class UserOrderController extends Controller implements HasMiddleware
             // new Middleware('role:Shop', only: ['edit', 'update', 'update_status']),
             // new Middleware('role:Shop', only: ['destroy', 'destroy_image']),
         ];
+    }
+
+    protected $payWayService;
+
+    public function __construct(PayWayService $payWayService)
+    {
+        $this->payWayService = $payWayService;
     }
 
     public function index(Request $request)
@@ -91,9 +99,41 @@ class UserOrderController extends Controller implements HasMiddleware
             abort(403, 'Unauthorized resource');
         }
 
+        $tran_id = 'TXN001234567';
+        $amount = '1.00';
+        $shipping = '2.00';
+        $email = 'sokha.tim@ababank.com'; // or any default payment option if needed
+        $req_time = date('YmdHis');
+        $merchant_id = config('payway.merchant_id');
+        $payment_option = 'abapay_khqr'; // or any default payment option if needed
+        $skip_success_page = 1; // or any default payment option if needed
+        $currency = 'USD'; // or any default payment option if needed
+        $return_url = env('APP_URL') . "/aba/callback/{$tran_id}";
+        $cancel_url = env('APP_URL') . "/aba/cancel?tran_id={$tran_id}";
+        $continue_success_url = env('APP_URL') . "/aba/success?tran_id={$tran_id}";
+        // $return_params ='payment_success';
+        $hash = $this->payWayService->getHash(
+            $req_time . $merchant_id . $tran_id . $amount . $shipping .
+                $email . $payment_option . $return_url . $cancel_url . $continue_success_url . $skip_success_page
+        );
+
         return Inertia::render('user-dashboard/orders/Show', [
             'order_detail' => $user_order->load('order_items.item.images', 'shop'),
             'readOnly' => true,
+            'api_url' => config('payway.api_url'),
+            'hash' => $hash,
+            'tran_id' => $tran_id,
+            'amount' => $amount,
+            'shipping' => $shipping,
+            'email' => $email,
+            'payment_option' => $payment_option,
+            'merchant_id' => $merchant_id,
+            'req_time' => $req_time,
+            'return_url' => $return_url,
+            'cancel_url' => $cancel_url,
+            'continue_success_url' => $continue_success_url,
+            'skip_success_page' => $skip_success_page,
+            'currency' => $currency,
         ]);
     }
 

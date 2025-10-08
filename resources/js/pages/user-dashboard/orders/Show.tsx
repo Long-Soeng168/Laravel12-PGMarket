@@ -15,6 +15,7 @@ import { TransactionDetailDialog } from '@/pages/nokor-tech/components/Transacti
 import OrderItemCard from '@/pages/user-dashboard/orders/components/OrderItemCard';
 import { usePage } from '@inertiajs/react';
 import { CheckCircle2, Clock, CreditCard, Loader2, ShoppingCart, Truck } from 'lucide-react';
+import PaymentMethods from './components/PaymentMethods';
 
 const Show = () => {
     const { order_detail } = usePage().props;
@@ -119,6 +120,9 @@ const Show = () => {
                         );
                     })}
                 </StepperNav>
+                <div>
+                    <PaymentMethods />
+                </div>
                 <p className="text-muted-foreground mb-4 text-lg font-bold">Order Detail</p>
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                     <div className="space-y-2 rounded-2xl border p-4">

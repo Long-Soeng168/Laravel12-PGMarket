@@ -171,7 +171,12 @@ class OrderController extends Controller implements HasMiddleware
 
             DB::commit();
 
-            return back()->with('success', 'Order placed successfully!');
+            // return redirect("/user-orders/{$order->id}");
+
+            return back()->with([
+                'success' => 'Order placed successfully!',
+                'order_id' => $order->id
+            ]);
 
             // $result = TelegramHelper::sendOrderItems($order->load('shop'));
             // if ($result['success']) {

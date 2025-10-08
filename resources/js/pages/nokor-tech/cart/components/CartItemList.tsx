@@ -5,6 +5,7 @@ import { useCart } from '@/contexts/cart-contexts';
 import { Minus, Plus, Trash2 } from 'lucide-react';
 import ClearCartButton from './ClearCartButton';
 import PaymentMethods from './PaymentMethods';
+import CheckoutButton from './CheckoutButton';
 
 const CartItemList = () => {
     const { cartItems, handleQuantityChange, removeFromCart } = useCart();
@@ -144,7 +145,7 @@ const CartItemList = () => {
                                 </div> */}
 
                                 {/* Checkout Button */}
-                                <PaymentMethods />
+                                <CheckoutButton />
                                 {/* <Button className="w-full">
                                     <CreditCard className="mr-2 h-4 w-4" />
                                     Proceed to Checkout

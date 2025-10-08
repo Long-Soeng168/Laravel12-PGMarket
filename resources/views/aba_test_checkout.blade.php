@@ -51,17 +51,17 @@
             <h2>TOTAL: ${{ $amount }}</h2>
             <form method="POST" target="aba_webservice" action="{{ config('payway.api_url') }}" id="aba_merchant_request">
                 @csrf
-                <input type="hidden" name="hash" value="{{ $hash }}" id="hash" />
-                <input type="hidden" name="req_time" value="{{ $req_time }}" />
-                <input type="hidden" name="merchant_id" value="{{ $merchant_id }}" />
-                <input type="hidden" name="tran_id" value="{{ $tran_id }}" id="tran_id" />
-                <input type="hidden" name="amount" value="{{ $amount }}" id="amount" />
-                <input type="hidden" name="shipping" value="{{ $shipping }}" id="shipping" />
-                <input type="hidden" name="email" value="{{ $email }}" />
-                <input type="hidden" name="payment_option" value="{{ $payment_option }}" />
-                <input type="hidden" name="return_url" value="{{ $return_url }}" />
-                <input type="hidden" name="cancel_url" value="{{ $cancel_url }}" />
-                <input type="hidden" name="continue_success_url" value="{{ $continue_success_url }}" />
+                <input name="hash" value="{{ $hash }}" id="hash" />
+                <input name="req_time" value="{{ $req_time }}" />
+                <input name="merchant_id" value="{{ $merchant_id }}" />
+                <input name="tran_id" value="{{ $tran_id }}" id="tran_id" />
+                <input name="amount" value="{{ $amount }}" id="amount" />
+                <input name="shipping" value="{{ $shipping }}" id="shipping" />
+                <input name="email" value="{{ $email }}" />
+                <input name="payment_option" value="{{ $payment_option }}" />
+                <input name="return_url" value="{{ $return_url }}" />
+                <input name="cancel_url" value="{{ $cancel_url }}" />
+                <input name="continue_success_url" value="{{ $continue_success_url }}" />
             </form>
             <input type="button" id="checkout_button" value="Checkout Now">
         </div>
