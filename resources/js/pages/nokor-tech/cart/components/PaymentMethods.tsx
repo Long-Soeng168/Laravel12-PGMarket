@@ -17,6 +17,11 @@ const PaymentMethods = () => {
     const [paymentOption, setPaymentOption] = useState('abapay_khqr'); // abapay_khqr
 
     const [returnUrl, setReturnUrl] = useState(`${app_url}/aba/callback?tran_id=${tran_id}`);
+    const [cancelUrl, setCancelUrl] = useState(`${app_url}/aba/cancel?tran_id=${tran_id}`);
+    const [continueSuccessUrl, setContinueSuccessUrl] = useState(`${app_url}/aba/success?tran_id=${tran_id}`);
+    const [skipSuccessPage, setSkipSuccessPage] = useState(1);
+    const [currency, setCurrency] = useState('USD');
+    // End ABA Payload
 
     const { post, progress, processing, transform, errors } = useForm();
 
@@ -66,11 +71,6 @@ const PaymentMethods = () => {
         };
         checkAbaPayway();
     }, []);
-
-    // useEffect(() => {
-    //     setEmail(auth?.user?.email || '');
-    //     setPhone(auth?.user?.phone || '');
-    // }, []);
 
     const startTransactionPolling = () => {
         // console.log(AbaPayway);
@@ -132,19 +132,27 @@ const PaymentMethods = () => {
             shipping +
             paymentOption +
             returnUrl +
+            cancelUrl +
+            continueSuccessUrl +
+            currency +
+            skipSuccessPage;
 
         console.log(
-            'Values for hash:\n' +
+            'String for hash:\n' +
                 `req_time: ${req_time}\n` +
                 `merchant_id: ${merchant_id}\n` +
                 `tran_id: ${tran_id}\n` +
                 `total_amount: ${total_amount}\n` +
                 `shipping: ${shipping}\n` +
                 `paymentOption: ${paymentOption}\n` +
-                `returnUrl: ${returnUrl}\n`
+                `returnUrl: ${returnUrl}\n` +
+                `cancelUrl: ${cancelUrl}\n` +
+                `continueSuccessUrl: ${continueSuccessUrl}\n` +
+                `currency: ${currency}\n` +
+                `skipSuccessPage: ${skipSuccessPage}`,
         );
-        console.log('hashString: ', hashString);
-
+        
+        console.log(hashString);
         try {
             const response = await axios.post('/aba/get-hash', { hash_string: hashString });
             if (response.data.code === '00') {
@@ -152,10 +160,8 @@ const PaymentMethods = () => {
                 const hashValue = response.data.hash;
                 console.log('Hash received:', response.data.hash);
 
-                // inject directly into the form input
                 const hashInput = document.getElementById('hash') as HTMLInputElement;
                 if (hashInput) hashInput.value = hashValue;
-
             } else {
                 setError(response.data.message || 'Failed to get hash');
             }
@@ -165,7 +171,7 @@ const PaymentMethods = () => {
     };
 
     const handleCheckout = () => {
-        // console.log('hash : ' + hash);
+        console.log('hash : ' + hash);
         if (typeof window === 'undefined') return; // safety no-op on server
 
         const orderData = {
@@ -173,7 +179,7 @@ const PaymentMethods = () => {
             note: '',
             total_amount: +total_amount + shipping,
             payment_method: paymentOption,
-            currency: 'USD',
+            currency: currency,
             tran_id: tran_id,
             req_time: req_time,
             shipping_price: shipping,
@@ -222,16 +228,19 @@ const PaymentMethods = () => {
             </div>
             {/* <h2 className="my-4">TOTAL(Testing): ${total_amount}</h2> */}
             <form method="POST" target="aba_webservice" action={api_url} id="aba_merchant_request">
-                <input name="req_time" value={req_time} />
-                <input name="merchant_id" value={merchant_id} />
-                <input name="tran_id" value={tran_id} id="tran_id" />
-                <input name="amount" value={total_amount} id="amount" />
-                <input name="shipping" value={shipping} />
-                <input name="payment_option" value={paymentOption} />
-                <input name="return_url" value={returnUrl} />
-                <input name="hash" id="hash" />
+                <input type="hidden" name="req_time" value={req_time} />
+                <input type="hidden" name="merchant_id" value={merchant_id} />
+                <input type="hidden" name="tran_id" value={tran_id} />
+                <input type="hidden" name="amount" value={total_amount} />
+                <input type="hidden" name="shipping" value={shipping} />
+                <input type="hidden" name="payment_option" value={paymentOption} />
+                <input type="hidden" name="return_url" value={returnUrl} />
+                <input type="hidden" name="cancel_url" value={cancelUrl} />
+                <input type="hidden" name="continue_success_url" value={continueSuccessUrl} />
+                <input type="hidden" name="currency" value={currency} />
+                <input type="hidden" name="skip_success_page" value={skipSuccessPage} />
+                <input type="hidden" name="hash" value={hash} />
             </form>
-            <p>{api_url}</p>
 
             {paywayReady ? (
                 <button
