@@ -8,7 +8,7 @@ import { toast } from 'sonner';
 
 const PaymentMethods = () => {
     // console.log(usePage<any>().props);
-    const { hash, req_time, merchant_id, tran_id, api_url, app_url, auth } = usePage<any>().props;
+    const { req_time, merchant_id, tran_id, api_url, app_url, auth } = usePage<any>().props;
 
     const [error, setError] = useState('');
 
@@ -228,7 +228,7 @@ const PaymentMethods = () => {
             <div className={'text-primary mb-4 text-lg leading-none font-bold'}>
                 <p>Choose Payment Method</p>
                 <p>Hash String:</p>
-                <p className="text-md">{hashString}</p>
+                <p className='text-md'>{hashString}</p>
             </div>
             {/* <h2 className="my-4">TOTAL(Testing): ${total_amount}</h2> */}
             <form method="POST" target="aba_webservice" action={api_url} id="aba_merchant_request">
@@ -243,7 +243,7 @@ const PaymentMethods = () => {
                 <input type="hidden" name="continue_success_url" value={continueSuccessUrl} />
                 <input type="hidden" name="currency" value={currency} />
                 <input type="hidden" name="skip_success_page" value={skipSuccessPage} />
-                <input type="hidden" name="hash" id="hash" value={hash} />
+                <input type="hidden" name="hash" id="hash" />
             </form>
 
             {paywayReady ? (
@@ -251,7 +251,7 @@ const PaymentMethods = () => {
                     id="checkout_button"
                     onClick={async () => {
                         setIsLoading(true);
-                        // await handleGetHash();
+                        await handleGetHash();
                         handleCheckout();
                     }}
                     disabled={!paywayReady}

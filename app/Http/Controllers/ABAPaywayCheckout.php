@@ -42,12 +42,11 @@ class ABAPaywayCheckout extends Controller
         $merchant_id = config('payway.merchant_id');
         $tran_id = uniqid();
 
-        $hashString = $req_time . 'pgmarket68e5ded23d68a482abapay_khqrhttps://pgmarket.corasolution.com/aba/callback?tran_id=68e5ded23d68ahttps://pgmarket.corasolution.com/aba/cancel?tran_id=68e5ded23d68ahttps://pgmarket.corasolution.com/aba/success?tran_id=68e5ded23d68aUSD1';
-        $hash = $this->payWayService->getHash($hashString);
+        // $hashString = $req_time . 'pgmarket68e5ded23d68a482abapay_khqrhttps://pgmarket.corasolution.com/aba/callback?tran_id=68e5ded23d68ahttps://pgmarket.corasolution.com/aba/cancel?tran_id=68e5ded23d68ahttps://pgmarket.corasolution.com/aba/success?tran_id=68e5ded23d68aUSD1';
+        // $hash = $this->payWayService->getHash($hashString);
 
         // dd($merchant_id);
         return Inertia::render("nokor-tech/cart/ShoppingCart", [
-            'hash' => $hash,
             'req_time' => $req_time,
             'merchant_id' => $merchant_id,
             'tran_id' => $tran_id,
@@ -58,40 +57,40 @@ class ABAPaywayCheckout extends Controller
 
     // End Payment Gateway
 
-    // public function showTestCheckoutForm()
-    // {
-    //     $item = [
-    //         ['name' => 'test1', 'quantity' => '1', 'price' => '10.00'],
-    //         ['name' => 'test2', 'quantity' => '1', 'price' => '10.00']
-    //     ];
-    //     $transactionId = 'TXN001234567';
-    //     $amount = '1.00';
-    //     $firstName = 'Sokha';
-    //     $lastName = 'Tim';
-    //     $phone = '093630466';
-    //     $email = 'sokha.tim@ababank.com'; // or any default payment option if needed
-    //     $req_time = date('YmdHis');
-    //     $merchant_id = config('payway.merchant_id');
-    //     $payment_option = 'abapay'; // or any default payment option if needed
-    //     // $return_params ='payment_success';
-    //     $hash = $this->payWayService->getHash(
-    //         $req_time . $merchant_id . $transactionId . $amount .
-    //             $firstName . $lastName . $email . $phone . $payment_option
-    //     );
+    public function showTestCheckoutForm()
+    {
+        $item = [
+            ['name' => 'test1', 'quantity' => '1', 'price' => '10.00'],
+            ['name' => 'test2', 'quantity' => '1', 'price' => '10.00']
+        ];
+        $transactionId = 'TXN001234567';
+        $amount = '1.00';
+        $firstName = 'Sokha';
+        $lastName = 'Tim';
+        $phone = '093630466';
+        $email = 'sokha.tim@ababank.com'; // or any default payment option if needed
+        $req_time = date('YmdHis');
+        $merchant_id = config('payway.merchant_id');
+        $payment_option = 'abapay'; // or any default payment option if needed
+        // $return_params ='payment_success';
+        $hash = $this->payWayService->getHash(
+            $req_time . $merchant_id . $transactionId . $amount .
+                $firstName . $lastName . $email . $phone . $payment_option
+        );
 
-    //     return view('aba_test_checkout', compact(
-    //         'hash',
-    //         'transactionId',
-    //         'amount',
-    //         'firstName',
-    //         'lastName',
-    //         'phone',
-    //         'email',
-    //         'payment_option',
-    //         'merchant_id',
-    //         'req_time'
-    //     ));
-    // }
+        return view('aba_test_checkout', compact(
+            'hash',
+            'transactionId',
+            'amount',
+            'firstName',
+            'lastName',
+            'phone',
+            'email',
+            'payment_option',
+            'merchant_id',
+            'req_time'
+        ));
+    }
 
     public function callback(Request $request)
     {

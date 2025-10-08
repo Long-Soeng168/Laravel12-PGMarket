@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ABAPaymentController;
+use App\Http\Controllers\ABAPaywayCheckout;
 use App\Http\Controllers\StreamFileController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -67,13 +68,13 @@ Route::post('/live', 'App\Http\Controllers\StripeController@live');
 Route::get('/success/{id}', 'App\Http\Controllers\StripeController@success')->name('success');
 
 // ABA Payemnt Route
-Route::get('/aba_merchant_payout', function () {
-   return view('aba_merchant_payout');
-});
+Route::get('/aba_test_checkout', [ABAPaywayCheckout::class, 'showTestCheckoutForm']);
+
 
 Route::get('/pdf_viewer', function () {
    return view('pdf_viewer');
-});
+}); 
+
 Route::get('/payment', function () {
    return Inertia::render('ABAPaymentPage');
 });
