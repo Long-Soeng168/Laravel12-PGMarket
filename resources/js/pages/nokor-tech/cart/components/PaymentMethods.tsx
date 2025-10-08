@@ -15,7 +15,6 @@ const PaymentMethods = () => {
     // Start ABA Payload
     const [hash, setHash] = useState('');
     const [shipping, setShipping] = useState(2);
-    const [type, setType] = useState('purchase');
     const [paymentOption, setPaymentOption] = useState('abapay_khqr'); // abapay_khqr
 
     const [returnUrl, setReturnUrl] = useState(`${app_url}/aba/callback?tran_id=${tran_id}`);
@@ -137,7 +136,6 @@ const PaymentMethods = () => {
             tran_id +
             total_amount +
             shipping +
-            type +
             paymentOption +
             returnUrl +
             cancelUrl +
@@ -152,7 +150,6 @@ const PaymentMethods = () => {
                 `tran_id: ${tran_id}\n` +
                 `total_amount: ${total_amount}\n` +
                 `shipping: ${shipping}\n` +
-                `type: ${type}\n` +
                 `paymentOption: ${paymentOption}\n` +
                 `returnUrl: ${returnUrl}\n` +
                 `cancelUrl: ${cancelUrl}\n` +
@@ -232,13 +229,12 @@ const PaymentMethods = () => {
                 <p>Choose Payment Method</p>
             </div>
             {/* <h2 className="my-4">TOTAL(Testing): ${total_amount}</h2> */}
-            <form method="POST" target="aba_webservice" action={api_url} id="aba_merchant_request">
+            <form method="POST"  target="aba_webservice" action={api_url} id="aba_merchant_request">
                 <input name="req_time" value={req_time} />
                 <input name="merchant_id" value={merchant_id} />
                 <input name="tran_id" value={tran_id} />
                 <input name="amount" value={total_amount} />
                 <input name="shipping" value={shipping} />
-                <input name="type" value={type} />
                 <input name="payment_option" value={paymentOption} />
                 <input name="return_url" value={returnUrl} />
                 <input name="cancel_url" value={cancelUrl} />
@@ -254,7 +250,7 @@ const PaymentMethods = () => {
                     id="checkout_button"
                     onClick={async () => {
                         setIsLoading(true);
-                        await handleGetHash();
+                        // await handleGetHash();
                         handleCheckout();
                     }}
                     disabled={!paywayReady}
