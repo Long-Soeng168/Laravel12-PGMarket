@@ -141,7 +141,7 @@ const PaymentMethods = () => {
                 `total_amount: ${total_amount}\n` +
                 `shipping: ${shipping}\n` +
                 `paymentOption: ${paymentOption}\n` +
-                `returnUrl: ${returnUrl}\n` +
+                `returnUrl: ${returnUrl}\n`
         );
         console.log('hashString: ', hashString);
 
