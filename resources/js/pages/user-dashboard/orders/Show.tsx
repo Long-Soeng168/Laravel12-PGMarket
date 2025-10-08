@@ -124,9 +124,9 @@ const Show = () => {
                 {order_detail?.payment_status !== 'APPROVED' && (
                     <div>
                         <PaymentMethods />
-                        <OrderSuccessDialog />
                     </div>
                 )}
+                <OrderSuccessDialog />dd
 
                 <p className="text-muted-foreground mb-4 text-lg font-bold">Order Detail</p>
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
