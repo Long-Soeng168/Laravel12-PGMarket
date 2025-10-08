@@ -214,7 +214,7 @@ class ABAPaywayCheckout extends Controller
         //     'notes' => json_encode($request->all(), JSON_UNESCAPED_UNICODE),
         // ]);
         if ($order) {
-            return redirect('/shopping-cart?order_success=1&order_id=' . $order->id);
+            return redirect("/user-orders/{$order->id}");
         } else {
             return redirect('/shopping-cart?order_fail=1');
         }

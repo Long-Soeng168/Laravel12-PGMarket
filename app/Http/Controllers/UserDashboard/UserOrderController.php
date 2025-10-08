@@ -100,22 +100,22 @@ class UserOrderController extends Controller implements HasMiddleware
         }
 
         $tran_id = 'TXN001234567';
-        $amount = '1.00';
-        $shipping = '2.00';
-        $email = 'sokha.tim@ababank.com'; // or any default payment option if needed
-        $req_time = date('YmdHis');
+        $amount = $user_order->total_amount - $user_order->shipping_price;
+        $shipping = $user_order->shipping_price;
+        $currency = $user_order->currency;
+        $email = $user_order->buyer->email;
+        $req_time = $user_order->req_time;
         $merchant_id = config('payway.merchant_id');
         $payment_option = 'abapay_khqr'; // or any default payment option if needed
         $skip_success_page = 1; // or any default payment option if needed
-        $currency = 'USD'; // or any default payment option if needed
         $return_url = env('APP_URL') . "/aba/callback/{$tran_id}";
-        $cancel_url = env('APP_URL') . "/aba/cancel?tran_id={$tran_id}";
         $continue_success_url = env('APP_URL') . "/aba/success?tran_id={$tran_id}";
         // $return_params ='payment_success';
         $hash = $this->payWayService->getHash(
             $req_time . $merchant_id . $tran_id . $amount . $shipping .
-                $email . $payment_option . $return_url . $cancel_url . $continue_success_url . $skip_success_page
+                $email . $payment_option . $return_url . $continue_success_url . $skip_success_page
         );
+
 
         return Inertia::render('user-dashboard/orders/Show', [
             'order_detail' => $user_order->load('order_items.item.images', 'shop'),
@@ -130,7 +130,6 @@ class UserOrderController extends Controller implements HasMiddleware
             'merchant_id' => $merchant_id,
             'req_time' => $req_time,
             'return_url' => $return_url,
-            'cancel_url' => $cancel_url,
             'continue_success_url' => $continue_success_url,
             'skip_success_page' => $skip_success_page,
             'currency' => $currency,

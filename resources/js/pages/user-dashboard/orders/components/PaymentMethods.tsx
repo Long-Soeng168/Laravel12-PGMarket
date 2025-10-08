@@ -17,7 +17,6 @@ const PaymentMethods = () => {
         merchant_id,
         req_time,
         return_url,
-        cancel_url,
         continue_success_url,
         skip_success_page,
         currency,
@@ -110,6 +109,7 @@ const PaymentMethods = () => {
         if (typeof window === 'undefined') return; // safety no-op on server
 
         if (paywayReady) {
+            setIsLoading(false);
             AbaPayway.checkout();
             startTransactionPolling(); // ✅ start polling after showing QR
         } else {
@@ -125,18 +125,17 @@ const PaymentMethods = () => {
             {/* <h2 className="my-4">TOTAL(Testing): ${amount}</h2> */}
             <div className="prose">
                 <form method="POST" target="aba_webservice" action={api_url} id="aba_merchant_request">
-                    <input name="hash" value={hash} id="hash" />
-                    <input name="req_time" value={req_time} />
-                    <input name="merchant_id" value={merchant_id} />
-                    <input name="tran_id" value={tran_id} id="tran_id" />
-                    <input name="amount" value={amount} id="amount" />
-                    <input name="shipping" value={shipping} id="shipping" />
-                    <input name="email" value={email} />
-                    <input name="payment_option" value={payment_option} />
-                    <input name="return_url" value={return_url} />
-                    <input name="cancel_url" value={cancel_url} />
-                    <input name="continue_success_url" value={continue_success_url} />
-                    <input name="skip_success_page" value={skip_success_page} />
+                    <input type="hidden" name="hash" value={hash} id="hash" />
+                    <input type="hidden" name="req_time" value={req_time} />
+                    <input type="hidden" name="merchant_id" value={merchant_id} />
+                    <input type="hidden" name="tran_id" value={tran_id} id="tran_id" />
+                    <input type="hidden" name="amount" value={amount} id="amount" />
+                    <input type="hidden" name="shipping" value={shipping} id="shipping" />
+                    <input type="hidden" name="email" value={email} />
+                    <input type="hidden" name="payment_option" value={payment_option} />
+                    <input type="hidden" name="return_url" value={return_url} />
+                    <input type="hidden" name="continue_success_url" value={continue_success_url} />
+                    <input type="hidden" name="skip_success_page" value={skip_success_page} />
                 </form>
             </div>
 
