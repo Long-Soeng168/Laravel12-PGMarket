@@ -13,6 +13,7 @@ const PaymentMethods = () => {
     const [error, setError] = useState('');
 
     // Start ABA Payload
+    const [hashString, setHashString] = useState('');
     const [shipping, setShipping] = useState(2);
     const [paymentOption, setPaymentOption] = useState('abapay_khqr'); // abapay_khqr
 
@@ -153,6 +154,7 @@ const PaymentMethods = () => {
         );
 
         console.log(hashString);
+        setHashString(hashString);
         try {
             const response = await axios.post('/aba/get-hash', { hash_string: hashString });
             if (response.data.code === '00') {
@@ -225,6 +227,8 @@ const PaymentMethods = () => {
         <div className="container">
             <div className={'text-primary mb-4 text-lg leading-none font-bold'}>
                 <p>Choose Payment Method</p>
+                <p>Hash String:</p>
+                <p className="text-md">{hashString}</p>
             </div>
             {/* <h2 className="my-4">TOTAL(Testing): ${total_amount}</h2> */}
             <form method="POST" target="aba_webservice" action={api_url} id="aba_merchant_request">
