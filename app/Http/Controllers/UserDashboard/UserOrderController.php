@@ -108,7 +108,7 @@ class UserOrderController extends Controller implements HasMiddleware
         $merchant_id = config('payway.merchant_id');
         $payment_option = 'abapay_khqr'; // or any default payment option if needed
         $skip_success_page = 1; // or any default payment option if needed
-        $return_url = env('APP_URL') . "/aba/callback/{$tran_id}";
+        $return_url = env('APP_URL') . "/aba/callback?tran_id={$tran_id}";
         $continue_success_url = env('APP_URL') . "/aba/success?tran_id={$tran_id}";
         // $return_params ='payment_success';
         $hash = $this->payWayService->getHash(
