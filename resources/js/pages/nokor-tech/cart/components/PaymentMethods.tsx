@@ -173,7 +173,7 @@ const PaymentMethods = () => {
     };
 
     const handleCheckout = () => {
-        // console.log('hash : ' + hash);
+        console.log('hash : ' + hash);
         if (typeof window === 'undefined') return; // safety no-op on server
 
         const orderData = {
