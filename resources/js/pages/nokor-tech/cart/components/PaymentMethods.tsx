@@ -151,7 +151,7 @@ const PaymentMethods = () => {
                 `currency: ${currency}\n` +
                 `skipSuccessPage: ${skipSuccessPage}`,
         );
-        
+
         console.log(hashString);
         try {
             const response = await axios.post('/aba/get-hash', { hash_string: hashString });
@@ -230,8 +230,8 @@ const PaymentMethods = () => {
             <form method="POST" target="aba_webservice" action={api_url} id="aba_merchant_request">
                 <input type="hidden" name="req_time" value={req_time} />
                 <input type="hidden" name="merchant_id" value={merchant_id} />
-                <input type="hidden" name="tran_id" value={tran_id} />
-                <input type="hidden" name="amount" value={total_amount} />
+                <input type="hidden" name="tran_id" value={tran_id} id="tran_id" />
+                <input type="hidden" name="amount" value={total_amount} id="amount" />
                 <input type="hidden" name="shipping" value={shipping} />
                 <input type="hidden" name="payment_option" value={paymentOption} />
                 <input type="hidden" name="return_url" value={returnUrl} />
@@ -239,7 +239,7 @@ const PaymentMethods = () => {
                 <input type="hidden" name="continue_success_url" value={continueSuccessUrl} />
                 <input type="hidden" name="currency" value={currency} />
                 <input type="hidden" name="skip_success_page" value={skipSuccessPage} />
-                <input type="hidden" name="hash" value={hash} />
+                <input type="hidden" name="hash" id="hash" />
             </form>
 
             {paywayReady ? (
