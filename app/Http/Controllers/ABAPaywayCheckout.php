@@ -69,7 +69,7 @@ class ABAPaywayCheckout extends Controller
         $req_time = date('YmdHis');
         $merchant_id = config('payway.merchant_id');
         $payment_option = 'abapay_khqr'; // or any default payment option if needed
-        $return_url = env('APP_URL') . "/aba/callback/{$tran_id}";
+        $return_url = env('APP_URL') . "/aba/cancel?tran_id={$tran_id}";
         $cancel_url = env('APP_URL') . "/aba/cancel?tran_id={$tran_id}";
         $continue_success_url = env('APP_URL') . "/aba/success?tran_id={$tran_id}";
         // $return_params ='payment_success';
