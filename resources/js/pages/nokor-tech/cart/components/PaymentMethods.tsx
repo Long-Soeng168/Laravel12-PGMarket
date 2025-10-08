@@ -162,8 +162,14 @@ const PaymentMethods = () => {
         try {
             const response = await axios.post('/aba/get-hash', { hash_string: hashString });
             if (response.data.code === '00') {
-                setHash(response.data.hash);
+                // setHash(response.data.hash);
+                const hashValue = response.data.hash;
                 console.log('Hash received:', response.data.hash);
+
+                // inject directly into the form input
+                const hashInput = document.getElementById('hash') as HTMLInputElement;
+                if (hashInput) hashInput.value = hashValue;
+                
             } else {
                 setError(response.data.message || 'Failed to get hash');
             }
@@ -173,7 +179,7 @@ const PaymentMethods = () => {
     };
 
     const handleCheckout = () => {
-        console.log('hash : ' + hash);
+        // console.log('hash : ' + hash);
         if (typeof window === 'undefined') return; // safety no-op on server
 
         const orderData = {
@@ -196,7 +202,7 @@ const PaymentMethods = () => {
             onSuccess: (page: any) => {
                 if (paywayReady) {
                     AbaPayway.checkout();
-                    // startTransactionPolling(); // ✅ start polling after showing QR
+                    startTransactionPolling(); // ✅ start polling after showing QR
                 } else {
                     alert('Payment system not loaded yet, please wait.');
                 }
@@ -241,8 +247,7 @@ const PaymentMethods = () => {
                 <input name="continue_success_url" value={continueSuccessUrl} />
                 <input name="currency" value={currency} />
                 <input name="skip_success_page" value={skipSuccessPage} />
-
-                <input name="hash" value={hash} id="hash" />
+                <input name="hash" id="hash" />
             </form>
             <p>{api_url}</p>
 
@@ -252,10 +257,6 @@ const PaymentMethods = () => {
                     onClick={async () => {
                         setIsLoading(true);
                         await handleGetHash();
-
-                        // wait 1 second before checkout
-                        await new Promise((resolve) => setTimeout(resolve, 1000));
-
                         handleCheckout();
                     }}
                     disabled={!paywayReady}
