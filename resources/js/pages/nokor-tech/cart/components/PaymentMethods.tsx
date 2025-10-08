@@ -230,10 +230,11 @@ const PaymentMethods = () => {
             </div>
             {/* <h2 className="my-4">TOTAL(Testing): ${total_amount}</h2> */}
             <form method="POST"  target="aba_webservice" action={api_url} id="aba_merchant_request">
+                <input name="hash" value={hash} id="hash"/>
                 <input name="req_time" value={req_time} />
                 <input name="merchant_id" value={merchant_id} />
-                <input name="tran_id" value={tran_id} />
-                <input name="amount" value={total_amount} />
+                <input name="tran_id" value={tran_id} id="tran_id"/>
+                <input name="amount" value={total_amount} id="amount"/>
                 <input name="shipping" value={shipping} />
                 <input name="payment_option" value={paymentOption} />
                 <input name="return_url" value={returnUrl} />
@@ -241,7 +242,6 @@ const PaymentMethods = () => {
                 <input name="continue_success_url" value={continueSuccessUrl} />
                 <input name="currency" value={currency} />
                 <input name="skip_success_page" value={skipSuccessPage} />
-                <input name="hash" value={hash} />
             </form>
             <p>{api_url}</p>
 
