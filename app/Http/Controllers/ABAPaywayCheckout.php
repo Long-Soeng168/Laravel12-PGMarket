@@ -42,7 +42,7 @@ class ABAPaywayCheckout extends Controller
         $merchant_id = config('payway.merchant_id');
         $tran_id = uniqid();
 
-        $hashString = $req_time + 'pgmarket68e5ded23d68a482abapay_khqrhttps://pgmarket.corasolution.com/aba/callback?tran_id=68e5ded23d68ahttps://pgmarket.corasolution.com/aba/cancel?tran_id=68e5ded23d68ahttps://pgmarket.corasolution.com/aba/success?tran_id=68e5ded23d68aUSD1';
+        $hashString = $req_time . 'pgmarket68e5ded23d68a482abapay_khqrhttps://pgmarket.corasolution.com/aba/callback?tran_id=68e5ded23d68ahttps://pgmarket.corasolution.com/aba/cancel?tran_id=68e5ded23d68ahttps://pgmarket.corasolution.com/aba/success?tran_id=68e5ded23d68aUSD1';
         $hash = $this->payWayService->getHash($hashString);
 
         // dd($merchant_id);
