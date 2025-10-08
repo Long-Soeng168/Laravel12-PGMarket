@@ -148,7 +148,24 @@ const PaymentMethods = () => {
             continueSuccessUrl +
             currency +
             skipSuccessPage;
-        console.log(hashString);
+
+        console.log(
+            'Values for hash:\n' +
+                `req_time: ${req_time}\n` +
+                `merchant_id: ${merchant_id}\n` +
+                `tran_id: ${tran_id}\n` +
+                `total_amount: ${total_amount}\n` +
+                `shipping: ${shipping}\n` +
+                `type: ${type}\n` +
+                `paymentOption: ${paymentOption}\n` +
+                `returnUrl: ${returnUrl}\n` +
+                `cancelUrl: ${cancelUrl}\n` +
+                `continueSuccessUrl: ${continueSuccessUrl}\n` +
+                `currency: ${currency}\n` +
+                `skipSuccessPage: ${skipSuccessPage}`,
+        );
+        console.log('hashString: ', hashString);
+
         try {
             const response = await axios.post('/aba/get-hash', { hash_string: hashString });
             if (response.data.code === '00') {
@@ -163,7 +180,7 @@ const PaymentMethods = () => {
     };
 
     const handleCheckout = () => {
-        console.log('hash : ' + hash);
+        // console.log('hash : ' + hash);
         if (typeof window === 'undefined') return; // safety no-op on server
 
         const orderData = {
