@@ -13,16 +13,10 @@ const PaymentMethods = () => {
     const [error, setError] = useState('');
 
     // Start ABA Payload
-    const [hash, setHash] = useState('');
     const [shipping, setShipping] = useState(2);
     const [paymentOption, setPaymentOption] = useState('abapay_khqr'); // abapay_khqr
 
     const [returnUrl, setReturnUrl] = useState(`${app_url}/aba/callback?tran_id=${tran_id}`);
-    const [cancelUrl, setCancelUrl] = useState(`${app_url}/aba/cancel?tran_id=${tran_id}`);
-    const [continueSuccessUrl, setContinueSuccessUrl] = useState(`${app_url}/aba/success?tran_id=${tran_id}`);
-    const [skipSuccessPage, setSkipSuccessPage] = useState(1);
-    const [currency, setCurrency] = useState('USD');
-    // End ABA Payload
 
     const { post, progress, processing, transform, errors } = useForm();
 
@@ -138,10 +132,6 @@ const PaymentMethods = () => {
             shipping +
             paymentOption +
             returnUrl +
-            cancelUrl +
-            continueSuccessUrl +
-            currency +
-            skipSuccessPage;
 
         console.log(
             'Values for hash:\n' +
@@ -152,10 +142,6 @@ const PaymentMethods = () => {
                 `shipping: ${shipping}\n` +
                 `paymentOption: ${paymentOption}\n` +
                 `returnUrl: ${returnUrl}\n` +
-                `cancelUrl: ${cancelUrl}\n` +
-                `continueSuccessUrl: ${continueSuccessUrl}\n` +
-                `currency: ${currency}\n` +
-                `skipSuccessPage: ${skipSuccessPage}`,
         );
         console.log('hashString: ', hashString);
 
@@ -169,7 +155,7 @@ const PaymentMethods = () => {
                 // inject directly into the form input
                 const hashInput = document.getElementById('hash') as HTMLInputElement;
                 if (hashInput) hashInput.value = hashValue;
-                
+
             } else {
                 setError(response.data.message || 'Failed to get hash');
             }
@@ -187,7 +173,7 @@ const PaymentMethods = () => {
             note: '',
             total_amount: +total_amount + shipping,
             payment_method: paymentOption,
-            currency: currency,
+            currency: 'USD',
             tran_id: tran_id,
             req_time: req_time,
             shipping_price: shipping,
@@ -243,10 +229,6 @@ const PaymentMethods = () => {
                 <input name="shipping" value={shipping} />
                 <input name="payment_option" value={paymentOption} />
                 <input name="return_url" value={returnUrl} />
-                <input name="cancel_url" value={cancelUrl} />
-                <input name="continue_success_url" value={continueSuccessUrl} />
-                <input name="currency" value={currency} />
-                <input name="skip_success_page" value={skipSuccessPage} />
                 <input name="hash" id="hash" />
             </form>
             <p>{api_url}</p>
