@@ -151,14 +151,14 @@ const PaymentMethods = () => {
                         disabled={!paywayReady}
                         className="bg-background relative flex w-full cursor-pointer items-center gap-[10px] rounded-[8px] border border-transparent p-[6px] text-start shadow-[0_1px_5px_rgb(0,0,0,0.1)] transition-all duration-300 hover:scale-105 hover:shadow-[0_3px_10px_rgb(0,0,0,0.2)] md:p-[10px] dark:bg-white/20 dark:hover:bg-white/25"
                     >
-                        <img className="size-[50px] rounded-[4px]" src="/assets/ABA_BANK.svg" alt="" />
+                        <img className="size-[40px] rounded-[4px]" src="/assets/ABA_BANK.svg" alt="" />
                         <div className="flex w-full items-center justify-between">
                             <div className="flex-1">
                                 <p className="text-[16px] font-semibold">ABA KHQR</p>
-                                <p className="text-[14px] font-normal text-gray-600 dark:text-gray-200">Scan to pay with any banking app</p>
+                                <p className="text-[12px] font-normal text-gray-600 dark:text-gray-200">Scan to pay with any banking app</p>
                             </div>
-                            <span className="bg-accent flex cursor-pointer items-center justify-center rounded-[4px] p-1 dark:bg-white/10">
-                                <ChevronRight className="stroke-gray-600 dark:stroke-gray-200" />
+                            <span className="bg-accent flex cursor-pointer items-center p-1 justify-center rounded-[6px] dark:bg-white/10">
+                                <ChevronRight size={18} className="stroke-gray-600 translate-x-[1px] dark:stroke-gray-200" />
                             </span>
                         </div>
                         <BorderBeam duration={6} size={100} />
