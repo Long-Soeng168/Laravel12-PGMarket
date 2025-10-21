@@ -84,7 +84,7 @@ class ABAPayoutController extends Controller
 
         // Bank info
         $shop_bank_account     = $order->shop?->bank_account; // replace with shop account if dynamic
-        $shipping_bank_account = '500000002';
+        $shipping_bank_account = env('ABA_DELIVERY_BANK_ACCOUNT');
         $currency              = 'USD';
 
 
