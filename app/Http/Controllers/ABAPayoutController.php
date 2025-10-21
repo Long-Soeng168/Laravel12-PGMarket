@@ -164,7 +164,7 @@ class ABAPayoutController extends Controller
             // Update order payout status
             $order->update(['payout_status' => 'paid']);
         } else {
-            dd($decodedResponse);
+            // dd($decodedResponse);
             return back()->with('error', 'Payout Error');
         }
         return back()->with('success', 'Payout Successfully');
