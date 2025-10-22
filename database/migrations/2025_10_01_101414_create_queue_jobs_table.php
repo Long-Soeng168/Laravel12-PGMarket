@@ -16,6 +16,7 @@ return new class extends Migration
 
             $table->string('job_type');               // e.g. payout, email
             $table->json('payload')->nullable();
+            $table->unsignedBigInteger('order_id')->nullable();
             $table->string('status')->default('pending'); // pending, running, completed, failed
             $table->integer('delay_second')->default(0);  // when to run
             $table->timestamp('run_at')->nullable();  // when to run

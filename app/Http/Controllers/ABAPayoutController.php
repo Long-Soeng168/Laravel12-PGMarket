@@ -95,7 +95,7 @@ class ABAPayoutController extends Controller
         $amount_after_shipping   = $total_amount - $shipping_receive_amount;
         $website_receive_amount  = $amount_after_shipping * $commission_percentage;
         $shop_receive_amount     = $amount_after_shipping - $website_receive_amount;
-        $total_payout = $shop_receive_amount + $shipping_receive_amount;
+        $total_payout = (($shop_receive_amount * 100) + ($shipping_receive_amount * 100))/100;
 
 
         // return [$shop_bank_account, $shipping_bank_account, $shop_receive_amount, $shipping_receive_amount, $website_receive_amount, $total_amount, $total_payout];
@@ -106,8 +106,8 @@ class ABAPayoutController extends Controller
 
         // Beneficiaries array
         $beneficiaries = [
-            ['account' => $shop_bank_account, 'amount' => $shipping_receive_amount],
-            ['account' => $shipping_bank_account, 'amount' => $shop_receive_amount],
+            ['account' => $shop_bank_account, 'amount' => (float) $shipping_receive_amount],
+            ['account' => $shipping_bank_account, 'amount' => (float) $shop_receive_amount],
         ];
         $merchantDataInfo = json_encode($beneficiaries);
 

@@ -22,3 +22,6 @@ How to setup project
 
 - npm i --legacy-peer-deps# Laravel12-ATA
 # Laravel12-PGMarket
+
+# Update DB
+ALTER TABLE `queue_jobs` ADD `order_id` BIGINT UNSIGNED NULL DEFAULT NULL AFTER `job_type`;
