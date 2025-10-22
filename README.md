@@ -25,3 +25,4 @@ How to setup project
 
 # Update DB
 ALTER TABLE `queue_jobs` ADD `order_id` BIGINT UNSIGNED NULL DEFAULT NULL AFTER `job_type`;
+ALTER TABLE `queue_jobs` ADD `respone_log` TEXT NULL DEFAULT NULL AFTER `note`;

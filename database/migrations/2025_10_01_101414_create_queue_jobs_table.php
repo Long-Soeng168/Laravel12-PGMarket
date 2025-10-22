@@ -22,6 +22,7 @@ return new class extends Migration
             $table->timestamp('run_at')->nullable();  // when to run
             $table->timestamp('completed_at')->nullable();
             $table->text('note')->nullable();         // logs / errors
+            $table->text('respone_log')->nullable();         // logs / errors
 
             $table->timestamps();
         });

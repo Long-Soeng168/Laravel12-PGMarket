@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\Payout;
+use App\Models\QueueJob;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -95,7 +96,7 @@ class ABAPayoutController extends Controller
         $amount_after_shipping   = $total_amount - $shipping_receive_amount;
         $website_receive_amount  = $amount_after_shipping * $commission_percentage;
         $shop_receive_amount     = $amount_after_shipping - $website_receive_amount;
-        $total_payout = (($shop_receive_amount * 100) + ($shipping_receive_amount * 100))/100;
+        $total_payout = (($shop_receive_amount * 100) + ($shipping_receive_amount * 100)) / 100;
 
 
         // return [$shop_bank_account, $shipping_bank_account, $shop_receive_amount, $shipping_receive_amount, $website_receive_amount, $total_amount, $total_payout];
@@ -140,6 +141,14 @@ class ABAPayoutController extends Controller
         $url      = config('payway.base_api_domain') . '/api/payment-gateway/v2/direct-payment/merchant/payout';
         $response = $this->sendRequest($url, $header, json_encode($jsonData));
         $decodedResponse = json_decode($response, true);
+
+        $job = QueueJob::where('order_id', $id)->first();
+        
+        if ($job) {
+            $job->update([
+                'respone_log' => json_encode($decodedResponse),
+            ]);
+        };
 
         // If successful, create payout record
         if (isset($decodedResponse['status']['code']) && $decodedResponse['status']['code'] === '0') {
