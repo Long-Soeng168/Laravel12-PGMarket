@@ -75,6 +75,10 @@ Route::get('/pdf_viewer', function () {
    return view('pdf_viewer');
 }); 
 
+Route::get('/qr', function () {
+   return Inertia::render('QRPage');
+});
+
 Route::get('/payment', function () {
    return Inertia::render('ABAPaymentPage');
 });
