@@ -131,7 +131,7 @@ const MyTableData = () => {
                                 <TableCell>
                                     <span className="flex h-full items-center justify-start">
                                         {hasPermission('shop view') && (
-                                            <Link href={`/admin/shops/${item.id}`}>
+                                            <Link href={`/shops/${item.id}`}>
                                                 <MyTooltipButton title={t('View')} side="bottom" variant="ghost">
                                                     <ScanEyeIcon />
                                                 </MyTooltipButton>
