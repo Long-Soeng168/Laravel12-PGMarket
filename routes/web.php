@@ -53,9 +53,6 @@ Route::post('/queue_job/{queueJob}/execute', [QueueJobController::class, 'execut
 // ========= Telegram Testing Route =========
 require __DIR__ . '/telegram.php';
 
-
-
-
 // ========= Pay Pal Route =========
 Route::get('/paypal_payment', '\App\Http\Controllers\PayPalController@index')->middleware('auth');
 Route::get('/create/{amount}', '\App\Http\Controllers\PayPalController@create');
@@ -69,7 +66,6 @@ Route::get('/success/{id}', 'App\Http\Controllers\StripeController@success')->na
 
 // ABA Payemnt Route
 Route::get('/aba_test_checkout', [ABAPaywayCheckout::class, 'showTestCheckoutForm']);
-
 
 Route::get('/pdf_viewer', function () {
    return view('pdf_viewer');

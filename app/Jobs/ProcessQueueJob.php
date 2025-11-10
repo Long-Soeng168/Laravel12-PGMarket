@@ -36,7 +36,7 @@ class ProcessQueueJob implements ShouldQueue
 
         try {
             $payload  = $this->queueJob->payload;
-            $order_id = $payload['order_id'] ?? null;
+            $order_id = $this->queueJob->order_id ?? null;
 
             if ($this->queueJob->job_type === 'payout_to_shop' && $order_id) {
 
@@ -48,7 +48,7 @@ class ProcessQueueJob implements ShouldQueue
                         'note'         => "Payout already done.",
                     ]);
                     return;
-                } 
+                }
 
                 // Call the payout method directly
                 $payoutController = new ABAPayoutController();
@@ -66,7 +66,14 @@ class ProcessQueueJob implements ShouldQueue
                 } else {
                     throw new \Exception("Payout failed");
                 }
+            } elseif ($this->queueJob->job_type === 'test') {
+                $this->queueJob->update([
+                    'status'       => 'completed',
+                    'completed_at' => now(),
+                    'note'         => "Update Test completed",
+                ]);
             }
+
 
             // If no matching type or order_id missing
         } catch (\Throwable $e) {

@@ -44,7 +44,7 @@ class QueueJobController extends Controller
         $queueJob = QueueJob::create([
             'job_type' => 'test',
             'payload' => $orderPayload,
-            'delay_second' => 5, // time delay to run after creation (48h =  48 * 3600)
+            'delay_second' => 2, // time delay to run after creation (48h =  48 * 3600)
             'run_at' => null,           // not started yet
         ]);
 
