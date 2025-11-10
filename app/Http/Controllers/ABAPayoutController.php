@@ -107,8 +107,8 @@ class ABAPayoutController extends Controller
 
         // Beneficiaries array
         $beneficiaries = [
-            ['account' => $shop_bank_account, 'amount' => (float) $shipping_receive_amount],
-            ['account' => $shipping_bank_account, 'amount' => (float) $shop_receive_amount],
+            ['account' => $shop_bank_account, 'amount' => (float) $shop_receive_amount],
+            ['account' => $shipping_bank_account, 'amount' => (float) $shipping_receive_amount],
         ];
         $merchantDataInfo = json_encode($beneficiaries);
 
