@@ -434,6 +434,14 @@ class NokorTechController extends Controller
             "getStartedNow" => $getStartedNow,
         ]);
     }
+    public function shop_terms_and_conditions()
+    {
+        $about = Page::with('children')->where('code', 'SHOP-TERMS-AND-CONDITIONS')->where('status', 'active')->orderBy('order_index')->first();
+        // return $about;
+        return Inertia::render("nokor-tech/About", [
+            "about" => $about,
+        ]);
+    }
 
     public function contact()
     {

@@ -41,7 +41,7 @@ export default function MyFooter() {
                         </div>
                     </div>
                     {/* Company Info */}
-                    <div className="lg:justify-self-center">
+                    <div className="max-lg:hidden lg:justify-self-center">
                         <h3 className="mb-4 text-xl font-bold">
                             Information <Separator className="w-auto bg-white" />
                         </h3>
@@ -65,7 +65,7 @@ export default function MyFooter() {
                     </div>
 
                     {/* Quick Links */}
-                    <div className="lg:justify-self-center">
+                    <div className="max-lg:hidden lg:justify-self-center">
                         <h3 className="mb-4 text-xl font-bold">
                             {t('Quick Links')} <Separator className="w-auto bg-white" />
                         </h3>
@@ -103,7 +103,7 @@ export default function MyFooter() {
                             </li>
                         </ul>
                     </div>
-                    <div className="lg:justify-self-center">
+                    <div className="max-lg:hidden lg:justify-self-center">
                         <h3 className="mb-4 text-xl font-bold">
                             {t('Social Media')} <Separator className="w-auto bg-white" />
                         </h3>
@@ -119,6 +119,26 @@ export default function MyFooter() {
                                             className="transition-all duration-300 hover:scale-125 hover:cursor-pointer"
                                         />
                                         {item?.title}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                    <div className="min-lg:hidden pb-7 lg:justify-self-center">
+                        <h3 className="mb-4 text-xl text-center underline underline-offset-8 font-bold">
+                            {t('Social Media')} 
+                        </h3>
+                        <ul className="flex flex-wrap justify-center gap-3">
+                            {links?.map((item) => (
+                                <li key={item?.id}>
+                                    <Link prefetch href={item?.link || '#'} className="flex border rounded-full items-center gap-2 hover:underline">
+                                        <img
+                                            width={28}
+                                            height={28}
+                                            src={`/assets/images/links/thumb/${item?.image}`}
+                                            alt=""
+                                            className="transition-all size-12 duration-300 hover:scale-125 hover:cursor-pointer"
+                                        />
                                     </Link>
                                 </li>
                             ))}

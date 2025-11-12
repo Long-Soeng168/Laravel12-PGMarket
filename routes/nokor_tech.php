@@ -7,6 +7,7 @@ use Inertia\Inertia;
 
 Route::get('/', [NokorTechController::class, 'index']);
 Route::get('/shops', [NokorTechController::class, 'shops']);
+Route::get('/shop-terms-and-conditions', [NokorTechController::class, 'shop_terms_and_conditions']);
 Route::get('/about-us', [NokorTechController::class, 'about']);
 Route::get('/download-app', [NokorTechController::class, 'download_app']);
 Route::get('/download_app', [NokorTechController::class, 'download_app']);

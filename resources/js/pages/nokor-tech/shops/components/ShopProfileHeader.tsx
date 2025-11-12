@@ -8,14 +8,14 @@ const ShopProfileHeader = ({ shop }) => {
             {/* Banner */}
             <div className="relative">
                 <Avatar className="size-full rounded-none">
-                    <AvatarImage src={`/assets/images/shops/${shop.banner}`} alt="" className="max-h-[500px] w-full object-cover" />
+                    <AvatarImage src={`/assets/images/shops/${shop.banner}`} alt="" className="aspect-[21/6] max-h-[500px] w-full object-cover" />
                     <AvatarFallback className="rounded-none">
                         <ImageOffIcon size={32} className="text-muted-foreground h-[220px]" />
                     </AvatarFallback>
                 </Avatar>
                 {/* <img src={`/assets/images/shops/${shop.banner}`} alt="Shop Banner" className="max-h-[500px] w-full object-cover" /> */}
                 {/* Logo */}
-                <div className="bg-background/80 -bottom-16 left-0 flex max-w-[600px] items-center space-x-4 rounded-2xl border p-4 shadow-md backdrop-blur md:absolute md:left-6">
+                <div className="bg-background/80 -bottom-16 left-0 flex max-w-full items-center space-x-4 rounded-none border p-4 shadow-md backdrop-blur md:absolute md:left-6 md:max-w-[600px]">
                     <Avatar className="size-auto rounded-full border">
                         <AvatarImage
                             src={`/assets/images/shops/${shop.logo}`}
