@@ -1,5 +1,6 @@
 import MyLoadingAnimationOne from '@/components/MyLoadingAnimationOne';
 import { BorderBeam } from '@/components/ui/border-beam';
+import useTranslation from '@/hooks/use-translation';
 import { useForm, usePage } from '@inertiajs/react';
 import { ChevronRight } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -118,10 +119,12 @@ const PaymentMethods = () => {
         }
     };
 
+    const { t } = useTranslation();
+
     return (
         <div className="container">
             <div className={'text-primary mb-4 text-lg leading-none font-bold'}>
-                <p>Choose Payment Method</p>
+                <p>{t('Choose Payment Method')}</p>
             </div>
             {/* <h2 className="my-4">TOTAL(Testing): ${amount}</h2> */}
             <div className="prose">
@@ -157,8 +160,8 @@ const PaymentMethods = () => {
                                 <p className="text-[16px] font-semibold">ABA KHQR</p>
                                 <p className="text-[12px] font-normal text-gray-600 dark:text-gray-200">Scan to pay with any banking app</p>
                             </div>
-                            <span className="bg-accent flex cursor-pointer items-center p-1 justify-center rounded-[6px] dark:bg-white/10">
-                                <ChevronRight size={18} className="stroke-gray-600 translate-x-[1px] dark:stroke-gray-200" />
+                            <span className="bg-accent flex cursor-pointer items-center justify-center rounded-[6px] p-1 dark:bg-white/10">
+                                <ChevronRight size={18} className="translate-x-[1px] stroke-gray-600 dark:stroke-gray-200" />
                             </span>
                         </div>
                         <BorderBeam duration={6} size={100} />

@@ -1,8 +1,10 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import useTranslation from '@/hooks/use-translation';
 import { Link } from '@inertiajs/react';
-import { ImageIcon, ImageOffIcon } from 'lucide-react';
+import { ImageOffIcon } from 'lucide-react';
 
 const ShopCard = ({ shop }) => {
+    const { t } = useTranslation();
     return (
         <Link
             href={`/shops/${shop.id}`}
@@ -39,14 +41,14 @@ const ShopCard = ({ shop }) => {
                     <h2 className="line-clamp-2 text-base font-semibold">{shop.name}</h2>
                     {shop.address && (
                         <p className="text-foreground mt-1 line-clamp-2 text-sm">
-                            <span className="font-semibold">Address:</span> {shop.address}
+                            <span className="font-semibold">{t("Address")}:</span> {shop.address}
                         </p>
                     )}
-                    {shop.phone && (
+                    {/* {shop.phone && (
                         <p className="text-foreground mt-1 text-sm">
                             <span className="font-semibold">Phone:</span> {shop.phone}
                         </p>
-                    )}
+                    )} */}
                 </div>
             </div>
         </Link>

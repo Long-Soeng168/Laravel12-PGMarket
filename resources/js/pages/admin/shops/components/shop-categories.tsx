@@ -52,15 +52,15 @@ export default function ComboboxDemo() {
         <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
                 <Button variant="outline" role="combobox" aria-expanded={open} className="w-full justify-between">
-                    {value ? item_categories.find((item) => item.code == selectedCategoryCode)?.name : 'Select Category...'}
+                    {value ? item_categories.find((item) => item.code == selectedCategoryCode)?.name : t('Select Category') + '...'}
                     <ChevronsUpDown className="opacity-50" />
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-[200px] p-0">
                 <Command>
-                    <CommandInput placeholder="Search Category..." className="h-9" />
+                    <CommandInput placeholder={t('Search Category') + '...'} className="h-9" />
                     <CommandList>
-                        <CommandEmpty>No framework found.</CommandEmpty>
+                        <CommandEmpty>No data found.</CommandEmpty>
                         <CommandGroup>
                             <CommandItem
                                 value={''} // Store code, not display name
@@ -75,7 +75,7 @@ export default function ComboboxDemo() {
                                 <span className="flex size-6 items-center justify-center">
                                     <LayoutGridIcon size={28} className="stroke-primary" />
                                 </span>
-                                <p className="text-primary text-xs font-semibold sm:text-sm">All Shop Categories</p>
+                                <p className="text-primary text-xs font-semibold sm:text-sm">{t('All Shop Categories')}</p>
                             </CommandItem>
                             {item_categories?.map((item) => (
                                 <CommandItem

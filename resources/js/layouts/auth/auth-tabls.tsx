@@ -1,3 +1,4 @@
+import useTranslation from '@/hooks/use-translation';
 import { cn } from '@/lib/utils';
 import { Link, usePage } from '@inertiajs/react';
 
@@ -6,6 +7,8 @@ const AuthTabs = () => {
 
     const isLogin = url === '/login';
     const isRegister = url === '/register';
+
+    const { t } = useTranslation();
 
     return (
         <div className="mx-auto mb-6 w-full max-w-full">
@@ -17,7 +20,7 @@ const AuthTabs = () => {
                         isLogin ? 'bg-background text-foreground shadow' : 'text-muted-foreground hover:text-foreground',
                     )}
                 >
-                    Login
+                    {t("Login")}
                 </Link>
                 <Link
                     href="/register"
@@ -26,7 +29,7 @@ const AuthTabs = () => {
                         isRegister ? 'bg-background text-foreground shadow' : 'text-muted-foreground hover:text-foreground',
                     )}
                 >
-                    Register
+                    {t("Register")}
                 </Link>
             </div>
         </div>

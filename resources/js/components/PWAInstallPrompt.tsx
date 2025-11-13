@@ -1,4 +1,5 @@
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import useTranslation from '@/hooks/use-translation';
 import { PlusSquare } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Badge } from './ui/badge';
@@ -12,15 +13,15 @@ export default function PWAInstallPrompt() {
     const [isStandalone, setIsStandalone] = useState(false);
     const [openDialog, setOpenDialog] = useState(false);
 
+    const { t } = useTranslation();
+
     useEffect(() => {
         if (typeof window === 'undefined') return;
 
         const ua = window.navigator.userAgent.toLowerCase();
 
         // iOS detection
-        const ios =
-            /iphone|ipad|ipod/.test(ua) ||
-            (ua.includes('mac') && 'ontouchend' in document); // iPadOS reports as Mac sometimes
+        const ios = /iphone|ipad|ipod/.test(ua) || (ua.includes('mac') && 'ontouchend' in document); // iPadOS reports as Mac sometimes
         setIsIOS(ios);
 
         // macOS Safari detection
@@ -28,9 +29,7 @@ export default function PWAInstallPrompt() {
         setIsMacSafari(macSafari);
 
         // standalone mode (already installed)
-        const standalone =
-            window.matchMedia('(display-mode: standalone)').matches ||
-            (window.navigator as any).standalone === true;
+        const standalone = window.matchMedia('(display-mode: standalone)').matches || (window.navigator as any).standalone === true;
         setIsStandalone(standalone);
 
         // Android/Chrome beforeinstallprompt
@@ -62,15 +61,15 @@ export default function PWAInstallPrompt() {
     // Android/Chrome flow
     if (visible && deferredPrompt && !isIOS && !isMacSafari) {
         return (
-            <div className="flex w-full flex-col items-center border-t border-white/50 border-dashed py-2">
-                <span className="mb-2 text-sm font-medium">Install this app for quick access</span>
+            <div className="flex w-full flex-col items-center border-t border-dashed border-white/50 py-2">
+                <span className="mb-2 text-sm font-medium">{t('Install this app for quick access')}</span>
                 <Button
                     className="text-true-primary flex w-fit items-center gap-2 bg-white font-semibold transition-all duration-300 hover:scale-105 hover:bg-gray-100"
                     variant="secondary"
                     onClick={handleInstall}
                 >
                     <img className="size-5" src="/assets/icons/app-download-icon.png" alt="Install" />
-                    Install
+                {t("Install")}
                 </Button>
             </div>
         );
@@ -79,23 +78,21 @@ export default function PWAInstallPrompt() {
     // iOS Safari flow
     if (isIOS && !isStandalone) {
         return (
-            <div className="flex w-full flex-col items-center border-t border-white/50 border-dashed py-3">
-                <span className="mb-2 text-sm font-medium">Install this app for quick access</span>
+            <div className="flex w-full flex-col items-center border-t border-dashed border-white/50 py-3">
+                <span className="mb-2 text-sm font-medium">{t('Install this app for quick access')}</span>
                 <Button
                     className="text-true-primary flex w-fit items-center gap-2 bg-white font-semibold transition-all duration-300 hover:scale-105 hover:bg-gray-100"
                     variant="secondary"
                     onClick={() => setOpenDialog(true)}
                 >
                     <img className="size-5" src="/assets/icons/app-download-icon.png" alt="Install" />
-                    Install
+                {t("Install")}
                 </Button>
                 <Dialog open={openDialog} onOpenChange={setOpenDialog}>
                     <DialogContent className="space-y-4 sm:max-w-[425px]">
                         <DialogHeader>
                             <DialogTitle>Install App</DialogTitle>
-                            <DialogDescription>
-                                Follow these steps to add this app to your iPhone or iPad home screen:
-                            </DialogDescription>
+                            <DialogDescription>Follow these steps to add this app to your iPhone or iPad home screen:</DialogDescription>
                         </DialogHeader>
 
                         <div className="flex flex-col gap-3">
@@ -127,15 +124,15 @@ export default function PWAInstallPrompt() {
     // macOS Safari flow
     if (isMacSafari && !isStandalone) {
         return (
-            <div className="flex w-full flex-col items-center border-t border-white/50 border-dashed py-3">
-                <span className="mb-2 text-sm font-medium">Install this app for quick access</span>
+            <div className="flex w-full flex-col items-center border-t border-dashed border-white/50 py-3">
+                <span className="mb-2 text-sm font-medium">{t('Install this app for quick access')}</span>
                 <Button
                     className="text-true-primary flex w-fit items-center gap-2 bg-white font-semibold"
                     variant="secondary"
                     onClick={() => setOpenDialog(true)}
                 >
                     <img className="size-5" src="/assets/icons/app-download-icon.png" alt="Install" />
-                    Install
+                {t("Install")}
                 </Button>
                 <Dialog open={openDialog} onOpenChange={setOpenDialog}>
                     <DialogContent>

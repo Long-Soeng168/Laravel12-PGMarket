@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectTrigger, SelectValue } from '@/components/ui/select';
+import useTranslation from '@/hooks/use-translation';
 import { router } from '@inertiajs/react';
 import { ArrowUpDown } from 'lucide-react';
 
@@ -27,15 +28,17 @@ const SortBy = () => {
         }
         router.get(currentPath + '?' + queryParams?.toString());
     };
+
+    const { t } = useTranslation();
     return (
         <div className="flex items-center gap-2">
             <Select>
-                <div className="rounded-xl border p-1 bg-secondary/60 dark:border-white/20">
+                <div className="bg-secondary/60 rounded-xl border p-1 dark:border-white/20">
                     <SelectTrigger className="bg-background rounded-md dark:border-white/20">
                         {queryParams?.get('sortBy') ? (
                             <p className="capitalize">{queryParams?.get('sortBy')}</p>
                         ) : (
-                            <SelectValue placeholder="Sort By : " />
+                            <SelectValue placeholder={t('Sort By') + ' : '} />
                         )}
                     </SelectTrigger>
                 </div>
@@ -43,32 +46,34 @@ const SortBy = () => {
                 <SelectContent className="w-36">
                     <Button variant="ghost" className="flex w-full justify-start" onClick={() => handleSort('name')}>
                         <ArrowUpDown className="!size-4" />
-                        Name
+                        {t('Name')}
                     </Button>
                     <Button variant="ghost" className="flex w-full justify-start" onClick={() => handleSort('price')}>
                         <ArrowUpDown className="!size-4" />
-                        Price
+                        {t('Price')}
                     </Button>
                     <Button variant="ghost" className="flex w-full justify-start" onClick={() => handleSort('created_at')}>
                         <ArrowUpDown className="!size-4" />
-                        Create Date
+                        {t('Create Date')}
                     </Button>
                 </SelectContent>
             </Select>
             <Select>
-                <div className="rounded-xl border p-1 bg-secondary/60 dark:border-white/20">
+                <div className="bg-secondary/60 rounded-xl border p-1 dark:border-white/20">
                     <SelectTrigger className="bg-background rounded-md dark:border-white/20">
                         {queryParams?.get('perPage') ? (
-                            <p className="capitalize">{queryParams?.get('perPage')} per page</p>
+                            <p className="capitalize">
+                                {queryParams?.get('perPage')} {t('per page')}
+                            </p>
                         ) : (
-                            <SelectValue placeholder="25 per page" />
+                            <SelectValue placeholder={'25 ' + t('per page')} />
                         )}
                     </SelectTrigger>
                 </div>
                 <SelectContent className="w-36">
                     {[5, 10, 25, 50, 100].map((num) => (
                         <Button key={num} variant="ghost" className="flex w-full justify-start" onClick={() => handleChagePerPage(num)}>
-                            {num} per page
+                            {num} {t('per page')}
                         </Button>
                     ))}
                 </SelectContent>

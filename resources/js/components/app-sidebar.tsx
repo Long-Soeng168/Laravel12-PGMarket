@@ -385,12 +385,12 @@ export function AppSidebar() {
     ];
 
     const footerNavItems: NavItem[] = [
-        {
-            permission: 'sample_content view',
-            title: t('Sample Content'),
-            url: '/admin/ckeditor5',
-            icon: FilePenLineIcon,
-        },
+        // {
+        //     permission: 'sample_content view',
+        //     title: t('Sample Content'),
+        //     url: '/admin/ckeditor5',
+        //     icon: FilePenLineIcon,
+        // },
         // {
         //     title: 'File Manager',
         //     url: '/admin/my_file_manager',

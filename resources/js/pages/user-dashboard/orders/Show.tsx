@@ -29,21 +29,21 @@ const Show = () => {
     // attach icons to each step
     const steps = [
         {
-            title: 'Order Created',
+            title: t('Order Created'),
             icon: ShoppingCart,
         },
         {
-            title: 'Payment',
+            title: t('Payment'),
             icon: CreditCard,
         },
         {
-            title: 'Shipped',
-            sub_title: '(Shipped out)',
+            title: t('Shipped'),
+            sub_title: t('(Shipped out)'),
             icon: Truck,
         },
         {
-            title: 'Completed',
-            sub_title: '(Buyer received)',
+            title: t('Completed'),
+            sub_title: t('(Buyer received)'),
             icon: CheckCircle2,
         },
     ];
@@ -72,20 +72,20 @@ const Show = () => {
     const getBadge = (stepIndex: number) => {
         if (stepIndex + 1 < currentStep) {
             return {
-                label: 'Completed',
+                label: t('Completed'),
                 color: 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300',
                 icon: CheckCircle2,
             };
         }
         if (stepIndex + 1 === currentStep) {
             return {
-                label: 'In Progress',
+                label: t('In Progress'),
                 color: 'bg-yellow-500 text-white dark:bg-yellow-600',
                 icon: Loader2,
             };
         }
         return {
-            label: 'Pending',
+            label: t('Pending'),
             color: 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300',
             icon: Clock,
         };
@@ -128,14 +128,14 @@ const Show = () => {
                 )}
                 <OrderSuccessDialog />
 
-                <p className="text-muted-foreground mb-4 text-lg font-bold">Order Detail</p>
+                <p className="text-muted-foreground mb-4 text-lg font-bold">{t("Order Detail")}</p>
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                     <div className="space-y-2 rounded-2xl border p-4">
                         <div className="flex items-center gap-2">
-                            Order Number : <span className="font-bold">{order_detail?.order_number.split('-').slice(1).join('-')}</span>
+                            {t("Order Number")} : <span className="font-bold">{order_detail?.order_number.split('-').slice(1).join('-')}</span>
                         </div>
                         <div className="flex items-center gap-2">
-                            Order Date :{' '}
+                            {t("Order Date")} :{' '}
                             <span className="text-base">
                                 {order_detail?.created_at
                                     ? new Date(order_detail?.created_at).toLocaleString('en-UK', {
@@ -150,52 +150,52 @@ const Show = () => {
                             </span>
                         </div>
                         <div className="flex items-center gap-2">
-                            Order Status :
+                            {t("Order Status")} :
                             <span className="capitalize">
                                 <StatusBadge status={order_detail?.status} />
                             </span>
                         </div>
                         {order_detail?.shop && (
                             <div className="flex items-center gap-2">
-                                Shop : <ShopHoverCard shop={order_detail?.shop} />
+                                {t("Shop")} : <ShopHoverCard shop={order_detail?.shop} />
                             </div>
                         )}
                         {order_detail?.buyer && (
                             <div className="flex items-center gap-2">
-                                Buyer : <UserHoverCard user={order_detail?.buyer} />
+                                {t("Buyer")} : <UserHoverCard user={order_detail?.buyer} />
                             </div>
                         )}
                         <div className="flex items-center gap-2">
-                            Buyer Note : <span className="text-base">{order_detail?.notes || '---'}</span>
+                            {t("Buyer Note")} : <span className="text-base">{order_detail?.notes || '---'}</span>
                         </div>
                         <div className="flex items-center gap-2">
-                            Shipping Address : <span className="text-base">{order_detail?.shipping_address || '---'}</span>
+                            {t("Shipping Address")} : <span className="text-base">{order_detail?.shipping_address || '---'}</span>
                         </div>
                     </div>
                     <div className="space-y-2 rounded-2xl border p-4">
-                        <div className="flex">
+                        {/* <div className="flex">
                             <span className="rounded-md border">
                                 <TransactionDetailDialog tranId={order_detail?.tran_id} detail={order_detail?.transaction_detail || '---'} />
                             </span>
-                        </div>
-                        <div className="flex items-center gap-2">Transaction ID : {order_detail?.tran_id}</div>
+                        </div> */}
+                        <div className="flex items-center gap-2">{t("Transaction ID")} : {order_detail?.tran_id}</div>
                         <div className="flex items-center gap-2">
-                            Pyament Method : <PaymentMethodLabel value={order_detail?.payment_method} />
-                        </div>
-                        <div className="flex items-center gap-2">
-                            Pyament Status : <StatusBadge status={order_detail?.payment_status} />
+                            {t("Pyament Method")} : <PaymentMethodLabel value={order_detail?.payment_method} />
                         </div>
                         <div className="flex items-center gap-2">
-                            Shipping Price : <span className="text-xl">$ {order_detail?.shipping_price}</span>
+                            {t("Pyament Status")} : <StatusBadge status={order_detail?.payment_status} />
                         </div>
                         <div className="flex items-center gap-2">
-                            Total Amount : <span className="text-xl font-bold">$ {order_detail?.total_amount}</span>
+                            {t("Shipping Price")} : <span className="text-xl">$ {order_detail?.shipping_price}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            {t("Total Amount")} : <span className="text-xl font-bold">$ {order_detail?.total_amount}</span>
                         </div>
                     </div>
                 </div>
 
                 <StepperPanel className="text-sm">
-                    <p className="text-muted-foreground mb-4 text-lg font-bold">Order Items</p>
+                    <p className="text-muted-foreground mb-4 text-lg font-bold">{t("Order Items")}</p>
                     {order_detail?.order_items?.length > 0 ? (
                         <div className="grid grid-cols-1 gap-6 md:grid-cols-1 xl:grid-cols-2">
                             {order_detail?.order_items?.map((order_item) => <OrderItemCard key={order_item.id} order_item={order_item} />)}
@@ -204,21 +204,8 @@ const Show = () => {
                         <MyNoData />
                     )}
 
-                    {/* {steps.map((step, index) => (
-                        <StepperContent key={index} value={index + 1} className="flex items-center justify-center">
-                            Step {step.title} content
-                        </StepperContent>
-                    ))} */}
                 </StepperPanel>
 
-                {/* <div className="flex items-center justify-between gap-2.5">
-                    <Button variant="outline" onClick={() => setCurrentStep((prev) => prev - 1)} disabled={currentStep === 1}>
-                        Previous
-                    </Button>
-                    <Button variant="outline" onClick={() => setCurrentStep((prev) => prev + 1)} disabled={currentStep === steps.length + 1}>
-                        Next
-                    </Button>
-                </div> */}
             </Stepper>
         </AppLayout>
     );

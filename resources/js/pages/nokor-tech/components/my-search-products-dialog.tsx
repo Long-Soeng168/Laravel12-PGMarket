@@ -1,10 +1,12 @@
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import useTranslation from '@/hooks/use-translation';
 import { SearchIcon } from 'lucide-react';
 import { useState } from 'react';
 import { MySearchProducts } from './my-search-products';
 
 const MySearchProductsDialog = () => {
     const [searchOpenDialog, setSearchOpenDialog] = useState(false);
+    const { t } = useTranslation();
     return (
         <div>
             <Sheet open={searchOpenDialog} onOpenChange={setSearchOpenDialog}>
@@ -17,7 +19,7 @@ const MySearchProductsDialog = () => {
                 </SheetTrigger>
                 <SheetContent side="top" className="w-full p-6 shadow-md">
                     <SheetHeader>
-                        <SheetTitle>Search Products</SheetTitle>
+                        <SheetTitle>{t('Search Products')}</SheetTitle>
                     </SheetHeader>
                     <MySearchProducts setSearchOpenDialog={setSearchOpenDialog} className="border-primary mx-auto max-w-full" />
                 </SheetContent>

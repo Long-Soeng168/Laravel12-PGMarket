@@ -1,7 +1,9 @@
+import useTranslation from '@/hooks/use-translation';
 import { Link } from '@inertiajs/react';
 import { ArrowRight } from 'lucide-react';
 
 export function SeeMoreProducts({ text = 'See More Products' }: { text?: string }) {
+    const { t } = useTranslation();
     return (
         <div className="rainbow-button rounded-full transition-all duration-300 hover:rounded-[16px]">
             <div className="bg-background/50 rounded-full p-1 transition-all duration-300 hover:rounded-[16px]">
@@ -14,7 +16,9 @@ export function SeeMoreProducts({ text = 'See More Products' }: { text?: string 
                     <ArrowRight className="stroke-foreground absolute left-[-25%] z-[9] h-4 w-4 fill-none transition-all duration-[800ms] ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:left-4 group-hover:stroke-white" />
 
                     {/* Text */}
-                    <span className="relative z-[1] -translate-x-3 transition-all duration-[800ms] ease-out group-hover:translate-x-3">{text}</span>
+                    <span className="relative z-[1] -translate-x-3 transition-all duration-[800ms] ease-out group-hover:translate-x-3">
+                        {t(text)}
+                    </span>
 
                     {/* Circle */}
                     <span className="absolute top-1/2 left-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-[50%] bg-[#111111] opacity-0 transition-all duration-[800ms] ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:h-[220px] group-hover:w-[440px] group-hover:opacity-100"></span>

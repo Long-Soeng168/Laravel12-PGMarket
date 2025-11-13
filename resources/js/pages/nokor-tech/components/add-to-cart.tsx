@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/contexts/cart-contexts';
+import useTranslation from '@/hooks/use-translation';
 import { router } from '@inertiajs/react';
 import { CheckIcon, ShoppingBagIcon, ShoppingCartIcon } from 'lucide-react';
 import { useState } from 'react';
@@ -37,6 +38,8 @@ function AddToCart({ item }: { item: any }) {
         }
     };
 
+    const { t } = useTranslation();
+
     return (
         <div className="flex items-center gap-2">
             <DifferenceShopDialog openDialog={openDialog} setOpenDialog={setOpenDialog} />
@@ -47,12 +50,12 @@ function AddToCart({ item }: { item: any }) {
                 className={added ? 'bg-green-500 text-white hover:bg-green-600' : ''}
             >
                 {added ? <CheckIcon className="mr-2" /> : <ShoppingCartIcon className="mr-2" />}
-                {added ? 'Added!' : 'Add To Cart'}
+                {added ? t('Added!') : t('Add To Cart')}
             </Button>
 
             <Button onClick={handleBuyNow} size="lg">
                 <ShoppingBagIcon className="mr-2" />
-                Buy Now
+                {t('Buy Now')}
             </Button>
         </div>
     );

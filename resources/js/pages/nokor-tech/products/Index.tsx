@@ -98,12 +98,12 @@ const Index = () => {
                                     ) : (
                                         tableData?.length > 0 && (
                                             <div className="text-muted-foreground flex flex-col items-center justify-center gap-2 py-10">
-                                                <p className="text-lg font-medium">You have reached the end.</p>
+                                                <p className="text-lg font-medium">{t("You have reached the end.")}</p>
                                                 <a
                                                     href={`${urlCleanPage}`}
                                                     className="bg-primary hover:bg-primary/90 inline-flex items-center gap-2 rounded-md px-4 py-2 text-primary-foreground transition-all"
                                                 >
-                                                    <ChevronUpIcon /> Start Scroll Again
+                                                    <ChevronUpIcon /> {t("Start Scroll Again")}
                                                 </a>
                                             </div>
                                         )

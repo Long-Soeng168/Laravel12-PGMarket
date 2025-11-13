@@ -1,8 +1,8 @@
 import { BottomMobileNav } from '@/components/BottomMobileNav';
-import MySelectLanguageSwitch from '@/components/my-select-language-switch';
+import NavLanguage from '@/components/NavLanguage';
 import PWAInstallPrompt from '@/components/PWAInstallPrompt';
-import ToggleModeSwitch from '@/components/toggle-mode-switch';
 import { TopDesktopNav } from '@/components/TopDesktopNav';
+import { AnimatedThemeToggler } from '@/components/ui/animated-theme-toggler';
 import { Separator } from '@/components/ui/separator';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import useRole from '@/hooks/use-role';
@@ -15,8 +15,6 @@ import CartButton from './cart-button';
 import { HomeUserButton } from './home-user-button';
 import { MySearchProducts } from './my-search-products';
 import MySearchProductsDialog from './my-search-products-dialog';
-import NavLanguage from '@/components/NavLanguage';
-import { AnimatedThemeToggler } from '@/components/ui/animated-theme-toggler';
 
 const MyHeader = () => {
     const { application_info, auth } = usePage().props;
@@ -137,7 +135,7 @@ const MyHeader = () => {
                                                 className={`group hover:text-primary relative flex w-full cursor-pointer items-center`}
                                             >
                                                 <Settings className="mr-2" />
-                                                Settings
+                                                {t('Settings')}
                                                 <span
                                                     className={`bg-primary absolute -bottom-1 left-0 h-0.5 w-0 transition-all group-hover:w-full`}
                                                 ></span>
@@ -149,7 +147,7 @@ const MyHeader = () => {
                                                     className={`group hover:text-primary relative flex w-full cursor-pointer items-center`}
                                                 >
                                                     <LayoutIcon className="mr-2" />
-                                                    Dashboard
+                                                    {t('Dashboard')}
                                                     <span
                                                         className={`bg-primary absolute -bottom-1 left-0 h-0.5 w-0 transition-all group-hover:w-full`}
                                                     ></span>
@@ -161,7 +159,7 @@ const MyHeader = () => {
                                                     href={`/user-dashboard`}
                                                     className={`group hover:text-primary relative flex w-full cursor-pointer items-center`}
                                                 >
-                                                    <StoreIcon className="mr-2" /> Shop Dashboard
+                                                    <StoreIcon className="mr-2" /> {t('Shop Dashboard')}
                                                     <span
                                                         className={`bg-primary absolute -bottom-1 left-0 h-0.5 w-0 transition-all group-hover:w-full`}
                                                     ></span>
@@ -172,8 +170,8 @@ const MyHeader = () => {
                                 )}
                                 <Separator className="my-4" />
                                 <div className="flex gap-4 px-4 min-md:hidden">
-                                    <MySelectLanguageSwitch />
-                                    <ToggleModeSwitch />
+                                    <AnimatedThemeToggler />
+                                    <NavLanguage />
                                 </div>
                                 <Separator className="my-4" />
                                 <PWAInstallPrompt />

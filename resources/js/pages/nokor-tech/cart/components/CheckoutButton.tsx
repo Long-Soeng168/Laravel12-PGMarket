@@ -1,5 +1,6 @@
 import MyLoadingAnimationOne from '@/components/MyLoadingAnimationOne';
 import { useCart } from '@/contexts/cart-contexts';
+import useTranslation from '@/hooks/use-translation';
 import { router, useForm, usePage } from '@inertiajs/react';
 import { ChevronRight } from 'lucide-react';
 import { useState } from 'react';
@@ -75,6 +76,8 @@ const CheckoutButton = () => {
         });
     };
 
+    const { t } = useTranslation();
+
     return (
         <div className="container">
             <>
@@ -85,12 +88,12 @@ const CheckoutButton = () => {
                         await setIsLoading(true);
                         handleCheckout();
                     }}
-                    className="transistion rainbow-btn hover:scale-105 duration-300 relative inline-flex h-12 w-full overflow-hidden rounded-[12px] p-[3px] focus:outline-none active:scale-95"
+                    className="transistion rainbow-btn relative inline-flex h-12 w-full overflow-hidden rounded-[12px] p-[3px] duration-300 hover:scale-105 focus:outline-none active:scale-95"
                 >
                     <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#fff_0%,#f472b6_90%,#bd5fff_100%)]"></span>
                     <span className="undefined bg-true-primary inline-flex h-full w-full cursor-pointer items-center justify-center gap-2 rounded-lg px-7 text-sm font-medium text-white backdrop-blur-3xl">
                         <div className="flex w-full items-center justify-between">
-                            <div className="flex-1 font-semibold">Checkout</div>
+                            <div className="flex-1 font-semibold">{t('Checkout')}</div>
                             <span className="flex cursor-pointer items-center justify-center rounded-[4px] bg-transparent p-1">
                                 <ChevronRight className="stroke-white" />
                             </span>

@@ -14,9 +14,9 @@ export function CartSheet({ openCartDialog = false, setOpeCartDialog }) {
             <SheetContent className="max-sm:w-full">
                 <SheetHeader>
                     <SheetTitle className="flex items-center gap-2">
-                        <ShoppingCartIcon /> Shopping Cart
+                        <ShoppingCartIcon /> {t('Shopping Cart')}
                     </SheetTitle>
-                    <SheetDescription>{cartItems?.length || '0'} items in your cart.</SheetDescription>
+                    <SheetDescription>{cartItems?.length || '0'} {t("items in your cart")}</SheetDescription>
                 </SheetHeader>
                 <div className="h-full overflow-y-scroll px-4">
                     {cartItems?.length < 1 && <MyNoData />}
@@ -59,8 +59,8 @@ export function CartSheet({ openCartDialog = false, setOpeCartDialog }) {
                                 {/* Quantity row */}
                                 <div>
                                     <div className="mt-2 flex items-center justify-start gap-4 text-xs">
-                                        <span className="text-primary">Price : ${item.price}</span>
-                                        <span className="text-muted-foreground">Qty : {item.cartQuantity}</span>
+                                        <span className="text-primary">{t("Price")} : ${item.price}</span>
+                                        <span className="text-muted-foreground">{t("Qty")} : {item.cartQuantity}</span>
                                     </div>
                                 </div>
                             </div>
@@ -71,12 +71,12 @@ export function CartSheet({ openCartDialog = false, setOpeCartDialog }) {
                     {cartItems?.length > 0 && (
                         <Link href={`/shopping-cart`} className="w-full">
                             <Button type="button" className="w-full">
-                                Checkout
+                                {t("Checkout")}
                             </Button>
                         </Link>
                     )}
                     <SheetClose asChild>
-                        <Button variant="outline">Close</Button>
+                        <Button variant="outline">{t("Close")}</Button>
                     </SheetClose>
                 </SheetFooter>
             </SheetContent>

@@ -43,7 +43,7 @@ export default function MyFooter() {
                     {/* Company Info */}
                     <div className="max-lg:hidden lg:justify-self-center">
                         <h3 className="mb-4 text-xl font-bold">
-                            Information <Separator className="w-auto bg-white" />
+                            {t('Information')} <Separator className="w-auto bg-white" />
                         </h3>
                         <ul className="flex flex-col gap-1">
                             <li className="flex">

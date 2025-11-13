@@ -1,8 +1,10 @@
 import MyNoData from '@/components/my-no-data';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import useTranslation from '@/hooks/use-translation';
 import { ImageOffIcon } from 'lucide-react';
 const ShopProfileHeader = ({ shop }) => {
+    const { t } = useTranslation();
     return (
         <div className="mb-8 w-full px-4 md:mb-28">
             {/* Banner */}
@@ -32,18 +34,18 @@ const ShopProfileHeader = ({ shop }) => {
                         <div>
                             {shop.address && (
                                 <p>
-                                    <span className="font-semibold">Address:</span> {shop.address}
+                                    <span className="font-semibold">{t('Address')}:</span> {shop.address}
                                 </p>
                             )}
-                            {shop.phone && (
+                            {/* {shop.phone && (
                                 <p>
                                     <span className="font-semibold">Phone:</span> {shop.phone}
                                 </p>
-                            )}
+                            )} */}
                             <div className="absolute right-1 bottom-1">
                                 <Dialog>
                                     <DialogTrigger className="text-primary bg-background/50 cursor-pointer rounded-lg p-1 px-2 backdrop-blur-md hover:underline">
-                                        About
+                                        {t('About')}
                                     </DialogTrigger>
                                     <DialogContent>
                                         <DialogHeader>

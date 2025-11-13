@@ -1,10 +1,12 @@
 import { Card, CardContent } from '@/components/ui/card';
+import useTranslation from '@/hooks/use-translation';
 import { Link } from '@inertiajs/react';
 
 export default function OrderItemCard({ order_item }: { order_item: any }) {
+    const { t } = useTranslation();
     return (
         <Link href={`/products/${order_item?.item_id}`}>
-            <Card className="flex h-full w-full max-w-full] flex-row gap-0 overflow-hidden rounded-2xl p-0 transition-shadow hover:shadow-md">
+            <Card className="max-w-full] flex h-full w-full flex-row gap-0 overflow-hidden rounded-2xl p-0 transition-shadow hover:shadow-md">
                 {/* Product Image */}
                 <div className="bg-accent relative size-40 flex-shrink-0 md:size-48">
                     <img
@@ -21,13 +23,13 @@ export default function OrderItemCard({ order_item }: { order_item: any }) {
 
                     {/* Order Details */}
                     <div className="grid grid-cols-2 gap-2 text-sm">
-                        <span className="text-muted-foreground">Quantity</span>
+                        <span className="text-muted-foreground">{t("Qty")}</span>
                         <span className="text-foreground text-end font-medium">{order_item?.quantity}</span>
-                        <span className="text-muted-foreground">Unit Price</span>
+                        <span className="text-muted-foreground">{t("Unit Price")}</span>
                         <span className="text-foreground text-end font-medium">${order_item?.price}</span>
                         {order_item?.discount_percent > 0 && (
                             <>
-                                <span className="text-muted-foreground">Discount</span>
+                                <span className="text-muted-foreground">{t("Discount")}</span>
                                 <span className="text-foreground text-end font-medium">%{order_item?.discount_percent}</span>
                             </>
                         )}
@@ -35,7 +37,7 @@ export default function OrderItemCard({ order_item }: { order_item: any }) {
 
                     {/* Subtotal */}
                     <div className="mt-2 flex items-center justify-between text-lg font-semibold">
-                        <span className="text-muted-foreground">Subtotal</span>
+                        <span className="text-muted-foreground">{t("Subtotal")}</span>
                         <span className="text-primary text-xl font-bold">${order_item?.sub_total}</span>
                     </div>
                 </CardContent>
