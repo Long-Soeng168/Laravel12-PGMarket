@@ -18,6 +18,7 @@ use App\Http\Controllers\ItemCategoryController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ItemModelController;
 use App\Http\Controllers\ItemColorController;
+use App\Http\Controllers\ItemSizeController;
 use App\Http\Controllers\LinkController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\MessageInquiryController;
@@ -44,7 +45,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::middleware('auth')->group(function () {
- 
+
 
     // === Testing Spatie Role & Permission ===
     Route::group(['middleware' => ['role:admin']], function () {
@@ -73,11 +74,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('admin/items/images/{image}', [ItemController::class, 'destroy_image']);
     Route::get('admin/item_view_counts', [ItemController::class, 'item_view_counts']);
     Route::get('admin/item_view_counts/export', [ItemController::class, 'item_view_counts_export']);
-
-    Route::resource('admin/item_colors', ItemColorController::class);
-    Route::post('admin/item_colors/{item_colors}/update', [ItemColorController::class, 'update']);
-
-
 
     // Type Route
     Route::resource('admin/types', TypeController::class);
@@ -148,6 +144,15 @@ Route::middleware('auth')->group(function () {
     Route::resource('admin/item_brands', ItemBrandController::class);
     Route::post('admin/item_brands/{item_brand}/update', [ItemBrandController::class, 'update']);
     Route::post('admin/item_brands/{item_brand}/update_status', [ItemBrandController::class, 'update_status']);
+
+    Route::resource('admin/item_sizes', ItemSizeController::class);
+    Route::post('admin/item_sizes/{item_size}/update', [ItemSizeController::class, 'update']);
+    Route::post('admin/item_sizes/{item_size}/update_status', [ItemSizeController::class, 'update_status']);
+
+    Route::resource('admin/item_colors', ItemColorController::class);
+    Route::post('admin/item_colors/{item_color}/update', [ItemColorController::class, 'update']);
+    Route::post('admin/item_colors/{item_color}/update_status', [ItemColorController::class, 'update_status']);
+
     // Item Model Route
     Route::resource('admin/item_models', ItemModelController::class);
     Route::post('admin/item_models/{item_model}/update', [ItemModelController::class, 'update']);

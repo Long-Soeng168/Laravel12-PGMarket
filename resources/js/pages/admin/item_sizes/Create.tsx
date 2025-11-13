@@ -110,7 +110,7 @@ export default function Create({
                 image: files ? files[0] : null,
             }));
             if (editData?.id) {
-                post('/admin/item_colors/' + editData.id + '/update', {
+                post('/admin/item_sizes/' + editData.id + '/update', {
                     preserveScroll: true,
                     onSuccess: (page) => {
                         setFiles(null);
@@ -128,7 +128,7 @@ export default function Create({
                     },
                 });
             } else {
-                post('/admin/item_colors', {
+                post('/admin/item_sizes', {
                     preserveScroll: true,
                     onSuccess: (page) => {
                         form.reset();
@@ -169,7 +169,7 @@ export default function Create({
                                 <FormItem>
                                     <FormLabel>{t('Code')}</FormLabel>
                                     <FormControl>
-                                        <Input autoFocus placeholder="New Code" type="color" {...field} />
+                                        <Input autoFocus placeholder="New Code" type="text" {...field} />
                                     </FormControl>
                                     <FormMessage>{errors.code && <div>{errors.code}</div>}</FormMessage>
                                 </FormItem>
@@ -284,7 +284,7 @@ export default function Create({
                                             className="group bg-background relative aspect-video h-auto w-full overflow-hidden rounded-md border p-0"
                                         >
                                             <img
-                                                src={'/assets/images/item_colors/thumb/' + editData?.image}
+                                                src={'/assets/images/item_sizes/thumb/' + editData?.image}
                                                 alt={editData?.image}
                                                 className="h-full w-full object-contain"
                                             />

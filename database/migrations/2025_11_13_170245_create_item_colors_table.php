@@ -13,9 +13,13 @@ return new class extends Migration
     {
         Schema::create('item_colors', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('name_kh')->nullable();
-            $table->string('code')->unique();
+
+            $table->string("code")->unique();
+            $table->string("name");
+            $table->string("name_kh")->nullable();
+            $table->string("image")->nullable();
+            $table->string("status")->nullable();
+            $table->integer("order_index")->nullable();
 
             $table->unsignedBigInteger('created_by')->nullable();
             $table->foreign('created_by')
@@ -40,11 +44,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Drop foreign key before dropping the table
-        Schema::table('item_colors', function (Blueprint $table) {
-            $table->dropForeign(['created_by']);
-            $table->dropForeign(['updated_by']);
-        });
         Schema::dropIfExists('item_colors');
     }
 };

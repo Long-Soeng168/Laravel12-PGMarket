@@ -41,7 +41,7 @@ const MyTableData = () => {
         <>
             <ScrollArea className="w-full rounded-md border">
                 <MyImageGallery
-                    imagePath="/assets/images/item_colors/"
+                    imagePath="/assets/images/item_sizes/"
                     selectedImages={selectedImages}
                     isOpenViewImages={isOpenViewImages}
                     setIsOpenViewImages={setIsOpenViewImages}
@@ -95,7 +95,7 @@ const MyTableData = () => {
                                     <TableCell>
                                         <span className="flex h-full items-center justify-start">
                                             <ViewButton item={item} />
-                                            {hasPermission('item delete') && <DeleteButton deletePath="/admin/item_colors/" id={item.id} />}
+                                            {hasPermission('item delete') && <DeleteButton deletePath="/admin/item_sizes/" id={item.id} />}
                                             {hasPermission('item update') && <EditButton item={item} />}
                                         </span>
                                     </TableCell>
@@ -109,7 +109,7 @@ const MyTableData = () => {
                                                 className="cursor-pointer"
                                             >
                                                 <img
-                                                    src={`/assets/images/item_colors/thumb/` + item.image}
+                                                    src={`/assets/images/item_sizes/thumb/` + item.image}
                                                     width={100}
                                                     height={100}
                                                     alt=""
@@ -126,9 +126,7 @@ const MyTableData = () => {
                                             />
                                         )}
                                     </TableCell>
-                                    <TableCell>
-                                        <input value={item.code || '---'} type='color'/>
-                                    </TableCell>
+                                    <TableCell>{item.code || '---'}</TableCell>
                                     <TableCell>{item.name || '---'}</TableCell>
                                     <TableCell>{item.name_kh || '---'}</TableCell>
                                     <TableCell>
@@ -140,7 +138,7 @@ const MyTableData = () => {
                                         {hasPermission('item update') ? (
                                             <MyUpdateStatusButton
                                                 id={item.id}
-                                                pathName="/admin/item_colors"
+                                                pathName="/admin/item_sizes"
                                                 currentStatus={item.status}
                                                 statuses={['active', 'inactive']}
                                             />

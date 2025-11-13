@@ -13,10 +13,13 @@ const Index = () => {
     const { t } = useTranslation();
     const breadcrumbs: BreadcrumbItem[] = [
         {
-            title: t('Item Colors'),
+            title: t('Items'),
+            href: '/admin/items',
+        },
+        {
+            title: t('Colors'),
             href: '/admin/item_colors',
         },
-        
     ];
     const hasPermission = usePermission();
     return (
@@ -29,8 +32,7 @@ const Index = () => {
                     <span className="flex-1"></span>
                     {/* <MyExportButton />
                     <MyImportButton /> */}
-                    {/* {hasPermission('item create') && <AddNewButton />} */}
-                    <AddNewButton />
+                    {hasPermission('item create') && <AddNewButton />}
                 </div>
             </div>
             <div className="h-2" />

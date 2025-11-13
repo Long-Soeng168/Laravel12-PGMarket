@@ -2,25 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UpdateItemColorRequest;
+use App\Helpers\ImageHelper;
+use App\Models\ItemCategory;
 use App\Models\ItemColor;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Support\Facades\DB;
 
-class ItemColorController extends Controller
+class ItemColorController extends Controller implements HasMiddleware
 {
-
     public static function middleware(): array
     {
         return [
             new Middleware('permission:item view', only: ['index', 'show']),
             new Middleware('permission:item create', only: ['create', 'store']),
-            new Middleware('permission:item update', only: ['edit', 'update']),
-            new Middleware('permission:item delete', only: ['destroy', 'destroy', 'remove_item']),
+            new Middleware('permission:item update', only: ['edit', 'update', 'update_status']),
+            new Middleware('permission:item delete', only: ['destroy', 'destroy_image']),
         ];
     }
-  
     /**
      * Display a listing of the resource.
      */
@@ -33,21 +35,30 @@ class ItemColorController extends Controller
         $query = ItemColor::query();
 
         if ($search) {
-            $query->where(function ($sub_query) use ($search) {
-                return $sub_query->where('name', 'LIKE', "%{$search}%")
-                    ->orWhere('name_kh', 'LIKE', "%{$search}%")
-                    ->orWhere('code', 'LIKE', "%{$search}%");
+            $query->where(function ($subQuery) use ($search) {
+                $subQuery->where('name', 'LIKE', "%{$search}%")
+                    ->orWhere('code', 'LIKE', "%{$search}%")
+                    ->orWhere('name_kh', 'LIKE', "%{$search}%");
             });
         }
+
+
         $query->orderBy($sortBy, $sortDirection);
-
-
-        $query->with('created_by', 'updated_by');
+        $query->with('categories');
 
         $tableData = $query->paginate(perPage: 10)->onEachSide(1);
 
+        $item_categories = ItemCategory::orderBy('order_index')->orderBy('name')
+            ->where('parent_code', null)
+            ->where('status', 'active')
+            ->with('children')
+            ->get();
+
+        // return ($tableData);
+
         return Inertia::render('admin/item_colors/Index', [
             'tableData' => $tableData,
+            'item_categories' => $item_categories,
         ]);
     }
 
@@ -64,52 +75,141 @@ class ItemColorController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
+        $categoryCodes = collect($request->input('category_codes'))
+            ->pluck('value')
+            ->filter()
+            ->toArray();
+
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'name_kh' => 'nullable|string|max:255',
             'code' => 'required|string|max:255|unique:item_colors,code',
+            'name' => 'nullable|string|max:255',
+            'name_kh' => 'nullable|string|max:255',
+            'order_index' => 'nullable|integer',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'category_codes' => 'required|array',
+            'category_codes.*.value' => 'required|exists:item_categories,code',
         ]);
 
         $validated['created_by'] = $request->user()->id;
         $validated['updated_by'] = $request->user()->id;
+        $validated['status'] = 'active';
 
-        ItemColor::create($validated);
+        $image_file = $request->file('image');
+        unset($validated['image']);
+        unset($validated['category_codes']);
 
-        return redirect()->back()->with('success', 'Item color created successfully!');
+        foreach ($validated as $key => $value) {
+            if ($value === '') {
+                $validated[$key] = null;
+            }
+        }
+
+        if ($image_file) {
+            try {
+                $created_image_name = ImageHelper::uploadAndResizeImageWebp($image_file, 'assets/images/item_colors', 600);
+                $validated['image'] = $created_image_name;
+            } catch (\Exception $e) {
+                return redirect()->back()->with('error', 'Failed to upload image: ' . $e->getMessage());
+            }
+        }
+
+        $color = ItemColor::create($validated);
+
+        // Save pivot
+        $pivotRows = array_map(function ($code) use ($color) {
+            return [
+                'color_code' => $color->code,
+                'category_code' => $code,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }, $categoryCodes);
+
+        DB::table('item_color_categories')->insert($pivotRows);
+
+        return redirect()->route('item_colors.index')->with('success', 'Item Color created successfully!');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(ItemColor $itemColor)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(ItemColor $itemColor)
-    {
-        //
-    }
-
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, ItemColor $item_colors)
+    public function update(Request $request, ItemColor $item_color)
     {
+        $categoryCodes = collect($request->input('category_codes'))
+            ->pluck('value')
+            ->filter()
+            ->values()
+            ->toArray();
+
         $validated = $request->validate([
+            'code' => 'required|string|max:255|unique:item_colors,code,' . $item_color->id,
             'name' => 'required|string|max:255',
             'name_kh' => 'nullable|string|max:255',
-            'code' => 'required|string|max:255|unique:item_colors,code,' . $item_colors->id,
+            'order_index' => 'nullable|integer',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'category_codes' => 'required|array',
+            'category_codes.*.value' => 'required|exists:item_categories,code',
         ]);
-    
         $validated['updated_by'] = $request->user()->id;
-    
-        $item_colors->update($validated); // Fixed here
-    
-        return redirect()->back()->with('success', 'Item color updated successfully!');
+
+        $image_file = $request->file('image');
+        unset($validated['image']);
+        unset($validated['category_codes']);
+
+        foreach ($validated as $key => $value) {
+            if ($value === '') {
+                $validated[$key] = null;
+            }
+        }
+
+        if ($image_file) {
+            try {
+                $created_image_name = ImageHelper::uploadAndResizeImageWebp($image_file, 'assets/images/item_colors', 600);
+                $validated['image'] = $created_image_name;
+
+                if ($item_color->image && $created_image_name) {
+                    ImageHelper::deleteImage($item_color->image, 'assets/images/item_colors');
+                }
+            } catch (\Exception $e) {
+                return redirect()->back()->with('error', 'Failed to upload image: ' . $e->getMessage());
+            }
+        }
+
+        $item_color->update($validated);
+
+        // 🔁 Sync categories
+        DB::table('item_color_categories')
+            ->where('color_code', $item_color->code)
+            ->delete();
+
+        $pivotRows = array_map(function ($code) use ($item_color) {
+            return [
+                'color_code' => $item_color->code,
+                'category_code' => $code,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }, $categoryCodes);
+
+        DB::table('item_color_categories')->insert($pivotRows);
+
+        return redirect()->route('item_colors.index')->with('success', 'Item Color updated successfully!');
+    }
+
+    public function update_status(Request $request, ItemColor $item_color)
+    {
+        $request->validate([
+            'status' => 'required|string|in:active,inactive',
+        ]);
+        $item_color->update([
+            'status' => $request->status,
+        ]);
+
+        return redirect()->back()->with('success', 'Status updated successfully!');
     }
 
     /**
@@ -117,8 +217,13 @@ class ItemColorController extends Controller
      */
     public function destroy(ItemColor $item_color)
     {
+        // Delete image if exists
+        if ($item_color->image) {
+            ImageHelper::deleteImage($item_color->image, 'assets/images/item_colors');
+        }
+
         $item_color->delete();
 
-        return redirect()->back()->with('success', 'Item color deleted successfully!');
+        return redirect()->route('item_colors.index')->with('success', 'Item Color deleted successfully!'); //
     }
 }

@@ -78,6 +78,18 @@ export function AppSidebar() {
                     icon: TagsIcon,
                     url: '/admin/item_brands',
                 },
+                {
+                    title: t('Sizes'),
+                    permission: 'item view',
+                    icon: TagsIcon,
+                    url: '/admin/item_sizes',
+                },
+                {
+                    title: t('Colors'),
+                    permission: 'item view',
+                    icon: TagsIcon,
+                    url: '/admin/item_colors',
+                },
                 // {
                 //     title: t('Models'),
                 //     permission: 'item view',

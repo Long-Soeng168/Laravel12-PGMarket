@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ItemColor extends Model
+class ItemSize extends Model
 {
     protected $guarded = [];
 
@@ -25,6 +25,6 @@ class ItemColor extends Model
     // In Brand.php
     public function categories()
     {
-        return $this->belongsToMany(ItemCategory::class, 'item_color_categories', 'color_code', 'category_code', 'code', 'code');
+        return $this->belongsToMany(ItemCategory::class, 'item_size_categories', 'size_code', 'category_code', 'code', 'code');
     }
 }
