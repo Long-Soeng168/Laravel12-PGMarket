@@ -22,7 +22,7 @@ export default function MyFooter() {
                         className="z-0 hidden w-[100%] max-w-7xl object-contain opacity-[40%] lg:opacity-[15%] dark:block"
                     />
                 </div>
-                <div className="relative grid grid-cols-1 gap-12 lg:grid-cols-4">
+                <div className="relative grid grid-cols-1 gap-2 lg:grid-cols-4">
                     <div className="justify-self-center">
                         {application_info?.image && (
                             <div className="flex flex-col items-center justify-center">
@@ -36,7 +36,7 @@ export default function MyFooter() {
                                 <p className="mt-2 text-2xl font-bold">{application_info?.name}</p>
                             </div>
                         )}
-                        <div className="mt-8 w-auto">
+                        <div className="mt-8 mb-4 w-auto">
                             <PWAInstallPrompt />
                         </div>
                     </div>
