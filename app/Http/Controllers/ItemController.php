@@ -10,9 +10,13 @@ use App\Models\ItemBodyType;
 use App\Models\ItemBrand;
 use App\Models\Link;
 use App\Models\ItemCategory;
+use App\Models\ItemColor;
 use App\Models\ItemDailyView;
 use App\Models\ItemImage;
 use App\Models\ItemModel;
+use App\Models\ItemSize;
+use App\Models\ItemWithColors;
+use App\Models\ItemWithSizes;
 use App\Models\Shop;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -20,6 +24,7 @@ use Inertia\Inertia;
 
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ItemController extends Controller implements HasMiddleware
@@ -84,11 +89,25 @@ class ItemController extends Controller implements HasMiddleware
             ];
         });
 
+        $itemSizes = ItemSize::with(['categories'])->where('status', 'active')->orderBy('name')->get();
+        $itemSizes = $itemSizes->map(function ($size) {
+            return [
+                'id' => $size->id,
+                'code' => $size->code,
+                'image' => $size->image,
+                'name' => $size->name,
+                'name_kh' => $size->name_kh,
+                'categories' => $size->categories->pluck('code')->values(), // values() to reset keys
+            ];
+        });
+
         // return $itemBrands;
         return Inertia::render('admin/items/Create', [
             'itemCategories' => $itemCategories,
             'itemBrands' => $itemBrands,
+            'itemSizes' => $itemSizes,
             'shops' => Shop::orderBy('name')->get(),
+            'colors' => ItemColor::orderBy('order_index')->get(),
         ]);
     }
 
@@ -97,6 +116,7 @@ class ItemController extends Controller implements HasMiddleware
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         $validated = $request->validate([
             'code' => 'nullable|string|max:255',
             'name' => 'required|string|max:255',
@@ -115,6 +135,13 @@ class ItemController extends Controller implements HasMiddleware
             'status' => 'nullable|string|in:active,inactive',
             'images' => 'required|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,webp,svg,webp|max:2048',
+
+            // COLORS FIXED
+            'item_colors' => 'required|array',
+            'item_colors.*' => 'required|string|max:255',
+
+            'item_sizes' => 'nullable|array',
+            'item_sizes.*' => 'nullable|string|max:255',
         ]);
 
 
@@ -126,6 +153,12 @@ class ItemController extends Controller implements HasMiddleware
         $image_files = $request->file('images');
         unset($validated['images']);
 
+        $item_colors = $request->input('item_colors');
+        unset($validated['item_colors']);
+
+        $item_sizes = $request->input('item_sizes');
+        unset($validated['item_sizes']);
+
         foreach ($validated as $key => $value) {
             if ($value === '') {
                 $validated[$key] = null;
@@ -133,6 +166,20 @@ class ItemController extends Controller implements HasMiddleware
         }
 
         $created_item = Item::create($validated);
+        DB::transaction(function () use ($created_item, $item_colors, $item_sizes) {
+            foreach ($item_colors as $colorCode) {
+                ItemWithColors::create([
+                    'item_id' => $created_item->id,
+                    'color_code' => $colorCode,
+                ]);
+            }
+
+            $insertSizes = array_map(fn($size) => [
+                'item_id' => $created_item->id,
+                'size_code' => $size,
+            ], $item_sizes);
+            ItemWithSizes::insert($insertSizes);
+        });
 
         if ($image_files) {
             try {
@@ -184,6 +231,7 @@ class ItemController extends Controller implements HasMiddleware
             'itemCategories' => $itemCategories,
             'itemBrands' => $itemBrands,
             'shops' => Shop::orderBy('name')->get(),
+            'colors' => ItemColor::orderBy('order_index')->get(),
         ]);
     }
 
@@ -193,7 +241,7 @@ class ItemController extends Controller implements HasMiddleware
 
     public function edit(Item $item)
     {
-        $editData = $item->load('images', 'category', 'brand');
+        $editData = $item->load('images', 'category', 'brand', 'colors_with_details', 'sizes_with_details');
         $itemCategories = ItemCategory::where('parent_code', null)->with('children.children')->where('status', 'active')->orderBy('name')->orderBy('name')->get();
 
         $itemBrands = ItemBrand::with(['categories'])->where('status', 'active')->orderBy('name')->get();
@@ -208,12 +256,27 @@ class ItemController extends Controller implements HasMiddleware
             ];
         });
 
+        $itemSizes = ItemSize::with(['categories'])->where('status', 'active')->orderBy('name')->get();
+        $itemSizes = $itemSizes->map(function ($size) {
+            return [
+                'id' => $size->id,
+                'code' => $size->code,
+                'image' => $size->image,
+                'name' => $size->name,
+                'name_kh' => $size->name_kh,
+                'categories' => $size->categories->pluck('code')->values(), // values() to reset keys
+            ];
+        });
+
+
         // return $editData;
         return Inertia::render('admin/items/Create', [
             'editData' => $editData,
             'itemCategories' => $itemCategories,
             'itemBrands' => $itemBrands,
+            'itemSizes' => $itemSizes,
             'shops' => Shop::orderBy('name')->get(),
+            'colors' => ItemColor::orderBy('order_index')->get(),
         ]);
     }
 
@@ -241,6 +304,13 @@ class ItemController extends Controller implements HasMiddleware
             'status' => 'nullable|string|in:active,inactive',
             'images' => 'nullable|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,webp,svg,webp|max:2048',
+
+            // COLORS FIXED
+            'item_colors' => 'nullable|array',
+            'item_colors.*' => 'nullable|string|max:255',
+
+            'item_sizes' => 'nullable|array',
+            'item_sizes.*' => 'nullable|string|max:255',
         ]);
 
         $validated['updated_by'] = $request->user()->id;
@@ -249,13 +319,39 @@ class ItemController extends Controller implements HasMiddleware
         $image_files = $request->file('images');
         unset($validated['images']);
 
-        // foreach ($validated as $key => $value) {
-        //     if ($value === null || $value === '') {
-        //         unset($validated[$key]);
-        //     }
-        // }
+        $item_colors = $request->input('item_colors');
+        unset($validated['item_colors']);
 
-        $item->update($validated);
+        $item_sizes = $request->input('item_sizes');
+        unset($validated['item_sizes']);
+
+        DB::transaction(function () use ($item, $validated, $item_colors, $item_sizes) {
+            // Convert empty strings to null
+            foreach ($validated as $key => $value) {
+                if ($value === '') $validated[$key] = null;
+            }
+
+            $item->update($validated);
+
+            // Replace old colors
+            ItemWithColors::where('item_id', $item->id)->delete();
+            ItemWithSizes::where('item_id', $item->id)->delete();
+
+            $insertColors = array_map(fn($color) => [
+                'item_id' => $item->id,
+                'color_code' => $color,
+            ], $item_colors);
+            ItemWithColors::insert($insertColors);
+
+
+            $insertSizes = array_map(fn($size) => [
+                'item_id' => $item->id,
+                'size_code' => $size,
+            ], $item_sizes);
+            ItemWithSizes::insert($insertSizes);
+        });
+
+
 
         if ($image_files) {
             try {

@@ -50,6 +50,49 @@ const ProductDetailPage = () => {
                                 </p>
                             )}
 
+                            {itemShow?.colors_with_details?.length > 0 && (
+                                <div className="mt-4">
+                                    <p>{t('Colors Available')}</p>
+
+                                    <div className="my-1 flex flex-wrap gap-2">
+                                        {itemShow?.colors_with_details?.map((item: any) => {
+                                            return (
+                                                <div
+                                                    key={item.code}
+                                                    className={`flex cursor-pointer items-center gap-4 rounded border px-3 py-2 transition`}
+                                                >
+                                                    <div
+                                                        className="flex h-4 w-4 items-center justify-center rounded border border-gray-300"
+                                                        style={{ backgroundColor: item.code }}
+                                                    ></div>
+
+                                                    <span className="text-sm">{item.name}</span>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            )}
+
+                            {itemShow?.sizes_with_details?.length > 0 && (
+                                <div className="mt-4">
+                                    <p>{t('Sizes Available')}</p>
+
+                                    <div className="my-1 flex flex-wrap gap-2">
+                                        {itemShow?.sizes_with_details?.map((item: any) => {
+                                            return (
+                                                <div
+                                                    key={item.code}
+                                                    className={`flex cursor-pointer items-center gap-4 rounded border px-3 py-2 transition`}
+                                                >
+                                                    <span className="text-sm">{item.name}</span>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            )}
+
                             <div className="mt-6 mb-4">
                                 <p className="text-2xl font-bold text-red-600">${itemShow?.price}</p>
                             </div>
@@ -78,7 +121,7 @@ const ProductDetailPage = () => {
                             {itemShow?.short_description && (
                                 <div>
                                     <hr className="my-8" />
-                                    <p className="text-foreground mb-2 text-lg font-semibold">{t("Description")}:</p>
+                                    <p className="text-foreground mb-2 text-lg font-semibold">{t('Description')}:</p>
                                     <div className="whitespace-pre-line">{itemShow?.short_description}</div>
                                 </div>
                             )}

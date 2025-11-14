@@ -31,7 +31,7 @@ import MultipleSelector, { Option } from '@/components/ui/multiple-selector';
 // ];
 
 const formSchema = z.object({
-    code: z.string().min(1).max(255),
+    code: z.string(),
     name: z.string().min(1).max(255).optional(),
     name_kh: z.string().max(255).optional(),
     order_index: z.string().optional(),
@@ -222,7 +222,7 @@ export default function Create({
                             )}
                         />
                     </div>
-                    <div className="col-span-12">
+                    {/* <div className="col-span-12">
                         <FormLabel>{t('Categories')}</FormLabel>
                         <MultipleSelector
                             className="my-1"
@@ -235,9 +235,9 @@ export default function Create({
                         />
                         <FormMessage>{errors.category_codes && <div>{errors.category_codes}</div>}</FormMessage>
                         <p className="text-xs text-gray-500 dark:text-gray-400">Select the categories this brand belongs to.</p>
-                    </div>
+                    </div> */}
                 </div>
-                <FormField
+                {/* <FormField
                     control={form.control}
                     name="image"
                     render={({ field }) => (
@@ -264,11 +264,7 @@ export default function Create({
                                                 aria-roledescription={`file ${i + 1} containing ${file.name}`}
                                             >
                                                 <img src={URL.createObjectURL(file)} alt={file.name} className="h-full w-full object-contain" />
-                                            </FileUploaderItem>
-                                            // <FileUploaderItem key={i} index={i}>
-                                            //     <Paperclip className="h-4 w-4 stroke-current" />
-                                            //     <span>{file.name}</span>
-                                            // </FileUploaderItem>
+                                            </FileUploaderItem> 
                                         ))}
                                     </FileUploaderContent>
                                 </FileUploader>
@@ -294,7 +290,7 @@ export default function Create({
                             )}
                         </FormItem>
                     )}
-                />
+                /> */}
                 {progress && <ProgressWithValue value={progress.percentage} position="start" />}
 
                 {setIsOpen && <MyDialogCancelButton onClick={() => setIsOpen(false)} />}

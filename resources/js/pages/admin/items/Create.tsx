@@ -14,7 +14,7 @@ import { cn } from '@/lib/utils';
 import { BreadcrumbItem } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm as inertiaUseForm, usePage } from '@inertiajs/react';
-import { Check, ChevronsUpDown, CloudUpload, Loader } from 'lucide-react';
+import { Check, CheckIcon, ChevronsUpDown, CloudUpload, Loader } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -73,7 +73,22 @@ export default function Create() {
     };
 
     const { post, progress, processing, transform, errors } = inertiaUseForm();
-    const { itemBrands, editData, shops, readOnly } = usePage<PageProps>().props;
+    const { itemBrands, itemSizes, editData, shops, colors, readOnly } = usePage<any>().props;
+
+    const [selectedValues, setSelectedValues] = useState<string[]>([]);
+    const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
+
+    useEffect(() => {
+        if (editData?.colors_with_details?.length) {
+            const selected = editData.colors_with_details.map((child: any) => child.code);
+            setSelectedValues(selected);
+        }
+
+        if (editData?.sizes_with_details?.length) {
+            const selected = editData.sizes_with_details.map((child: any) => child.code);
+            setSelectedSizes(selected);
+        }
+    }, [editData]);
 
     const [files, setFiles] = useState<File[] | null>(null);
     const [long_description, setLong_description] = useState(editData?.long_description || '');
@@ -83,6 +98,8 @@ export default function Create() {
     const [finalBrandSelect, setFinalBrandSelect] = useState<any>(null);
     const [filteredBrands, setFilteredBrands] = useState<any>(null);
 
+    const [filteredSizes, setFilteredSizes] = useState<any>(null);
+
     useEffect(() => {
         setFinalCategorySelect(editData?.category);
         setFinalBrandSelect(editData?.brand);
@@ -91,7 +108,7 @@ export default function Create() {
     // 🔥 Filter brands by selected category code
     useEffect(() => {
         const filtered = itemBrands.filter(
-            (brand) => brand.categories.includes(finalCategorySelect?.code) || brand.categories.includes(finalCategorySelect?.parent_code),
+            (brand: any) => brand.categories.includes(finalCategorySelect?.code) || brand.categories.includes(finalCategorySelect?.parent_code),
         );
         setFilteredBrands(filtered);
 
@@ -99,7 +116,18 @@ export default function Create() {
         if (finalBrandSelect && !filtered.some((brand) => brand.code === finalBrandSelect.code)) {
             setFinalBrandSelect(null);
         }
-    }, [finalCategorySelect, itemBrands]);
+
+        const sizes_filtered = itemSizes.filter(
+            (size: any) => size.categories.includes(finalCategorySelect?.code) || size.categories.includes(finalCategorySelect?.parent_code),
+        );
+        setFilteredSizes(sizes_filtered);
+
+        // Clear selections that are no longer in filtered sizes
+        if (selectedSizes.length > 0) {
+            const validSelections = selectedSizes.filter((code: any) => sizes_filtered.some((size: any) => size.code === code));
+            setSelectedSizes(validSelections);
+        }
+    }, [finalCategorySelect, itemBrands, itemSizes]);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -134,6 +162,8 @@ export default function Create() {
                 category_code: finalCategorySelect?.code || null,
                 brand_code: finalBrandSelect?.code || null,
                 images: files || null,
+                item_colors: selectedValues || [],
+                item_sizes: selectedSizes || [],
             }));
 
             if (editData?.id) {
@@ -141,8 +171,6 @@ export default function Create() {
                     preserveScroll: true,
                     onSuccess: (page: any) => {
                         setFiles(null);
-                        setFinalCategorySelect(null);
-                        setFinalBrandSelect(null);
                         if (page.props.flash?.success) {
                             toast.success('Success', {
                                 description: page.props.flash.success,
@@ -170,6 +198,8 @@ export default function Create() {
                         setFiles(null);
                         setFinalCategorySelect(null);
                         setFinalBrandSelect(null);
+                        setSelectedSizes([]);
+                        setSelectedValues([]);
                         if (page.props.flash?.success) {
                             toast.success('Success', {
                                 description: page.props.flash.success,
@@ -396,6 +426,85 @@ export default function Create() {
                             </FormItem>
                         )}
                     />
+
+                    <div className="col-span-12">
+                        <FormLabel>{t('Colors Available')}</FormLabel>
+
+                        <div className="my-1 flex flex-wrap gap-2">
+                            {colors?.map((item: any) => {
+                                const selected = selectedValues.includes(item.code);
+
+                                return (
+                                    <div
+                                        key={item.code}
+                                        onClick={() => {
+                                            setSelectedValues(
+                                                selected ? selectedValues.filter((v) => v !== item.code) : [...selectedValues, item.code],
+                                            );
+                                        }}
+                                        className={`flex cursor-pointer items-center gap-4 rounded border px-3 py-2 transition ${
+                                            selected
+                                                ? 'border-blue-500 bg-blue-50 ring-3 ring-blue-500/30 dark:bg-blue-900/20'
+                                                : 'border-gray-300 hover:border-gray-400 dark:border-gray-700'
+                                        }`}
+                                    >
+                                        {/* Color box */}
+                                        <div
+                                            className="flex h-4 w-4 items-center justify-center rounded border border-gray-300"
+                                            style={{ backgroundColor: item.code }}
+                                        >
+                                            {selected && <CheckIcon size={12} className="text-white" />}
+                                        </div>
+
+                                        <span className="text-sm">{item.name}</span>
+                                    </div>
+                                );
+                            })}
+                        </div>
+
+                        <FormMessage>{errors.category_codes && <div>{errors.category_codes}</div>}</FormMessage>
+
+                        <p className="text-xs text-gray-500 dark:text-gray-400">Select the colors this item available.</p>
+                    </div>
+
+                    {filteredSizes?.length > 0 && (
+                        <div className="col-span-12">
+                            <FormLabel>{t('Sizes Available')}</FormLabel>
+
+                            <div className="my-1 flex flex-wrap gap-2">
+                                {filteredSizes?.map((size: any) => {
+                                    const selected = selectedSizes.includes(size.code); // or size.id if you prefer
+
+                                    return (
+                                        <div
+                                            key={size.code}
+                                            onClick={() => {
+                                                setSelectedSizes(
+                                                    selected ? selectedSizes.filter((v) => v !== size.code) : [...selectedSizes, size.code],
+                                                );
+                                            }}
+                                            className={`flex cursor-pointer items-center gap-4 rounded border px-3 py-2 transition ${
+                                                selected
+                                                    ? 'border-blue-500 bg-blue-50 ring-3 ring-blue-500/30 dark:bg-blue-900/20'
+                                                    : 'border-gray-300 hover:border-gray-400 dark:border-gray-700'
+                                            }`}
+                                        >
+                                            {/* Color box */}
+                                            <div className="flex h-4 w-4 items-center justify-center rounded border border-gray-300 bg-white">
+                                                {selected && <CheckIcon size={14} className="stroke-3 text-blue-500" />}
+                                            </div>
+                                            <span className="text-sm">{size.name}</span>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+
+                            <FormMessage>{errors.size_codes && <div>{errors.size_codes}</div>}</FormMessage>
+
+                            <p className="text-xs text-gray-500 dark:text-gray-400">Select the sizes this item is available in.</p>
+                        </div>
+                    )}
+
                     <FormField
                         control={form.control}
                         name="images"

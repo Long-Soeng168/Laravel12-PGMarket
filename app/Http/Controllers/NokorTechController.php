@@ -391,7 +391,7 @@ class NokorTechController extends Controller
         ]);
 
         return Inertia::render("nokor-tech/products/Show", [
-            "itemShow" => $itemShow->load('created_by', 'updated_by', 'images', 'category', 'brand', 'shop'),
+            "itemShow" => $itemShow->load('created_by', 'updated_by', 'images', 'category', 'brand', 'shop', 'colors_with_details', 'sizes_with_details'),
             'relatedItems' => $relatedItems,
         ]);
     }

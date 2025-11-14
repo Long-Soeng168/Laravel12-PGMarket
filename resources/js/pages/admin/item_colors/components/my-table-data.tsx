@@ -51,11 +51,10 @@ const MyTableData = () => {
                         <TableRow>
                             <TableHead className="w-[50px]">{t('No')}</TableHead>
                             <TableHead className="text-left">{t('Action')}</TableHead>
-                            <TableHead>{t('Image')}</TableHead>
-
+                            {/* <TableHead>{t('Image')}</TableHead> */}
                             <TableHead onClick={() => handleSort('code')}>
                                 <span className="flex cursor-pointer items-center">
-                                    <ArrowUpDown size={16} /> {t('Code')}
+                                    <ArrowUpDown size={16} /> {t('Color')}
                                 </span>
                             </TableHead>
                             <TableHead onClick={() => handleSort('name')}>
@@ -68,9 +67,9 @@ const MyTableData = () => {
                                     <ArrowUpDown size={16} /> {t('Name Khmer')}
                                 </span>
                             </TableHead>
-                            <TableHead onClick={() => {}}>
+                            {/* <TableHead onClick={() => {}}>
                                 <span className="flex cursor-pointer items-center">{t('Categories')}</span>
-                            </TableHead>
+                            </TableHead> */}
                             <TableHead onClick={() => handleSort('order_index')}>
                                 <span className="flex cursor-pointer items-center">
                                     <ArrowUpDown size={16} /> {t('Order Index')}
@@ -99,7 +98,7 @@ const MyTableData = () => {
                                             {hasPermission('item update') && <EditButton item={item} />}
                                         </span>
                                     </TableCell>
-                                    <TableCell>
+                                    {/* <TableCell>
                                         {item.image ? (
                                             <button
                                                 onClick={() => {
@@ -125,15 +124,15 @@ const MyTableData = () => {
                                                 className="size-10 object-contain"
                                             />
                                         )}
-                                    </TableCell>
+                                    </TableCell> */}
                                     <TableCell>
                                         <input value={item.code || '---'} type='color'/>
                                     </TableCell>
                                     <TableCell>{item.name || '---'}</TableCell>
                                     <TableCell>{item.name_kh || '---'}</TableCell>
-                                    <TableCell>
+                                    {/* <TableCell>
                                         <CategoriesHoverCard categories={item.categories} />
-                                    </TableCell>
+                                    </TableCell> */}
                                     <TableCell>{item.order_index || '---'}</TableCell>
                                     {/* <TableCell>{item.image || '---'}</TableCell> */}
                                     <TableCell>

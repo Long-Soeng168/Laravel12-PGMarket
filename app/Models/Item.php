@@ -47,4 +47,39 @@ class Item extends Model
     {
         return $this->hasMany(ItemImage::class, 'item_id', 'id');
     }
+    // In Item.php model
+    public function colors()
+    {
+        return $this->hasMany(ItemWithColors::class, 'item_id', 'id');
+    }
+
+    // In Item.php
+    public function colors_with_details()
+    {
+        return $this->hasManyThrough(
+            ItemColor::class,       // Final model
+            ItemWithColors::class,  // Intermediate model
+            'item_id',              // Foreign key on intermediate table (ItemWithColors)
+            'code',                   // Foreign key on final table (ItemColor)
+            'id',                   // Local key on this table (Item)
+            'color_code'              // Local key on intermediate table pointing to final table
+        );
+    }
+    public function sizes()
+    {
+        return $this->hasMany(ItemWithSizes::class, 'item_id', 'id');
+    }
+
+    // In Item.php
+    public function sizes_with_details()
+    {
+        return $this->hasManyThrough(
+            ItemSize::class,       // Final model
+            ItemWithSizes::class,  // Intermediate model
+            'item_id',              // Foreign key on intermediate table (ItemWithColors)
+            'code',                   // Foreign key on final table (ItemColor)
+            'id',                   // Local key on this table (Item)
+            'size_code'              // Local key on intermediate table pointing to final table
+        );
+    }
 }

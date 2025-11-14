@@ -131,7 +131,7 @@ const MyTableData = () => {
                                 </TableCell>
                                 <TableCell>
                                     <span className="flex h-full items-center justify-start">
-                                        <Link href={`/admin/items/${item.id}`}>
+                                        <Link href={`/products/${item.id}`}>
                                             <MyTooltipButton title={t('Show')} side="bottom" variant="ghost">
                                                 <ScanEyeIcon />
                                             </MyTooltipButton>

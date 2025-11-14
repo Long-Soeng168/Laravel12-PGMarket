@@ -82,13 +82,13 @@ class ItemColorController extends Controller implements HasMiddleware
             ->toArray();
 
         $validated = $request->validate([
-            'code' => 'required|string|max:255|unique:item_colors,code',
+            'code' => 'required|string|unique:item_colors,code',
             'name' => 'nullable|string|max:255',
             'name_kh' => 'nullable|string|max:255',
             'order_index' => 'nullable|integer',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
-            'category_codes' => 'required|array',
-            'category_codes.*.value' => 'required|exists:item_categories,code',
+            'category_codes' => 'nullable|array',
+            'category_codes.*.value' => 'nullable|exists:item_categories,code',
         ]);
 
         $validated['created_by'] = $request->user()->id;
@@ -151,8 +151,8 @@ class ItemColorController extends Controller implements HasMiddleware
             'name_kh' => 'nullable|string|max:255',
             'order_index' => 'nullable|integer',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
-            'category_codes' => 'required|array',
-            'category_codes.*.value' => 'required|exists:item_categories,code',
+            'category_codes' => 'nullable|array',
+            'category_codes.*.value' => 'nullable|exists:item_categories,code',
         ]);
         $validated['updated_by'] = $request->user()->id;
 

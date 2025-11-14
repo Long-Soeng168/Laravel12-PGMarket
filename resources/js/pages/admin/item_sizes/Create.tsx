@@ -264,11 +264,7 @@ export default function Create({
                                                 aria-roledescription={`file ${i + 1} containing ${file.name}`}
                                             >
                                                 <img src={URL.createObjectURL(file)} alt={file.name} className="h-full w-full object-contain" />
-                                            </FileUploaderItem>
-                                            // <FileUploaderItem key={i} index={i}>
-                                            //     <Paperclip className="h-4 w-4 stroke-current" />
-                                            //     <span>{file.name}</span>
-                                            // </FileUploaderItem>
+                                            </FileUploaderItem> 
                                         ))}
                                     </FileUploaderContent>
                                 </FileUploader>
