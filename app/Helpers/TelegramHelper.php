@@ -49,7 +49,7 @@ class TelegramHelper
                     $caption .= "<b>Amount:</b> " .  '$ ' . ($order->total_amount ?? '-') . "\n";
                     $caption .= "<b>Payment Status:</b> " . $order->payment_status . "\n";
 
-                    $caption .= "<b>Shop:</b> " . ($order->shop?->name ?? '-') .  '(' . $order->shop?->phone . ')' . "\n";
+                    $caption .= "<b>Shop:</b> " . ($order->shop?->name ?? '-') . "\n";
 
                     $photo['caption']     = $caption;
                     $photo['parse_mode']  = 'HTML';

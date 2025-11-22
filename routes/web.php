@@ -106,8 +106,6 @@ Route::get('/test-telegram-notification/{id}', function ($id) {
             'notify_telegram_status' => 'failed'
          ]);
          Log::warning('Telegram notify failed for order ' . $order->id . ': ' . $result['message']);
-
-         return "Telegram notify failed : " . $result['message'];
       }
    }
    return "Telegram notify Sucess";
