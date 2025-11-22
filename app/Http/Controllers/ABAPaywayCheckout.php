@@ -49,7 +49,7 @@ class ABAPaywayCheckout extends Controller
         // dd($merchant_id);
         return Inertia::render("nokor-tech/cart/ShoppingCart", [
             'req_time' => $req_time,
-            'shipping' => 2,
+            'shipping' => (float) env('SHIPPING_PRICE'),
             'currency' => "USD",
             'paymentOption' => "abapay_khqr",
             'merchant_id' => $merchant_id,

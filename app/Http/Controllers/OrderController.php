@@ -119,10 +119,6 @@ class OrderController extends Controller implements HasMiddleware
             // Create Order Number Sequent base on each shop
             $shopId = $validated['shop_id'];
 
-            // dd((float) env('SHIPPING_PRICE'));
-
-            $validated['shipping_price'] = (float) env('SHIPPING_PRICE') ?? $validated['shipping_price'];
-
             $lastOrder = Order::where('shop_id', $shopId)
                 ->orderBy('id', 'desc')
                 ->first();
@@ -145,7 +141,7 @@ class OrderController extends Controller implements HasMiddleware
                 'shop_id' => $validated['shop_id'],
                 'user_id' => $request->user()->id ?? null,
 
-                'shipping_price' => $validated['shipping_price'] ?? null,
+                'shipping_price' => (float) env('SHIPPING_PRICE') ?? null,
                 'shipping_address' => $request->user()?->address ?? 'N/A',
                 'shipping_lat' => $validated['shipping_lat'] ?? null,
                 'shipping_lng' => $validated['shipping_lng'] ?? null,
