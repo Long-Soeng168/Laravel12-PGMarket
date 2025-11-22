@@ -119,6 +119,8 @@ class OrderController extends Controller implements HasMiddleware
             // Create Order Number Sequent base on each shop
             $shopId = $validated['shop_id'];
 
+            $validated['shipping_price'] = env('SHIPPING_PRICE') ?? $validated['shipping_price'];
+
             $lastOrder = Order::where('shop_id', $shopId)
                 ->orderBy('id', 'desc')
                 ->first();

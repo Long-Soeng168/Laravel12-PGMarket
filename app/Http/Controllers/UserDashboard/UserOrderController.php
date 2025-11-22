@@ -73,22 +73,7 @@ class UserOrderController extends Controller implements HasMiddleware
             'tableData' => $tableData,
         ]);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create(Request $request)
-    {
-        dd('Create Function');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        dd('Store Function');
-    }
+ 
 
     /**
      * Display the specified resource.
