@@ -1,5 +1,6 @@
 <?php
 
+use App\Helpers\TelegramHelper;
 use App\Http\Controllers\ABAPaymentController;
 use App\Http\Controllers\ABAPaywayCheckout;
 use App\Http\Controllers\StreamFileController;
@@ -42,6 +43,8 @@ require __DIR__ . '/order.php';
 
 // ========= Queues Jobs =========
 use App\Http\Controllers\QueueJobController;
+use App\Models\Order;
+use Illuminate\Support\Facades\Log;
 
 Route::get('/queue_jobs', [QueueJobController::class, 'index']);
 Route::post('/queue_job/start', [QueueJobController::class, 'start']);
@@ -69,7 +72,7 @@ Route::get('/aba_test_checkout', [ABAPaywayCheckout::class, 'showTestCheckoutFor
 
 Route::get('/pdf_viewer', function () {
    return view('pdf_viewer');
-}); 
+});
 
 Route::get('/qr', function () {
    return Inertia::render('QRPage');
@@ -85,4 +88,25 @@ Route::get('/bakong', function () {
 });
 Route::get('/paymentBakong/success', function () {
    return view('bakong_success');
+});
+
+Route::get('/test-telegram-notification/{id}', function ($id) {
+
+   $order = Order::findOrFail($id)->firstOrFail();
+   if ($order->notify_telegram_status != 'completed') {
+
+      $result = TelegramHelper::sendOrderItems($order);
+
+      if ($result['success'] === true) {
+         $order->update([
+            'notify_telegram_status' => 'completed'
+         ]);
+      } else {
+         $order->update([
+            'notify_telegram_status' => 'failed'
+         ]);
+         Log::warning('Telegram notify failed for order ' . $order->id . ': ' . $result['message']);
+      }
+   }
+   return "Telegram notify Sucess";
 });
