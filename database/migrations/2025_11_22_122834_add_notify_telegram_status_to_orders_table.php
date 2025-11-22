@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->boolean('notify_telegram_status')->default(false)->after('status');
+            $table->string('notify_telegram_status')->default(null)->after('status')->nullable();
         });
     }
 
