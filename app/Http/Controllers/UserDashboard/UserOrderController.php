@@ -73,7 +73,7 @@ class UserOrderController extends Controller implements HasMiddleware
             'tableData' => $tableData,
         ]);
     }
- 
+
 
     /**
      * Display the specified resource.
@@ -95,10 +95,12 @@ class UserOrderController extends Controller implements HasMiddleware
         $skip_success_page = 1; // or any default payment option if needed
         $return_url = env('APP_URL') . "/aba/callback?tran_id={$tran_id}";
         $continue_success_url = env('APP_URL') . "/aba/success?tran_id={$tran_id}";
+        $ios_scheme = env('APP_URL') . "/aba/success?tran_id={$tran_id}";
+        $android_scheme = env('APP_URL') . "/aba/success?tran_id={$tran_id}";
         // $return_params ='payment_success';
         $hash = $this->payWayService->getHash(
             $req_time . $merchant_id . $tran_id . $amount . $shipping .
-                $email . $payment_option . $return_url . $continue_success_url . $skip_success_page
+                $email . $payment_option . $return_url . $continue_success_url . $ios_scheme . $android_scheme . $skip_success_page
         );
 
 
@@ -116,6 +118,8 @@ class UserOrderController extends Controller implements HasMiddleware
             'req_time' => $req_time,
             'return_url' => $return_url,
             'continue_success_url' => $continue_success_url,
+            'ios_scheme' => $ios_scheme,
+            'android_scheme' => $android_scheme,
             'skip_success_page' => $skip_success_page,
             'currency' => $currency,
         ]);
@@ -137,16 +141,6 @@ class UserOrderController extends Controller implements HasMiddleware
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Order $user_order)
-    {
-        if ($user_order->user_id != Auth::user()->id) {
-            abort(404);
-        }
-        dd($request->all());
-    }
 
     public function update_status(Request $request, Item $user_item)
     {
