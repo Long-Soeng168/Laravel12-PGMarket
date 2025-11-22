@@ -47,6 +47,8 @@ class ShopController extends Controller implements HasMiddleware
                 return $sub_query->where('name', 'LIKE', "%{$search}%")
                     ->orWhere('id', 'LIKE', "%{$search}%")
                     ->orWhere('address', 'LIKE', "%{$search}%")
+                    ->orWhere('phone', 'LIKE', "%{$search}%")
+                    ->orWhere('email', 'LIKE', "%{$search}%")
                     ->orWhere('short_description', 'LIKE', "%{$search}%");
             });
         }
