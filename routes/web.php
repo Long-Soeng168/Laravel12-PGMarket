@@ -92,7 +92,7 @@ Route::get('/paymentBakong/success', function () {
 
 Route::get('/test-telegram-notification/{id}', function ($id) {
 
-   $order = Order::findOrFail($id)->firstOrFail();
+   $order = Order::findOrFail($id);
    if ($order->notify_telegram_status != 'completed') {
 
       $result = TelegramHelper::sendOrderItems($order);
