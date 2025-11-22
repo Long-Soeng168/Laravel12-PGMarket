@@ -35,7 +35,7 @@ export function MySearchTableData({ className, placholder = 'Search' }: { classN
                     setSearch(e.target.value);
                     handleSearch(e.target.value);
                 }}
-                className="ml-0.5 min-w-xs rounded-sm border-none shadow-none"
+                className="ml-0.5 min-w-auto rounded-sm border-none shadow-none"
                 placeholder={`${t(placholder)}...`}
             />
             <Button variant="outline" type="submit" onClick={() => handleSearch(search)}>

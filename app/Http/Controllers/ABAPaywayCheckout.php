@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\TelegramHelper;
 use App\Jobs\ProcessQueueJob;
 use App\Models\Order;
 use App\Models\QueueJob;
@@ -144,7 +145,7 @@ class ABAPaywayCheckout extends Controller
                 ]);
 
                 if ($paymentStatus === 'APPROVED') {
-                    
+
                     $job = QueueJob::where('order_id', $order->id)->first();
                     if ($job) return;
 
@@ -158,7 +159,24 @@ class ABAPaywayCheckout extends Controller
 
                     // 2️⃣ Dispatch to Laravel queue with delay
                     ProcessQueueJob::dispatch($queueJob)->delay(120);
+
+                    if ($order->notify_telegram_status != 'completed') {
+
+                        $result = TelegramHelper::sendOrderItems($order);
+
+                        if ($result['success'] === true) {
+                            $order->update([
+                                'notify_telegram_status' => 'completed'
+                            ]);
+                        } else {
+                            $order->update([
+                                'notify_telegram_status' => 'failed'
+                            ]);
+                            Log::warning('Telegram notify failed for order ' . $order->id . ': ' . $result['message']);
+                        }
+                    }
                 }
+
 
                 return response()->json([
                     'message'  => 'Success',

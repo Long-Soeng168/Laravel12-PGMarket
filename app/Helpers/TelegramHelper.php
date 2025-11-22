@@ -15,6 +15,7 @@ class TelegramHelper
         $token = env('TELEGRAM_BOT_TOKEN');
         $chatId = env('TELEGRAM_GROUP_CHAT_ID');
         $isLocalhost = env('TETELGRAM_LOCALHOST');
+        $placeholder_image = env('PLACEHOLDER_IMAGE');
 
         if (!$token || !$chatId) {
             return ['success' => false, 'message' => 'Telegram configuration is missing.'];
@@ -36,17 +37,17 @@ class TelegramHelper
 
                 $photo = [
                     'type'  => 'photo',
-                    'media' => !$isLocalhost ? $imageUrl : 'https://digitalassets.tesla.com/tesla-contents/image/upload/f_auto,q_auto/Homepage-Card-Model-S-Desktop.png',
+                    'media' => !$isLocalhost ? $imageUrl : $placeholder_image,
                 ];
 
                 if ($index === 0) {
                     $caption  = "🚀 <b>New order ID: {$order->id} placed!</b>\n\n";
-                    $caption .= "<b>Name:</b> " . (Auth::user()->name ?? '-') . "\n";
-                    $caption .= "<b>Phone:</b> " . Auth::user()->phone . "\n";
-                    $caption .= "<b>Note:</b> " . ($order->note ?? '-') . "\n\n";
+                    $caption .= "<b>Name:</b> " . ($order->buyer->name ?? '-') . "\n";
+                    $caption .= "<b>Phone:</b> " . $order->buyer->phone . "\n";
+                    // $caption .= "<b>Note:</b> " . ($order->note ?? '-') . "\n\n";
 
                     $caption .= "<b>Amount:</b> " .  '$ ' . ($order->total_amount ?? '-') . "\n";
-                    $caption .= "<b>Status:</b> " . 'Pending' . "\n";
+                    $caption .= "<b>Payment Status:</b> " . $order->payment_status . "\n";
 
                     $caption .= "<b>Shop:</b> " . ($order->shop?->name ?? '-') . "\n";
 

@@ -6,11 +6,11 @@ import { ImageOffIcon } from 'lucide-react';
 const ShopProfileHeader = ({ shop }) => {
     const { t } = useTranslation();
     return (
-        <div className="mb-8 w-full px-4 md:mb-28">
+        <div className="mb-8 w-full p-4 md:mb-28">
             {/* Banner */}
             <div className="relative">
-                <Avatar className="size-full rounded-none">
-                    <AvatarImage src={`/assets/images/shops/${shop.banner}`} alt="" className="aspect-[21/6] max-h-[500px] w-full object-cover" />
+                <Avatar className="size-auto rounded-none">
+                    <AvatarImage src={`/assets/images/shops/${shop.banner}`} alt="" className="w-full h-auto aspect-auto max-h-[500px]" />
                     <AvatarFallback className="rounded-none">
                         <ImageOffIcon size={32} className="text-muted-foreground h-[220px]" />
                     </AvatarFallback>
