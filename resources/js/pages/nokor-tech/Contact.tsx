@@ -71,11 +71,11 @@ const ContactCamActivePage = () => {
                     </div>
                 </div>
             </div>
-            {application_info?.google_map && (
+            {/* {application_info?.google_map && (
                 <div>
                     <iframe className="h-[400px]" src={application_info?.google_map} width="100%" height="100%" loading="lazy"></iframe>
                 </div>
-            )}
+            )} */}
         </NokorTechLayout>
     );
 };
