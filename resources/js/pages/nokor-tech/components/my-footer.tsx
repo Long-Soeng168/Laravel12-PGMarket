@@ -110,7 +110,7 @@ export default function MyFooter() {
                         <ul className="space-y-3">
                             {links?.map((item) => (
                                 <li key={item?.id}>
-                                    <Link prefetch href={item?.link || '#'} className="flex items-center gap-2 hover:underline">
+                                    <a target='_blank' href={item?.link || '#'} className="flex items-center gap-2 hover:underline">
                                         <img
                                             width={28}
                                             height={28}
@@ -119,7 +119,7 @@ export default function MyFooter() {
                                             className="transition-all duration-300 hover:scale-125 hover:cursor-pointer"
                                         />
                                         {item?.title}
-                                    </Link>
+                                    </a>
                                 </li>
                             ))}
                         </ul>

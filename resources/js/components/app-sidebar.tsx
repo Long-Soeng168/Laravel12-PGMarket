@@ -394,6 +394,12 @@ export function AppSidebar() {
             url: '/admin/orders',
             icon: ClipboardListIcon,
         },
+        {
+            title: t('All Payouts'),
+            permission: 'payout view',
+            url: '/admin/payouts',
+            icon: ClipboardListIcon,
+        },
     ];
 
     const footerNavItems: NavItem[] = [
@@ -416,18 +422,7 @@ export function AppSidebar() {
         //     url: '/dashboard',
         //     icon: LayoutDashboardIcon,
         // },
-        {
-            title: t('Shop Orders'),
-            permission: 'Shop',
-            url: '/shop-orders',
-            icon: ClipboardListIcon,
-        },
-        {
-            title: t('Your Orders'),
-            permission: '',
-            url: '/user-orders',
-            icon: ClipboardListIcon,
-        },
+
         {
             title: t('Shop Settings'),
             permission: 'Shop',
@@ -439,6 +434,27 @@ export function AppSidebar() {
             permission: 'Shop',
             url: '/user-items',
             icon: ListTodoIcon,
+        },
+
+        {
+            title: t('Shop Payouts'),
+            permission: 'Shop',
+            url: '/shop-payouts',
+            icon: ClipboardListIcon,
+        },
+
+        {
+            title: t('Shop Orders'),
+            permission: 'Shop',
+            url: '/shop-orders',
+            icon: ClipboardListIcon,
+        },
+
+        {
+            title: t('Your Orders'),
+            permission: '',
+            url: '/user-orders',
+            icon: ClipboardListIcon,
         },
 
         // {

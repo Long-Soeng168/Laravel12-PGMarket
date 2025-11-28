@@ -125,6 +125,11 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::firstOrCreate(['name' => 'order update']);
         Permission::firstOrCreate(['name' => 'order delete']);
 
+        Permission::firstOrCreate(['name' => 'payout view']);
+        Permission::firstOrCreate(['name' => 'payout create']);
+        Permission::firstOrCreate(['name' => 'payout update']);
+        Permission::firstOrCreate(['name' => 'payout delete']);
+
         // Message
         Permission::firstOrCreate(['name' => 'message view']);
         Permission::firstOrCreate(['name' => 'message create']);

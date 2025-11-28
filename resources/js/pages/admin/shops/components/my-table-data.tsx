@@ -94,7 +94,7 @@ const MyTableData = () => {
                                     <ArrowUpDown size={16} /> {t('Status')}
                                 </span>
                             </TableHead>
-                             <TableHead onClick={() => handleSort('order_index')}>
+                            <TableHead onClick={() => handleSort('order_index')}>
                                 <span className="flex cursor-pointer items-center">
                                     <ArrowUpDown size={16} /> {t('Order Index')}
                                 </span>
@@ -212,7 +212,11 @@ const MyTableData = () => {
                                 <TableCell>
                                     <div className="space-y-2">
                                         <Badge variant="secondary">{item.owner?.name || '---'}</Badge>
-                                        <Badge variant="outline">{item.owner?.email || '---'}</Badge>
+                                        <Link href={`/admin/users?search=${item.owner?.email}`}>
+                                            <Badge className="hover:underline" variant="outline">
+                                                {item.owner?.email || '---'}
+                                            </Badge>
+                                        </Link>
                                     </div>
                                 </TableCell>
                                 <TableCell>

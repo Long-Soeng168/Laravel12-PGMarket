@@ -26,6 +26,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\PagePositionController;
 use App\Http\Controllers\PartnerController;
+use App\Http\Controllers\PayoutController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\PhoneCompanyController;
 use App\Http\Controllers\PositionController;
@@ -128,6 +129,9 @@ Route::middleware('auth')->group(function () {
     Route::resource('admin/orders', OrderController::class);
     Route::post('admin/orders/{order}/update', [OrderController::class, 'update']);
     Route::post('admin/orders/{order}/update_status', [OrderController::class, 'update_status']);
+
+    Route::resource('admin/payouts', PayoutController::class);
+    Route::get('/shop-payouts', [PayoutController::class, 'shop_payouts']);
 
     // Video Play Lists Route
     Route::resource('admin/video_play_lists', VideoPlayListController::class);

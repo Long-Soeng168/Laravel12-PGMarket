@@ -45,6 +45,7 @@ class ShopOrderController extends Controller implements HasMiddleware
             });
         }
 
+        // dd($request->user()->shop_id);
         $query->where('shop_id', $request->user()->shop_id);
 
         $tableData = $query->paginate(perPage: 10)->onEachSide(1);
