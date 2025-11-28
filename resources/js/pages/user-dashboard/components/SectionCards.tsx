@@ -1,11 +1,14 @@
 import { MyTooltipButton } from '@/components/my-tooltip-button';
 import useRole from '@/hooks/use-role';
+import useTranslation from '@/hooks/use-translation';
 import { Link, usePage } from '@inertiajs/react';
-import { PackageIcon, StoreIcon, UserIcon } from 'lucide-react';
+import { StoreIcon, UserIcon } from 'lucide-react';
 
 const SectionCards = () => {
     const { item_counts, garage_post_counts, auth } = usePage().props;
     const hasRole = useRole();
+
+    const { t } = useTranslation();
 
     return (
         <div>
@@ -21,7 +24,7 @@ const SectionCards = () => {
                             <UserIcon className="stroke-primary aspect-square size-7 object-contain" />
                         </div>
                         <div className="flex flex-row flex-wrap items-center justify-center gap-2">
-                            <span className="text-lg font-bold underline-offset-4 hover:underline">Profile Settings</span>
+                            <span className="text-lg font-bold underline-offset-4 hover:underline">{t("Profile Settings")}</span>
                         </div>
                     </Link>
                 )}
@@ -37,11 +40,11 @@ const SectionCards = () => {
                             <StoreIcon className="stroke-primary aspect-square size-7 object-contain" />
                         </div>
                         <div className="flex flex-row flex-wrap items-center justify-center gap-2">
-                            <span className="text-lg font-bold underline-offset-4 hover:underline">Your Shop</span>
+                            <span className="text-lg font-bold underline-offset-4 hover:underline">{t("Your Shop")}</span>
                             <div className="mt-1 space-y-1 text-sm text-gray-500">
                                 <MyTooltipButton title="View Items" variant="ghost" className="h-auto p-0">
                                     <Link href="/user-items" className="text-primary hover:underline hover:underline-offset-4">
-                                        (Items: {item_counts})
+                                        ({t("Items")}: {item_counts})
                                     </Link>
                                 </MyTooltipButton>
                             </div>
@@ -102,7 +105,7 @@ const SectionCards = () => {
                             <StoreIcon className="stroke-forgbg-foreground aspect-square size-7 object-contain" />
                         </div>
                         <div className="flex flex-col items-start">
-                            <span className="text-lg font-bold underline-offset-4 hover:underline">Register Shop</span>
+                            <span className="text-lg font-bold underline-offset-4 hover:underline">{t("Register Shop")}</span>
                         </div>
                     </Link>
                 )}

@@ -397,30 +397,32 @@ export default function Create({
                     />
 
                     {/* Agreement Checkbox */}
-                    <div>
-                        <FormItem className="mt-4 flex items-center space-x-1">
-                            <FormControl>
-                                <input
-                                    required
-                                    type="checkbox"
-                                    id="agreement"
-                                    className="text-primary focus:ring-primary h-4 w-4 rounded border-gray-300"
-                                />
-                            </FormControl>
-                            <FormLabel htmlFor="agreement" className="text-sm leading-tight">
-                                {t('I agree to the')}{' '}
-                                <a
-                                    href="/shop-terms-and-conditions"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-primary underline hover:no-underline"
-                                >
-                                    {t('Terms and Conditions')}
-                                </a>{' '}
-                            </FormLabel>
-                            <FormMessage>{errors.agreement && <div>{errors.agreement}</div>}</FormMessage>
-                        </FormItem>
-                    </div>
+                    {!editData.id && (
+                        <div>
+                            <FormItem className="mt-4 flex items-center space-x-1">
+                                <FormControl>
+                                    <input
+                                        required={!editData.id}
+                                        type="checkbox"
+                                        id="agreement"
+                                        className="text-primary focus:ring-primary h-4 w-4 rounded border-gray-300"
+                                    />
+                                </FormControl>
+                                <FormLabel htmlFor="agreement" className="text-sm leading-tight">
+                                    {t('I agree to the')}{' '}
+                                    <a
+                                        href="/shop-terms-and-conditions"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-primary underline hover:no-underline"
+                                    >
+                                        {t('Terms and Conditions')}
+                                    </a>{' '}
+                                </FormLabel>
+                                <FormMessage>{errors.agreement && <div>{errors.agreement}</div>}</FormMessage>
+                            </FormItem>
+                        </div>
+                    )}
 
                     {progress && <ProgressWithValue value={progress.percentage} position="start" />}
                     {setIsOpen && <MyDialogCancelButton onClick={() => setIsOpen(false)} />}
