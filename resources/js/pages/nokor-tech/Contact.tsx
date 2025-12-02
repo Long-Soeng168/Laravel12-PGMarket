@@ -1,11 +1,12 @@
+import useTranslation from '@/hooks/use-translation';
 import { Head, usePage } from '@inertiajs/react';
-import { Globe2Icon, MailIcon, MapPinIcon, PhoneIcon } from 'lucide-react';
+import { MailIcon, MapPinIcon, PhoneIcon } from 'lucide-react';
 import ContactFormSubmit from './components/contact-form-submit';
 import NokorTechLayout from './layouts/nokor-tech-layout';
 
 const ContactCamActivePage = () => {
     const { application_info, contactPage, app_url } = usePage().props;
-
+    const { t, currentLocale } = useTranslation();
     return (
         <NokorTechLayout>
             <Head>
@@ -31,16 +32,16 @@ const ContactCamActivePage = () => {
                                 <div className="bg-primary/10 text-primary flex h-12 w-12 items-center justify-center rounded-full">
                                     <MapPinIcon />
                                 </div>
-                                <h3 className="mt-6 text-xl font-semibold">Address</h3>
+                                <h3 className="mt-6 text-xl font-semibold">{t('Address')}</h3>
                                 <a className="text-primary font-medium" href={`#`}>
-                                    {application_info?.address}
+                                    {currentLocale == 'kh' ? application_info?.address_kh || application_info?.address : application_info?.address}
                                 </a>
                             </div>
                             <div className="flex flex-col items-center justify-center sm:items-start">
                                 <div className="bg-primary/10 text-primary flex h-12 w-12 items-center justify-center rounded-full">
                                     <PhoneIcon />
                                 </div>
-                                <h3 className="mt-6 text-xl font-semibold">Phone</h3>
+                                <h3 className="mt-6 text-xl font-semibold">{t('Phone')}</h3>
                                 <a className="text-primary font-medium" href={`tel:${application_info?.phone}`}>
                                     {application_info?.phone}
                                 </a>
@@ -49,21 +50,21 @@ const ContactCamActivePage = () => {
                                 <div className="bg-primary/10 text-primary flex h-12 w-12 items-center justify-center rounded-full">
                                     <MailIcon />
                                 </div>
-                                <h3 className="mt-6 text-xl font-semibold">Email</h3>
+                                <h3 className="mt-6 text-xl font-semibold">{t('Email')}</h3>
                                 <a className="text-primary font-medium" href={`mailto:${application_info?.email}`}>
                                     {application_info?.email}
                                 </a>
                             </div>
 
-                            <div className="flex flex-col items-center justify-center sm:items-start">
+                            {/* <div className="flex flex-col items-center justify-center sm:items-start">
                                 <div className="bg-primary/10 text-primary flex h-12 w-12 items-center justify-center rounded-full">
                                     <Globe2Icon />
                                 </div>
-                                <h3 className="mt-6 text-xl font-semibold">Website</h3>
+                                <h3 className="mt-6 text-xl font-semibold">{(Website)}</h3>
                                 <a className="text-primary font-medium" href={app_url}>
                                     {app_url}
                                 </a>
-                            </div>
+                            </div> */}
                         </div>
 
                         {/* Contact Form */}

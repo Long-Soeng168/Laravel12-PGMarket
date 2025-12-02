@@ -8,7 +8,7 @@ const About = () => {
     return (
         <NokorTechLayout>
             <Head>
-                <title>About Us</title>
+                <title>{currentLocale == 'kh' ? about?.title_kh : about?.title}</title>
                 <meta
                     name="description"
                     content="Discover the story of PG Online, a fast-growing real estate and digital marketplace company in Cambodia founded by Mr. Samret Sophat. Learn about our vision, mission, and commitment to building trust with customers."
@@ -16,7 +16,7 @@ const About = () => {
             </Head>
             <div className="text-foreground bg-background">
                 {/* Main Content */}
-                <main className="mx-auto max-w-7xl px-4 py-20">
+                <main className="mx-auto max-w-7xl px-4 py-4">
                     {/* About */}
                     <section>
                         <div>

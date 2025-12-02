@@ -2,6 +2,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import useTranslation from '@/hooks/use-translation';
 import { useForm } from '@inertiajs/react';
 import { ArrowRight, LoaderIcon } from 'lucide-react';
 import { useState } from 'react';
@@ -43,17 +44,19 @@ const ContactFormSubmit = () => {
         });
     };
 
+    const { t, currentLocale } = useTranslation();
+
     return (
         <Card className="relative overflow-hidden rounded-lg bg-gray-400/5">
             <CardContent className="relative z-10 p-6">
                 <form onSubmit={handleSubmit}>
-                    <h2 className="mb-4 text-center text-3xl font-bold">Send Us a Message</h2>
+                    <h2 className="mb-4 text-center text-3xl font-bold">{t('Send Us a Message')}</h2>
 
                     <div className="grid gap-x-8 gap-y-5 md:grid-cols-2">
                         <div className="col-span-2">
-                            <Label htmlFor="name">Name</Label>
+                            <Label htmlFor="name">{t('Name')}</Label>
                             <Input
-                                placeholder="Your full name"
+                                placeholder={t('Name')}
                                 id="name"
                                 value={data.name}
                                 onChange={(e) => setData('name', e.target.value)}
@@ -63,10 +66,10 @@ const ContactFormSubmit = () => {
                         </div>
 
                         <div className="col-span-2">
-                            <Label htmlFor="phone">Phone</Label>
+                            <Label htmlFor="phone">{t('Phone')}</Label>
                             <Input
                                 type="tel"
-                                placeholder="Phone number"
+                                placeholder={t('Phone')}
                                 id="phone"
                                 value={data.phone}
                                 onChange={(e) => setData('phone', e.target.value)}
@@ -76,10 +79,10 @@ const ContactFormSubmit = () => {
                         </div>
 
                         <div className="col-span-2">
-                            <Label htmlFor="email">Email</Label>
+                            <Label htmlFor="email">{t('Email')}</Label>
                             <Input
                                 type="email"
-                                placeholder="Email"
+                                placeholder={t('Email')}
                                 id="email"
                                 value={data.email}
                                 onChange={(e) => setData('email', e.target.value)}
@@ -89,10 +92,10 @@ const ContactFormSubmit = () => {
                         </div>
 
                         <div className="col-span-2">
-                            <Label htmlFor="message">Message</Label>
+                            <Label htmlFor="message">{t('Message')}</Label>
                             <Textarea
                                 id="message"
-                                placeholder="Write your message here"
+                                placeholder={t('Write your message here')}
                                 value={data.message}
                                 onChange={(e) => setData('message', e.target.value)}
                                 className="mt-1.5"
@@ -102,7 +105,7 @@ const ContactFormSubmit = () => {
                         </div>
                     </div>
                     {successMessage && <p className="mt-1 text-center text-sm text-green-500">{successMessage}</p>}
-                    {successMessage && <p className="mt-1 text-center text-sm text-green-500">We will get back to you as soon as possible.</p>}
+                    {successMessage && <p className="mt-1 text-center text-sm text-green-500">{t('We will get back to you as soon as possible.')}</p>}
 
                     <button
                         type="submit"
@@ -112,10 +115,10 @@ const ContactFormSubmit = () => {
                         <span
                             className={`inline-block transition-all duration-300 ${processing ? 'opacity-0' : 'translate-x-1 group-hover:translate-x-12 group-hover:opacity-0'}`}
                         >
-                            Submit
+                            {t('Submit')}
                         </span>
                         <div className="absolute top-0 z-10 flex h-full w-full translate-x-12 items-center justify-center gap-2 text-[#263381] opacity-0 transition-all duration-300 group-hover:-translate-x-1 group-hover:opacity-100">
-                            Submit
+                            {t('Submit')}
                             {processing ? <LoaderIcon className="animate-spin" /> : <ArrowRight />}
                         </div>
                         <div className="absolute top-[40%] left-[20%] h-2 w-2 scale-[1] rounded-lg bg-white transition-all duration-300 group-hover:top-[0%] group-hover:left-[0%] group-hover:h-full group-hover:w-full group-hover:scale-[1.8] group-hover:bg-white"></div>

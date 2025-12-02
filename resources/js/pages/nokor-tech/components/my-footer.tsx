@@ -5,7 +5,7 @@ import { Separator } from './ui/separator';
 
 export default function MyFooter() {
     const { application_info, links } = usePage().props;
-    const { t } = useTranslation();
+    const { t, currentLocale } = useTranslation();
     return (
         <footer className="bg-true-primary dark relative border-t text-white dark:bg-black">
             <div className="relative z-10 mx-auto max-w-7xl px-4 pt-14 pb-20 sm:px-6 lg:px-8">
@@ -47,7 +47,9 @@ export default function MyFooter() {
                         </h3>
                         <ul className="flex flex-col gap-1">
                             <li className="flex">
-                                <span>{application_info?.address}</span>
+                                <span>
+                                    {currentLocale === 'kh' ? (application_info?.address_kh ?? application_info?.address) : application_info?.address}
+                                </span>
                             </li>
                             <li className="flex">
                                 <span className="mr-2 font-semibold">{t('Phone')}:</span>
@@ -110,7 +112,7 @@ export default function MyFooter() {
                         <ul className="space-y-3">
                             {links?.map((item) => (
                                 <li key={item?.id}>
-                                    <a target='_blank' href={item?.link || '#'} className="flex items-center gap-2 hover:underline">
+                                    <a target="_blank" href={item?.link || '#'} className="flex items-center gap-2 hover:underline">
                                         <img
                                             width={28}
                                             height={28}
@@ -124,37 +126,37 @@ export default function MyFooter() {
                             ))}
                         </ul>
                     </div>
-                    <div className="min-lg:hidden pb-7 lg:justify-self-center">
-                        <h3 className="mb-4 text-xl text-center underline underline-offset-8 font-bold">
-                            {t('Social Media')} 
-                        </h3>
+                    <div className="pb-7 min-lg:hidden lg:justify-self-center">
+                        <h3 className="mb-4 text-center text-xl font-bold underline underline-offset-8">{t('Social Media')}</h3>
                         <ul className="flex flex-wrap justify-center gap-3">
                             {links?.map((item) => (
                                 <li key={item?.id}>
-                                    <Link prefetch href={item?.link || '#'} className="flex border rounded-full items-center gap-2 hover:underline">
+                                    <a href={item?.link || '#'} className="flex items-center gap-2 rounded-full border hover:underline">
                                         <img
                                             width={28}
                                             height={28}
                                             src={`/assets/images/links/thumb/${item?.image}`}
                                             alt=""
-                                            className="transition-all size-12 duration-300 hover:scale-125 hover:cursor-pointer"
+                                            className="size-12 transition-all duration-300 hover:scale-125 hover:cursor-pointer"
                                         />
-                                    </Link>
+                                    </a>
                                 </li>
                             ))}
                         </ul>
                     </div>
                 </div>
             </div>
-            <div className="relative z-10 mx-auto max-w-7xl pb-18 sm:pb-0">
+            <div className="relative z-10 mx-auto max-w-7xl pb-18 sm:pb-0 px-2">
                 {/* Footer Bottom */}
                 <div className="flex flex-col items-center justify-between gap-4 py-6 md:flex-row">
-                    <p className="text-sm">{application_info?.copyright}</p>
+                    <p className="text-sm">
+                        {currentLocale === 'kh' ? (application_info?.copyright_kh ?? application_info?.copyright) : application_info?.copyright}
+                    </p>
                     {/* <a className="text-sm" href="#">
                         {t('Developed by')} : <strong></strong>
                     </a> */}
                     <div className="flex items-center space-x-[10px] text-[18px] font-semibold">
-                        <p>We accept:</p>
+                        <p>{t("We accept")}:</p>
                         <div className="flex gap-[10px]">
                             <img className="h-[40px]" src="/assets/ABA_PAY.svg" alt="" />
                             <img className="h-[40px]" src="/assets/KHQR.svg" alt="" />

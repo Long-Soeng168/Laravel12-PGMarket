@@ -26,8 +26,8 @@ const MyHeader = () => {
         { label: t('Products'), href: '/products' },
         { label: t('Shops'), href: '/shops' },
         // { label: t('Privacy'), href: '/privacy' },
-        // { label: t('About'), href: '/about-us' },
-        // { label: t('Contact'), href: '/contact-us' },
+        { label: t('About'), href: '/about-us' },
+        { label: t('Contact'), href: '/contact-us' },
     ];
 
     const hasRole = useRole();
