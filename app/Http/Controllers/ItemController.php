@@ -137,8 +137,8 @@ class ItemController extends Controller implements HasMiddleware
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,webp,svg,webp|max:2048',
 
             // COLORS FIXED
-            'item_colors' => 'required|array',
-            'item_colors.*' => 'required|string|max:255',
+            'item_colors' => 'nullable|array',
+            'item_colors.*' => 'nullable|string|max:255',
 
             'item_sizes' => 'nullable|array',
             'item_sizes.*' => 'nullable|string|max:255',
@@ -167,18 +167,22 @@ class ItemController extends Controller implements HasMiddleware
 
         $created_item = Item::create($validated);
         DB::transaction(function () use ($created_item, $item_colors, $item_sizes) {
-            foreach ($item_colors as $colorCode) {
-                ItemWithColors::create([
-                    'item_id' => $created_item->id,
-                    'color_code' => $colorCode,
-                ]);
+            if ($item_colors && count($item_colors) > 0) {
+                foreach ($item_colors as $colorCode) {
+                    ItemWithColors::create([
+                        'item_id' => $created_item->id,
+                        'color_code' => $colorCode,
+                    ]);
+                }
             }
-
-            $insertSizes = array_map(fn($size) => [
-                'item_id' => $created_item->id,
-                'size_code' => $size,
-            ], $item_sizes);
-            ItemWithSizes::insert($insertSizes);
+            if ($item_colors && count($item_sizes) > 0) {
+                foreach ($item_sizes as $sizeCode) {
+                    ItemWithSizes::create([
+                        'item_id' => $created_item->id,
+                        'size_code' => $sizeCode,
+                    ]);
+                }
+            }
         });
 
         if ($image_files) {
@@ -337,18 +341,22 @@ class ItemController extends Controller implements HasMiddleware
             ItemWithColors::where('item_id', $item->id)->delete();
             ItemWithSizes::where('item_id', $item->id)->delete();
 
-            $insertColors = array_map(fn($color) => [
-                'item_id' => $item->id,
-                'color_code' => $color,
-            ], $item_colors);
-            ItemWithColors::insert($insertColors);
-
-
-            $insertSizes = array_map(fn($size) => [
-                'item_id' => $item->id,
-                'size_code' => $size,
-            ], $item_sizes);
-            ItemWithSizes::insert($insertSizes);
+            if ($item_colors && count($item_colors) > 0) {
+                foreach ($item_colors as $colorCode) {
+                    ItemWithColors::create([
+                        'item_id' => $item->id,
+                        'color_code' => $colorCode,
+                    ]);
+                }
+            }
+            if ($item_colors && count($item_sizes) > 0) {
+                foreach ($item_sizes as $sizeCode) {
+                    ItemWithSizes::create([
+                        'item_id' => $item->id,
+                        'size_code' => $sizeCode,
+                    ]);
+                }
+            }
         });
 
 
