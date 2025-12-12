@@ -28,7 +28,7 @@ const MyMiddleSlide: React.FC<MyMiddleSlideProps> = ({ slides, path = '' }) => {
                 {slides.map((slide) => (
                     <CarouselItem
                         key={slide.id}
-                        className="basis-1/2 cursor-pointer pl-2 transition-all duration-500 hover:scale-95 lg:basis-1/3 lg:pl-4"
+                        className="basis-1/2 cursor-pointer pl-2 transition-all duration-500 lg:basis-1/3 lg:pl-4"
                     >
                         <div>
                             {slide.link ? (

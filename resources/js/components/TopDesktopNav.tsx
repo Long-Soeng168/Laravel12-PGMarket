@@ -19,7 +19,7 @@ export function TopDesktopNav() {
         { label: t('Home'), href: '/' },
         { label: t('Products'), href: '/products' },
         { label: t('Shops'), href: '/shops' },
-         { label: t('Privacy'), href: '/privacy' },
+        { label: t('Privacy'), href: '/privacy' },
         { label: t('About'), href: '/about-us' },
         { label: t('Contact'), href: '/contact-us' },
     ];
