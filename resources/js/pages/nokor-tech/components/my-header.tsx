@@ -129,8 +129,7 @@ const MyHeader = () => {
                                     <>
                                         <Separator className="my-4" />
                                         <div className="flex flex-col gap-6 px-4 font-semibold">
-                                            <Link
-                                                prefetch
+                                            <a
                                                 href={`/settings/profile`}
                                                 className={`group hover:text-primary relative flex w-full cursor-pointer items-center`}
                                             >
@@ -139,10 +138,9 @@ const MyHeader = () => {
                                                 <span
                                                     className={`bg-primary absolute -bottom-1 left-0 h-0.5 w-0 transition-all group-hover:w-full`}
                                                 ></span>
-                                            </Link>
+                                            </a>
                                             {hasRole('Admin') && (
-                                                <Link
-                                                    prefetch
+                                                <a
                                                     href={`/dashboard`}
                                                     className={`group hover:text-primary relative flex w-full cursor-pointer items-center`}
                                                 >
@@ -151,11 +149,10 @@ const MyHeader = () => {
                                                     <span
                                                         className={`bg-primary absolute -bottom-1 left-0 h-0.5 w-0 transition-all group-hover:w-full`}
                                                     ></span>
-                                                </Link>
+                                                </a>
                                             )}
                                             {hasRole('Shop') && (
-                                                <Link
-                                                    prefetch
+                                                <a
                                                     href={`/user-dashboard`}
                                                     className={`group hover:text-primary relative flex w-full cursor-pointer items-center`}
                                                 >
@@ -163,7 +160,7 @@ const MyHeader = () => {
                                                     <span
                                                         className={`bg-primary absolute -bottom-1 left-0 h-0.5 w-0 transition-all group-hover:w-full`}
                                                     ></span>
-                                                </Link>
+                                                </a>
                                             )}
                                         </div>
                                     </>

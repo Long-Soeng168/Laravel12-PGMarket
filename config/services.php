@@ -43,4 +43,9 @@ return [
         'merchant_id' => env('PAYWAY_MERCHANT_ID'),
     ],
 
+    'apollo' => [
+        'base_url' => env('APOLLO_BASE_URL'),
+        'email' => env('APOLLO_EMAIL'),
+        'password' => env('APOLLO_PASSWORD'),
+    ],
 ];

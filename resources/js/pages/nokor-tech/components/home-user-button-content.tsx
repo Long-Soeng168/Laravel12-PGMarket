@@ -27,31 +27,31 @@ export function HomeUserButtonContent({ user }: HomeUserButtonContentProps) {
 
             <DropdownMenuGroup>
                 <DropdownMenuItem asChild>
-                    <Link className="block w-full" href={route('profile.edit')} as="button" prefetch onClick={cleanup}>
+                    <a className="block w-full" href={`/settings/profile`} onClick={cleanup}>
                         <Settings className="mr-2" />
                         {t('Settings')}
-                    </Link>
+                    </a>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                    <Link className="block w-full" href={`/user-orders`} as="button" prefetch onClick={cleanup}>
+                    <a className="block w-full" href={`/user-orders`} onClick={cleanup}>
                         <ClipboardListIcon className="mr-2" />
                         {t('Your Orders')}
-                    </Link>
+                    </a>
                 </DropdownMenuItem>
                 {hasRole('Shop') && (
                     <DropdownMenuItem asChild>
-                        <Link className="block w-full" href={`user-dashboard`} as="button" prefetch onClick={cleanup}>
+                        <a className="block w-full" href={`/user-dashboard`} onClick={cleanup}>
                             <StoreIcon className="mr-2" />
                             {t('Store Dashboard')}
-                        </Link>
+                        </a>
                     </DropdownMenuItem>
                 )}
                 {hasRole('Admin') && (
                     <DropdownMenuItem asChild>
-                        <Link className="block w-full" href={`dashboard`} as="button" prefetch onClick={cleanup}>
+                        <a className="block w-full" href={`/dashboard`} onClick={cleanup}>
                             <LayoutIcon className="mr-2" />
                             {t('Dashboard')}
-                        </Link>
+                        </a>
                     </DropdownMenuItem>
                 )}
             </DropdownMenuGroup>

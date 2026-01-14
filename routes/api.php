@@ -91,7 +91,7 @@ require __DIR__ . '/api_auth.php';
 // Route::post('/complete', '\App\Http\Controllers\PayPalController@complete');
 
 
-Route::post('/payway/purchase', [ABAPaymentController::class, 'purchase']);
+// Route::post('/payway/purchase', [ABAPaymentController::class, 'purchase']);
 
 
 use Illuminate\Support\Facades\Http;

@@ -3,6 +3,7 @@
 use App\Helpers\TelegramHelper;
 use App\Http\Controllers\ABAPaymentController;
 use App\Http\Controllers\ABAPaywayCheckout;
+use App\Http\Controllers\ApolloController;
 use App\Http\Controllers\StreamFileController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -50,6 +51,20 @@ Route::get('/queue_jobs', [QueueJobController::class, 'index']);
 Route::post('/queue_job/start', [QueueJobController::class, 'start']);
 Route::get('/queue_job/{queueJob}', [QueueJobController::class, 'show']);
 Route::post('/queue_job/{queueJob}/execute', [QueueJobController::class, 'execute']);
+
+
+// ========= Apollo Delivery =========
+Route::get('/apollo', [ApolloController::class, 'index']);
+
+Route::post('/apollo/estimate', [ApolloController::class, 'estimate']);
+Route::post('/apollo/booking', [ApolloController::class, 'store']);
+
+Route::get('/apollo/booking/{code}', [ApolloController::class, 'bookingDetail']);
+
+
+Route::get('/apollo/districts', [ApolloController::class, 'districts']);
+Route::get('/apollo/communes', [ApolloController::class, 'communes']);
+Route::get('/apollo/villages', [ApolloController::class, 'villages']);
 
 
 

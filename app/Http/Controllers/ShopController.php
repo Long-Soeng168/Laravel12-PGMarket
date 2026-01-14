@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\ImageHelper;
 use App\Models\ItemCategory;
+use App\Models\Province;
 use App\Models\Shop;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -52,7 +53,7 @@ class ShopController extends Controller implements HasMiddleware
             });
         }
 
-        $tableData = $query->paginate(perPage: 10)->onEachSide(1);
+        $tableData = $query->paginate(10)->onEachSide(1);
 
         return Inertia::render('admin/shops/Index', [
             'tableData' => $tableData,
@@ -80,7 +81,6 @@ class ShopController extends Controller implements HasMiddleware
 
         $itemCategories = ItemCategory::where('parent_code', null)->where('status', 'active')->orderBy('name')->orderBy('name')->get();
 
-        // return ($all_users);
         // return $shop->load('owner');
         return Inertia::render('admin/shops/Create', [
             'editData' => $shop->load('owner'),
@@ -96,11 +96,14 @@ class ShopController extends Controller implements HasMiddleware
             ->get();
 
         $itemCategories = ItemCategory::where('parent_code', null)->where('status', 'active')->orderBy('name')->orderBy('name')->get();
+
+        $provinces = Province::orderBy('name')->get();
         // return ($all_users);
         return Inertia::render('admin/shops/Create', [
             'editData' => $shop->load('owner', 'category'),
             'all_users' => $all_users,
             'itemCategories' => $itemCategories,
+            'provinces' => $provinces,
         ]);
     }
 
@@ -111,10 +114,14 @@ class ShopController extends Controller implements HasMiddleware
             ->get();
         $itemCategories = ItemCategory::where('parent_code', null)->where('status', 'active')->orderBy('name')->orderBy('name')->get();
 
+        $provinces = Province::orderBy('name')->get();
+
+        // return ($provinces);
         // return ($all_users);
         return Inertia::render('admin/shops/Create', [
             'all_users' => $all_users,
             'itemCategories' => $itemCategories,
+            'provinces' => $provinces,
         ]);
     }
 
@@ -126,6 +133,7 @@ class ShopController extends Controller implements HasMiddleware
         // dd($request->all());
         $validated = $request->validate([
             'category_code' => 'required|string|exists:item_categories,code',
+            'province_id' => 'required|numeric|exists:provinces,id',
             'owner_user_id' => 'required|exists:users,id',
             'name' => 'required|string|max:255',
             'address' => 'nullable|string|max:255',
@@ -138,6 +146,9 @@ class ShopController extends Controller implements HasMiddleware
             'status' => 'nullable|string|in:active,inactive',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg,webp|max:2048',
             'banner' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg,webp|max:2048',
+            'location' => 'required|string',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
         ]);
 
         $validated['created_by'] = $request->user()->id;
@@ -192,6 +203,7 @@ class ShopController extends Controller implements HasMiddleware
     {
         $validated = $request->validate([
             'category_code' => 'required|string|exists:item_categories,code',
+            'province_id' => 'required|numeric|exists:provinces,id',
             'owner_user_id' => 'required|exists:users,id',
             'name' => 'required|string|max:255',
             'address' => 'nullable|string|max:255',
@@ -204,6 +216,9 @@ class ShopController extends Controller implements HasMiddleware
             'status' => 'nullable|string|in:active,inactive,pending,reject',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg,webp|max:2048',
             'banner' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg,webp|max:2048',
+            'location' => 'required|string',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
         ]);
 
         $validated['updated_by'] = $request->user()->id;
