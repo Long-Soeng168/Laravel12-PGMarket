@@ -1,16 +1,20 @@
+import LocationPicker from '@/components/LocationPicker';
 import MyDialogCancelButton from '@/components/my-dialog-cancel-button';
 import { AutosizeTextarea } from '@/components/ui/autosize-textarea';
 import { Button } from '@/components/ui/button';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { FileInput, FileUploader, FileUploaderContent, FileUploaderItem } from '@/components/ui/file-upload';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { ProgressWithValue } from '@/components/ui/progress-with-value';
 import useTranslation from '@/hooks/use-translation';
 import AppLayout from '@/layouts/app-layout';
+import { cn } from '@/lib/utils';
 import { BreadcrumbItem } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm as inertiaUseForm, usePage } from '@inertiajs/react';
-import { CloudUpload, Loader, Paperclip } from 'lucide-react';
+import { CheckIcon, ChevronsUpDownIcon, CloudUpload, Loader, Paperclip } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -33,6 +37,10 @@ const formSchema = z.object({
     short_description_kh: z.string().max(500).optional(),
     logo: z.string().optional(),
     banner: z.string().optional(),
+    location: z.string().optional().nullable(),
+    latitude: z.number().nullable().optional(),
+    longitude: z.number().nullable().optional(),
+    province_id: z.number().nullable().optional(),
 });
 
 export default function Create({
@@ -60,7 +68,7 @@ export default function Create({
             'image/webp': ['.webp'],
         },
     };
-    const { auth } = usePage().props;
+    const { auth, provinces } = usePage<any>().props;
 
     const [finalCategorySelect, setFinalCategorySelect] = useState<any>(null);
 
@@ -82,6 +90,10 @@ export default function Create({
             owner_user_id: auth?.user?.id?.toString() || '',
             logo: '',
             banner: '',
+            location: editData?.location || '',
+            latitude: editData?.latitude ?? null,
+            longitude: editData?.longitude ?? null,
+            province_id: Number(editData?.province_id) ?? '',
         },
     });
 
@@ -106,7 +118,7 @@ export default function Create({
             if (editData?.id) {
                 post('/user-shops/' + editData?.id + '/update', {
                     preserveScroll: true,
-                    onSuccess: (page) => {
+                    onSuccess: (page: any) => {
                         setFiles(null);
                         setFilesBanner(null);
                         setFinalCategorySelect(null);
@@ -125,7 +137,7 @@ export default function Create({
             } else {
                 post('/user-shops', {
                     preserveScroll: true,
-                    onSuccess: (page) => {
+                    onSuccess: (page: any) => {
                         form.reset();
                         setFiles(null);
                         setFilesBanner(null);
@@ -207,7 +219,7 @@ export default function Create({
                                 )}
                             />
                         </div>
-                        <div className="col-span-12">
+                        {/* <div className="col-span-12">
                             <FormField
                                 control={form.control}
                                 name="address"
@@ -223,8 +235,8 @@ export default function Create({
                                     </FormItem>
                                 )}
                             />
-                        </div>
-                        <div className="col-span-12">
+                        </div> */}
+                        <div className="col-span-12 mt-4">
                             <FormField
                                 control={form.control}
                                 name="bank_account"
@@ -302,7 +314,7 @@ export default function Create({
                                                     <span className="font-semibold">{t('Click to upload')}</span>
                                                     &nbsp; {t('or drag and drop')}
                                                 </p>
-                                                <p className="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF</p>
+                                                <p className="hidden text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF</p>
                                             </div>
                                         </FileInput>
                                         <FileUploaderContent>
@@ -359,7 +371,7 @@ export default function Create({
                                                     <span className="font-semibold">{t('Click to upload')}</span>
                                                     &nbsp; {t('or drag and drop')}
                                                 </p>
-                                                <p className="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF</p>
+                                                <p className="hidden text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF</p>
                                             </div>
                                         </FileInput>
                                         <FileUploaderContent>
@@ -423,6 +435,125 @@ export default function Create({
                             </FormItem>
                         </div>
                     )}
+
+                    <div className="col-span-12 space-y-4">
+                        <LocationPicker
+                            key={'location_picker_key' + (form.getValues('location') || editData?.location || '')}
+                            value={
+                                editData?.latitude != null && editData?.longitude != null
+                                    ? {
+                                          coordinates: {
+                                              lat: Number(editData.latitude),
+                                              lng: Number(editData.longitude),
+                                          },
+                                          formatted_address: editData?.location || '',
+                                      }
+                                    : form.getValues('latitude') != null && form.getValues('longitude') != null
+                                      ? {
+                                            coordinates: {
+                                                lat: Number(form.getValues('latitude')),
+                                                lng: Number(form.getValues('longitude')),
+                                            },
+                                            formatted_address: form.getValues('location') || '',
+                                        }
+                                      : null
+                            }
+                            onChange={(loc: any) => {
+                                // loc?.coordinates?.lat, loc?.coordinates?.lng, loc?.formatted_address
+                                form.setValue('latitude', loc?.coordinates?.lat ?? null);
+                                form.setValue('longitude', loc?.coordinates?.lng ?? null);
+                                form.setValue('location', loc?.formatted_address ?? '');
+                            }}
+                            label={t('Pick a location')}
+                            height="300px"
+                        />
+                        <FormMessage>{errors.location && <div>{errors.location}</div>}</FormMessage>
+
+                        <div className="grid gap-4 md:grid-cols-12">
+                            <div className="col-span-6">
+                                <FormField
+                                    control={form.control}
+                                    name="province_id"
+                                    render={({ field }) => (
+                                        <FormItem className="flex flex-col">
+                                            <FormLabel>{t('Province')}</FormLabel>
+
+                                            <Popover>
+                                                <PopoverTrigger asChild>
+                                                    <FormControl>
+                                                        <Button
+                                                            variant="outline"
+                                                            role="combobox"
+                                                            className={cn('w-full justify-between', !field.value && 'text-muted-foreground')}
+                                                        >
+                                                            {field.value
+                                                                ? provinces.find((p: any) => p.id == Number(field.value))?.khmer_name +
+                                                                  ' (' +
+                                                                  provinces.find((p: any) => p.id == Number(field.value))?.name +
+                                                                  ')'
+                                                                : t('Select province')}
+                                                            <ChevronsUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                                        </Button>
+                                                    </FormControl>
+                                                </PopoverTrigger>
+
+                                                <PopoverContent className="w-[350px] p-0">
+                                                    <Command>
+                                                        <CommandInput placeholder={t('Search province')} />
+                                                        <CommandList>
+                                                            <CommandEmpty>{t('No data')}</CommandEmpty>
+                                                            <CommandGroup>
+                                                                <CommandItem value="" onSelect={() => form.setValue('province_id', null)}>
+                                                                    <CheckIcon
+                                                                        className={cn('mr-2 h-4 w-4', !field.value ? 'opacity-100' : 'opacity-0')}
+                                                                    />
+                                                                    {t('Select')}
+                                                                </CommandItem>
+
+                                                                {provinces.map((province: any) => (
+                                                                    <CommandItem
+                                                                        key={province.id}
+                                                                        value={`${province.name} ${province.khmer_name}`}
+                                                                        onSelect={() => form.setValue('province_id', province.id)}
+                                                                    >
+                                                                        <CheckIcon
+                                                                            className={cn(
+                                                                                'mr-2 h-4 w-4',
+                                                                                province.id === Number(field.value) ? 'opacity-100' : 'opacity-0',
+                                                                            )}
+                                                                        />
+                                                                        {province.khmer_name} ({province.name})
+                                                                    </CommandItem>
+                                                                ))}
+                                                            </CommandGroup>
+                                                        </CommandList>
+                                                    </Command>
+                                                </PopoverContent>
+                                            </Popover>
+
+                                            <FormMessage>{errors.province_id && <div>{errors.province_id}</div>}</FormMessage>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+                            <div className="col-span-6">
+                                <FormField
+                                    control={form.control}
+                                    name="address"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>{t('Address')}</FormLabel>
+                                            <FormControl>
+                                                <Input className="h-10" placeholder={t('Address')} type="text" {...field} />
+                                            </FormControl>
+                                            <FormMessage>{errors.address && <div>{errors.address}</div>}</FormMessage>
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+                        </div>
+                    </div>
 
                     {progress && <ProgressWithValue value={progress.percentage} position="start" />}
                     {setIsOpen && <MyDialogCancelButton onClick={() => setIsOpen(false)} />}

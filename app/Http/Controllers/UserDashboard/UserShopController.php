@@ -5,6 +5,7 @@ namespace App\Http\Controllers\UserDashboard;
 use App\Helpers\ImageHelper;
 use App\Http\Controllers\Controller;
 use App\Models\ItemCategory;
+use App\Models\Province;
 use App\Models\Shop;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -33,10 +34,13 @@ class UserShopController extends Controller implements HasMiddleware
         }
         $itemCategories = ItemCategory::where('parent_code', null)->where('status', 'active')->orderBy('name')->orderBy('name')->get();
 
-        // return ($all_users);
+        $provinces = Province::orderBy('name')->get();
+
+
         return Inertia::render('user-dashboard/shops/Create', [
             'editData' => $user_shop->load('owner', 'category'),
             'itemCategories' => $itemCategories,
+            'provinces' => $provinces,
         ]);
     }
     public function create()
@@ -48,9 +52,12 @@ class UserShopController extends Controller implements HasMiddleware
 
         $itemCategories = ItemCategory::where('parent_code', null)->where('status', 'active')->orderBy('name')->orderBy('name')->get();
 
+        $provinces = Province::orderBy('name')->get();
+
         // return ($all_users);
         return Inertia::render('user-dashboard/shops/Create', [
             'itemCategories' => $itemCategories,
+            'provinces' => $provinces,
         ]);
     }
 
@@ -69,6 +76,10 @@ class UserShopController extends Controller implements HasMiddleware
             'status' => 'nullable|string|in:active,inactive,pending,reject',
             'logo' => 'required|image|mimes:jpeg,png,jpg,gif,webp,svg,webp|max:2048',
             'banner' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg,webp|max:2048',
+            'province_id' => 'required|numeric|exists:provinces,id',
+            'location' => 'required|string',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
         ]);
 
         $user_shop = Shop::find(Auth::user()->shop_id);
@@ -145,6 +156,10 @@ class UserShopController extends Controller implements HasMiddleware
             'status' => 'nullable|string|in:active,inactive,pending,reject',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg,webp|max:2048',
             'banner' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg,webp|max:2048',
+            'province_id' => 'required|numeric|exists:provinces,id',
+            'location' => 'required|string',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
         ]);
 
         $validated['updated_by'] = $request->user()->id;

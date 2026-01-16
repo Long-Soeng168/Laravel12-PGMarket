@@ -1,22 +1,19 @@
 import DeleteButton from '@/components/delete-button';
 import { AutosizeTextarea } from '@/components/ui/autosize-textarea';
 import { Button } from '@/components/ui/button';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { FileInput, FileUploader, FileUploaderContent, FileUploaderItem } from '@/components/ui/file-upload';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { ProgressWithValue } from '@/components/ui/progress-with-value';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import useTranslation from '@/hooks/use-translation';
 import AppLayout from '@/layouts/app-layout';
-import { cn } from '@/lib/utils';
 import BrandSelect from '@/pages/admin/items/components/brand-select';
 import CategorySelect from '@/pages/admin/items/components/category-select';
 import { BreadcrumbItem } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm as inertiaUseForm, usePage } from '@inertiajs/react';
-import { Check, ChevronsUpDown, CloudUpload, Loader } from 'lucide-react';
+import { CloudUpload, Loader } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -44,6 +41,7 @@ const formSchema = z.object({
     name: z.string().min(1).max(255),
     short_description: z.string().optional(),
     price: z.string().optional(),
+    weight_kg: z.string().optional(),
     code: z.string().max(255).optional(),
     link: z.string().max(255).optional(),
     status: z.string().optional(),
@@ -106,6 +104,7 @@ export default function Create() {
             name: editData?.name || '',
             code: editData?.code || '',
             price: editData?.price?.toString() || '',
+            weight_kg: editData?.weight_kg?.toString() || '',
             short_description: editData?.short_description || '',
             link: editData?.link || '',
             status: editData?.status || 'active',
@@ -209,7 +208,24 @@ export default function Create() {
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 p-5">
                     <div className="grid grid-cols-12 gap-8">
-                        <div className="col-span-4">
+                        <div className="col-span-12">
+                            <FormField
+                                control={form.control}
+                                name="name"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>{t('Name')}</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder={t('Name')} type="text" {...field} />
+                                        </FormControl>
+                                        <FormMessage>{errors.name && <div>{errors.name}</div>}</FormMessage>
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-12 gap-8">
+                        <div className="col-span-6">
                             <FormField
                                 control={form.control}
                                 name="price"
@@ -224,7 +240,22 @@ export default function Create() {
                                 )}
                             />
                         </div>
-                        <div className="col-span-4">
+                        <div className="col-span-6">
+                            <FormField
+                                control={form.control}
+                                name="weight_kg"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>{t('Estimate Weight (kg)')}</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder={t('Weight (kg)')} type="number" {...field} />
+                                        </FormControl>
+                                        <FormMessage>{errors.weight_kg && <div>{errors.weight_kg}</div>}</FormMessage>
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                        <div className="col-span-6">
                             <FormField
                                 control={form.control}
                                 name="code"
@@ -240,7 +271,7 @@ export default function Create() {
                                 )}
                             />
                         </div>
-                        <div className="col-span-4">
+                        <div className="col-span-6">
                             <FormField
                                 control={form.control}
                                 name="status"
@@ -259,23 +290,6 @@ export default function Create() {
                                             </SelectContent>
                                         </Select>
                                         <FormMessage>{errors.status && <div>{errors.status}</div>}</FormMessage>
-                                    </FormItem>
-                                )}
-                            />
-                        </div>
-                    </div>
-                    <div className="grid grid-cols-12 gap-8">
-                        <div className="col-span-12">
-                            <FormField
-                                control={form.control}
-                                name="name"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>{t('Name')}</FormLabel>
-                                        <FormControl>
-                                            <Input placeholder={t('Name')} type="text" {...field} />
-                                        </FormControl>
-                                        <FormMessage>{errors.name && <div>{errors.name}</div>}</FormMessage>
                                     </FormItem>
                                 )}
                             />
@@ -333,7 +347,7 @@ export default function Create() {
                                                     <span className="font-semibold">{t('Click to upload')}</span>
                                                     &nbsp; or drag and drop
                                                 </p>
-                                                <p className="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF</p>
+                                                <p className="hidden text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF</p>
                                             </div>
                                         </FileInput>
                                         <FileUploaderContent className="grid w-full grid-cols-3 gap-2 rounded-md lg:grid-cols-6">

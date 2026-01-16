@@ -385,7 +385,7 @@ export default function Create({
                                                  <span className="font-semibold">{t('Click to upload')}</span>
                                                 &nbsp; {t('or drag and drop')}
                                             </p>
-                                            <p className="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF</p>
+                                            <p className="hidden text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF</p>
                                         </div>
                                     </FileInput>
                                     <FileUploaderContent>
@@ -442,7 +442,7 @@ export default function Create({
                                                  <span className="font-semibold">{t('Click to upload')}</span>
                                                 &nbsp; {t('or drag and drop')}
                                             </p>
-                                            <p className="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF</p>
+                                            <p className="hidden text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF</p>
                                         </div>
                                     </FileInput>
                                     <FileUploaderContent>

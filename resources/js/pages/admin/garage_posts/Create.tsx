@@ -544,7 +544,7 @@ export default function Create() {
                                                     <span className="font-semibold">{t('Click to upload')}</span>
                                                     &nbsp; or drag and drop
                                                 </p>
-                                                <p className="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF</p>
+                                                <p className="hidden text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF</p>
                                             </div>
                                         </FileInput>
                                         <FileUploaderContent className="grid w-full grid-cols-3 gap-2 rounded-md lg:grid-cols-6">

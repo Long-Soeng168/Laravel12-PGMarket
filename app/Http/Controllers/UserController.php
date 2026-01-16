@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\ImageHelper;
+use App\Models\Province;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -50,8 +51,12 @@ class UserController extends Controller implements HasMiddleware
 
         $tableData = $query->paginate(perPage: 10)->onEachSide(1);
 
+        $provinces = Province::orderBy('name')->get();
+
+
         return Inertia::render('admin/users/Index', [
             'tableData' => $tableData,
+            'provinces' => $provinces,
         ]);
     }
 
@@ -64,10 +69,11 @@ class UserController extends Controller implements HasMiddleware
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email',
             'password' => 'required|string|min:6|max:255|confirmed', // Laravel auto-validates against confirm_password
-            'phone' => 'nullable|numeric',
+            'phone' => 'required|string|regex:/^[0-9]{8,15}$/|unique:users,phone',
             'gender' => 'nullable|string|in:male,female,other',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg,webp|max:2048',
-            'roles' => 'nullable|array'
+            'roles' => 'nullable|array',
+            'province_id' => 'nullable|numeric|exists:provinces,id',
         ]);
         // dd($validated );
 
@@ -123,10 +129,11 @@ class UserController extends Controller implements HasMiddleware
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'password' => 'nullable|string|min:6|max:255|confirmed', // Laravel auto-validates against confirm_password
-            'phone' => 'nullable|numeric',
+            'phone' => 'required|string|regex:/^[0-9]{8,15}$/|unique:users,phone, ' . $user->id,
             'gender' => 'nullable|string|in:male,female,other',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg,webp|max:2048',
-            'roles' => 'nullable|array'
+            'roles' => 'nullable|array',
+            'province_id' => 'nullable|numeric|exists:provinces,id',
         ]);
 
         try {

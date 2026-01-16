@@ -133,7 +133,6 @@ class ShopController extends Controller implements HasMiddleware
         // dd($request->all());
         $validated = $request->validate([
             'category_code' => 'required|string|exists:item_categories,code',
-            'province_id' => 'required|numeric|exists:provinces,id',
             'owner_user_id' => 'required|exists:users,id',
             'name' => 'required|string|max:255',
             'address' => 'nullable|string|max:255',
@@ -146,6 +145,7 @@ class ShopController extends Controller implements HasMiddleware
             'status' => 'nullable|string|in:active,inactive',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg,webp|max:2048',
             'banner' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg,webp|max:2048',
+            'province_id' => 'required|numeric|exists:provinces,id',
             'location' => 'required|string',
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',

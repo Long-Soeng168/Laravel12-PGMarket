@@ -1,18 +1,21 @@
 import MyDialogCancelButton from '@/components/my-dialog-cancel-button';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { FileInput, FileUploader, FileUploaderContent, FileUploaderItem } from '@/components/ui/file-upload';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { PasswordInput } from '@/components/ui/password-input';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { ProgressWithValue } from '@/components/ui/progress-with-value';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import useTranslation from '@/hooks/use-translation';
+import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm as inertiaUseForm } from '@inertiajs/react';
+import { useForm as inertiaUseForm, usePage } from '@inertiajs/react';
 import axios from 'axios';
-import { CloudUpload, Loader, Paperclip } from 'lucide-react';
+import { CheckIcon, ChevronsUpDown, CloudUpload, Loader, Paperclip } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -27,6 +30,7 @@ const formSchema = z.object({
     password_confirmation: z.string().max(255).optional(),
     image: z.string().optional(),
     roles: z.array(z.string()).optional(),
+    province_id: z.any().nullable().optional(),
 });
 
 export default function Create({
@@ -65,6 +69,7 @@ export default function Create({
             password_confirmation: '',
             image: '',
             roles: editData?.roles?.map((r: any) => r.name) || [],
+            province_id: Number(editData?.province_id) ?? '',
         },
     });
 
@@ -90,6 +95,7 @@ export default function Create({
             });
     }
 
+    const { provinces } = usePage<any>().props;
     const { post, data, progress, processing, transform, errors } = inertiaUseForm();
 
     function onSubmit(values: z.infer<typeof formSchema>) {
@@ -106,7 +112,7 @@ export default function Create({
             if (editData?.id) {
                 post('/admin/users/' + editData.id + '/update', {
                     preserveScroll: true,
-                    onSuccess: (page) => {
+                    onSuccess: (page: any) => {
                         setFiles(null);
                         if (page.props.flash?.success) {
                             toast.success('Success', {
@@ -123,7 +129,7 @@ export default function Create({
             } else {
                 post('/admin/users', {
                     preserveScroll: true,
-                    onSuccess: (page) => {
+                    onSuccess: (page: any) => {
                         form.reset();
                         setFiles(null);
                         if (page.props.flash?.success) {
@@ -151,7 +157,7 @@ export default function Create({
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 pt-10">
-                <div className="grid md:grid-cols-12 gap-4">
+                <div className="grid gap-4 md:grid-cols-12">
                     <div className="col-span-6">
                         <FormField
                             control={form.control}
@@ -160,7 +166,7 @@ export default function Create({
                                 <FormItem>
                                     <FormLabel>{t('Name')}</FormLabel>
                                     <FormControl>
-                                        <Input placeholder={t("Name")} type="text" {...field} />
+                                        <Input placeholder={t('Name')} type="text" {...field} />
                                     </FormControl>
                                     <FormMessage>{errors.name && <div>{errors.name}</div>}</FormMessage>
                                 </FormItem>
@@ -285,6 +291,72 @@ export default function Create({
                     </div>
                 )}
 
+                <div className="col-span-6">
+                    <FormField
+                        control={form.control}
+                        name="province_id"
+                        render={({ field }) => (
+                            <FormItem className="flex flex-col">
+                                <FormLabel>{t('Province')}</FormLabel>
+
+                                <Popover>
+                                    <PopoverTrigger asChild>
+                                        <FormControl>
+                                            <Button
+                                                variant="outline"
+                                                role="combobox"
+                                                className={cn('w-full justify-between', !field.value && 'text-muted-foreground')}
+                                            >
+                                                {field.value
+                                                    ? provinces.find((p: any) => p.id == Number(field.value))?.khmer_name +
+                                                      ' (' +
+                                                      provinces.find((p: any) => p.id == Number(field.value))?.name +
+                                                      ')'
+                                                    : t('Select province')}
+                                                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                            </Button>
+                                        </FormControl>
+                                    </PopoverTrigger>
+
+                                    <PopoverContent className="w-[350px] p-0">
+                                        <Command>
+                                            <CommandInput placeholder={t('Search province')} />
+                                            <CommandList>
+                                                <CommandEmpty>{t('No data')}</CommandEmpty>
+                                                <CommandGroup>
+                                                    <CommandItem value="" onSelect={() => form.setValue('province_id', null)}>
+                                                        <CheckIcon className={cn('mr-2 h-4 w-4', !field.value ? 'opacity-100' : 'opacity-0')} />
+                                                        {t('Select')}
+                                                    </CommandItem>
+
+                                                    {provinces.map((province: any) => (
+                                                        <CommandItem
+                                                            key={province.id}
+                                                            value={`${province.name} ${province.khmer_name}`}
+                                                            onSelect={() => form.setValue('province_id', province.id || '')}
+                                                        >
+                                                            <CheckIcon
+                                                                className={cn(
+                                                                    'mr-2 h-4 w-4',
+                                                                    province.id === Number(field.value) ? 'opacity-100' : 'opacity-0',
+                                                                )}
+                                                            />
+                                                            {province.khmer_name} ({province.name})
+                                                        </CommandItem>
+                                                    ))}
+                                                </CommandGroup>
+                                            </CommandList>
+                                        </Command>
+                                    </PopoverContent>
+                                </Popover>
+
+                                <FormMessage>{errors.province_id && <div>{errors.province_id}</div>}</FormMessage>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </div>
+
                 <FormField
                     control={form.control}
                     name="image"
@@ -302,10 +374,10 @@ export default function Create({
                                         <div className="flex w-full flex-col items-center justify-center p-8">
                                             <CloudUpload className="h-10 w-10 text-gray-500" />
                                             <p className="mb-1 text-sm text-gray-500 dark:text-gray-400">
-                                                 <span className="font-semibold">{t('Click to upload')}</span>
+                                                <span className="font-semibold">{t('Click to upload')}</span>
                                                 &nbsp; {t('or drag and drop')}
                                             </p>
-                                            <p className="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF</p>
+                                            <p className="hidden text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF</p>
                                         </div>
                                     </FileInput>
                                     <FileUploaderContent>
