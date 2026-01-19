@@ -180,6 +180,7 @@ class UserController extends Controller implements HasMiddleware
             return redirect()->back()->with('error', 'Failed to create user: ' . $e->getMessage());
         }
     }
+   
 
     /**
      * Remove the specified resource from storage.

@@ -53,6 +53,28 @@ class ProfileController extends Controller
         return to_route('profile.edit');
     }
 
+    public function updateUserInfoForDelivery(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
+            'phone' => 'required|string|regex:/^[0-9]{8,15}$/|unique:users,phone, ' . $request->user()->id,
+            'province_id' => 'required|numeric|exists:provinces,id',
+        ]);
+
+        try {
+            // Add updater
+            $validated['updated_by'] = $request->user()->id;
+
+
+            // Create the user
+            $request->user()->update($validated);
+
+            return redirect()->back()->with('success', 'User updated successfully!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to update user: ' . $e->getMessage());
+        }
+    }
 
     /**
      * Delete the user's account.

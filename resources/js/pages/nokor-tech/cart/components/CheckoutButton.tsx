@@ -6,9 +6,9 @@ import { ChevronRight } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
-const CheckoutButton = () => {
+const CheckoutButton = ({ shipping_price }: { shipping_price: number }) => {
     // console.log(usePage<any>().props);
-    const { req_time, shipping, currency, paymentOption, tran_id } = usePage<any>().props;
+    const { req_time, currency, paymentOption, tran_id } = usePage<any>().props;
 
     const [error, setError] = useState('');
 
@@ -16,7 +16,7 @@ const CheckoutButton = () => {
 
     const [isLoading, setIsLoading] = useState(false);
 
-    const { cartItems, clearCart } = useCart();
+    const { cartItems, clearCart, getTotalWeightKg } = useCart();
     const cartItemsSubmit =
         cartItems?.map((item: any) => {
             const itemPrice = parseFloat(item.price);
@@ -42,12 +42,13 @@ const CheckoutButton = () => {
         const orderData = {
             shop_id: cartItems[0]?.shop_id || null,
             note: '',
-            total_amount: Number(total_amount) + Number(shipping),
+            total_amount: Number(total_amount) + Number(shipping_price),
             payment_method: paymentOption,
             currency: currency,
             tran_id: tran_id,
             req_time: req_time,
-            shipping_price: shipping,
+            shipping_price: shipping_price,
+            total_weight: getTotalWeightKg(),
             shipping_lat: 0.0,
             shipping_lng: 0.0,
             items: cartItemsSubmit,
@@ -90,7 +91,7 @@ const CheckoutButton = () => {
                     }}
                     className="transistion rainbow-btn relative inline-flex h-12 w-full overflow-hidden rounded-[12px] p-[3px] duration-300 hover:scale-105 focus:outline-none active:scale-95"
                 >
-                    <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#fff_0%,#f472b6_90%,#bd5fff_100%)]"></span>
+                    {/* <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#fff_0%,#f472b6_90%,#bd5fff_100%)]"></span> */}
                     <span className="undefined bg-true-primary inline-flex h-full w-full cursor-pointer items-center justify-center gap-2 rounded-lg px-7 text-sm font-medium text-white backdrop-blur-3xl">
                         <div className="flex w-full items-center justify-between">
                             <div className="flex-1 font-semibold">{t('Checkout')}</div>

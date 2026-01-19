@@ -102,6 +102,7 @@ class OrderController extends Controller implements HasMiddleware
             'req_time'       => 'nullable|string',
             'currency'       => 'nullable|string',
             'shipping_price' => 'nullable|numeric',
+            'total_weight' => 'nullable|numeric',
             'shipping_lat' => 'nullable|numeric',
             'shipping_lng' => 'nullable|numeric',
             'items'      => 'required|array',
@@ -141,7 +142,8 @@ class OrderController extends Controller implements HasMiddleware
                 'shop_id' => $validated['shop_id'],
                 'user_id' => $request->user()->id ?? null,
 
-                'shipping_price' => (float) env('SHIPPING_PRICE') ?? null,
+                'shipping_price' => $request->shipping_price ??  (float) env('SHIPPING_PRICE') ?? null,
+                'total_weight' => $request->total_weight ?? 0,
                 'shipping_address' => $request->user()?->address ?? 'N/A',
                 'shipping_lat' => $validated['shipping_lat'] ?? null,
                 'shipping_lng' => $validated['shipping_lng'] ?? null,

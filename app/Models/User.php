@@ -33,6 +33,7 @@ class User extends Authenticatable
         'status',
         'created_by',
         'updated_by',
+        'address',
         'province_id',
     ];
 

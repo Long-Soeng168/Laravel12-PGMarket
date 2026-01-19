@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use App\Models\Province;
 use App\Models\Shop;
 use App\Services\ApolloService;
@@ -10,6 +11,77 @@ use Inertia\Inertia;
 
 class ApolloController extends Controller
 {
+    public function createBookingFromOrder(int $orderId): string
+    {
+        $order = Order::with(['shop', 'user'])->findOrFail($orderId);
+
+        if ($order->apollo_parcel_code) {
+            return $order->apollo_parcel_code;
+        }
+
+        if (!$order->total_weight || $order->total_weight <= 0) {
+            throw new \Exception('Order weight is invalid');
+        }
+
+        $shop = $order->shop;
+        $user = $order->user;
+
+        $payload = [
+            'book_datetime' => now()->format('Y-m-d H:i:s'),
+
+            /* ---------- SENDER ---------- */
+            'sender_name' => $shop->name,
+            'sender_phone' => $shop->phone,
+            'sender_address' => $shop->address,
+            'sender_latitude' => $shop->latitude ?? null,
+            'sender_longitude' => $shop->longitude ?? null,
+            'sender_province_id' => $shop->province_id,
+            'sender_district_id' => null,
+            'sender_commune_id' => null,
+            'sender_village_id' => null,
+
+            'delivery_fee' => (float) $order->shipping_price,
+            'service_type' => 'same_day',
+
+            /* ---------- PARCEL ---------- */
+            'parcel' => [
+                'client_reference' => $order->order_number,
+                'fee_payer' => 'sender',
+                'parcel_uom_qty' => 1,
+                'parcel_weight' => (float) $order->total_weight,
+
+                /* ---------- RECEIVER ---------- */
+                'receiver_name' => $user->name,
+                'receiver_phone' => $user->phone,
+                'receiver_address' => $user->address,
+                'receiver_province_id' => $user->province_id,
+                'receiver_district_id' => null,
+                'receiver_commune_id' => null,
+                'receiver_village_id' => null,
+
+                'receiver_latitude' => null,
+                'receiver_longitude' => null,
+
+                'note' => $order->note ?? '',
+            ],
+        ];
+
+        $apollo = app(ApolloService::class);
+        $response = $apollo->createBooking($payload);
+
+        if (!($response['success'] ?? false)) {
+            return false;
+            // throw new \Exception($response['message'] ?? 'Apollo booking failed');
+        }
+
+        $order->update([
+            'apollo_parcel_code' => $response['data']['parcel_code'],
+        ]);
+
+        // return $response['data']['parcel_code'];
+        return true;
+    }
+
     public function index(ApolloService $apollo)
     {
         $provinces = Province::orderBy('name')->get();

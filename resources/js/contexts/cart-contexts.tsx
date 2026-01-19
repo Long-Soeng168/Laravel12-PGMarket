@@ -101,6 +101,14 @@ export function CartProvider({ children }) {
         return state.cartItems.length; // Access length directly, not as a method
     };
 
+    const getTotalWeightKg = () => {
+        return state.cartItems.reduce((total, item) => {
+            const weight = Number(item.weight_kg) || 0;
+            const qty = Number(item.cartQuantity) || 0;
+            return total + weight * qty;
+        }, 0);
+    };
+
     return (
         <CartContext.Provider
             value={{
@@ -110,6 +118,7 @@ export function CartProvider({ children }) {
                 clearCart,
                 handleQuantityChange,
                 getTotalItemCount,
+                getTotalWeightKg,
             }}
         >
             {children}

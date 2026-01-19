@@ -4,15 +4,44 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { useCart } from '@/contexts/cart-contexts';
 import useTranslation from '@/hooks/use-translation';
 import { usePage } from '@inertiajs/react';
-import { Minus, Plus, Trash2 } from 'lucide-react';
+import axios from 'axios';
+import { Loader2Icon, Minus, Plus, Trash2 } from 'lucide-react';
+import { useState } from 'react';
 import CheckoutButton from './CheckoutButton';
 import ClearCartButton from './ClearCartButton';
+import UpdateUserAddress from './UpdateUserAddress';
 
 const CartItemList = () => {
-    const { cartItems, handleQuantityChange, removeFromCart } = useCart();
-    const { shipping } = usePage().props;
+    const { cartItems, handleQuantityChange, removeFromCart, getTotalWeightKg } = useCart();
+    const { auth } = usePage().props;
+
+    const [senderProvince, setSenderProvince] = useState(cartItems[0]?.shop?.province_id || '0');
+    const [receiverProvince, setReceiverProvince] = useState(auth?.user?.province_id || '0');
+    const [serviceType, setServiceType] = useState('same_day');
+    const [deliveryFee, setDeliveryFee] = useState(0);
+    const [loading, setLoading] = useState(false);
+
+    const estimateFee = async () => {
+        if (!senderProvince || !receiverProvince) return alert('Select sender and receiver provinces!');
+        setLoading(true);
+        const weight = getTotalWeightKg();
+        try {
+            const res = await axios.post('/apollo/estimate', {
+                sender_province_id: senderProvince,
+                receiver_province_id: receiverProvince,
+                weight,
+                service_type: serviceType,
+            });
+            setDeliveryFee(res.data.delivery_fee_usd);
+        } catch (e) {
+            alert('Failed to estimate fee.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.cartQuantity, 0);
-    const total = Number(subtotal) + Number(shipping);
+    const total = Number(subtotal) + Number(deliveryFee || 0);
 
     const { t } = useTranslation();
     return (
@@ -26,6 +55,21 @@ const CartItemList = () => {
                             <p className="text-muted-foreground">
                                 {cartItems.length} {t('items in your cart')}
                             </p>
+                            <p>Weight: {getTotalWeightKg()} kg</p>
+                            <p>receiver_name: {auth?.user?.name || '---'}</p>
+                            <p>receiver_phone: {auth?.user?.phone || '---'}</p>
+                            <p>receiver_address: {auth?.user?.address || '---'}</p>
+                            <p>receiver_province_id: {auth?.user?.province_id || '---'}</p>
+                            <p>Seller Name: {cartItems[0]?.shop?.name || '---'}</p>
+                            <p>Seller Province: {cartItems[0]?.shop?.province_id || '---'}</p>
+                            <p>Seller longitude: {cartItems[0]?.shop?.longitude || '---'}</p>
+                            <p>Seller latitude: {cartItems[0]?.shop?.latitude || '---'}</p>
+                            <p>Seller address: {cartItems[0]?.shop?.address || '---'}</p>
+                            <p>Seller phone: {cartItems[0]?.shop?.phone || '---'}</p>
+                            <p>service_type: {'same_day'}</p>
+                            <p>fee_payer: {'sender'}</p>
+                            <p>----</p>
+                            <p>Delivery Fee Caculated: {deliveryFee}</p>
                         </div>
 
                         <div className="space-y-4">
@@ -54,18 +98,39 @@ const CartItemList = () => {
                                                             {item.color} • {item.size}
                                                         </p> */}
                                                         </div>
-                                                        <Button variant="ghost" size="icon" onClick={() => removeFromCart(item)}>
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="icon"
+                                                            onClick={() => {
+                                                                setDeliveryFee(0);
+                                                                removeFromCart(item);
+                                                            }}
+                                                        >
                                                             <Trash2 className="stroke-destructive h-4 w-4" />
                                                         </Button>
                                                     </div>
 
                                                     <div className="mt-4 flex items-center justify-between">
                                                         <div className="flex items-center gap-2">
-                                                            <Button variant="outline" size="icon" onClick={() => handleQuantityChange(item?.id, -1)}>
+                                                            <Button
+                                                                variant="outline"
+                                                                size="icon"
+                                                                onClick={() => {
+                                                                    setDeliveryFee(0);
+                                                                    handleQuantityChange(item?.id, -1);
+                                                                }}
+                                                            >
                                                                 <Minus className="h-4 w-4" />
                                                             </Button>
                                                             <span className="w-8 text-center">{item.cartQuantity}</span>
-                                                            <Button variant="outline" size="icon" onClick={() => handleQuantityChange(item?.id, +1)}>
+                                                            <Button
+                                                                variant="outline"
+                                                                size="icon"
+                                                                onClick={() => {
+                                                                    setDeliveryFee(0);
+                                                                    handleQuantityChange(item?.id, +1);
+                                                                }}
+                                                            >
                                                                 <Plus className="h-4 w-4" />
                                                             </Button>
                                                         </div>
@@ -110,7 +175,7 @@ const CartItemList = () => {
                                     </div>
                                     <div className="flex justify-between text-sm">
                                         <span>{t('Shipping')}</span>
-                                        <span>${shipping.toFixed(2)}</span>
+                                        <span>${deliveryFee.toFixed(2)}</span>
                                     </div>
                                     <div className="flex justify-between font-medium">
                                         <span>{t('Total')}</span>
@@ -119,7 +184,20 @@ const CartItemList = () => {
                                 </div>
 
                                 {/* Checkout Button */}
-                                <CheckoutButton />
+
+                                <UpdateUserAddress />
+                                {deliveryFee > 0 && total > 0 ? (
+                                    <CheckoutButton shipping_price={deliveryFee} />
+                                ) : (
+                                    <Button
+                                        onClick={() => estimateFee()}
+                                        disabled={loading || total == 0}
+                                        className="flex w-full bg-green-600 text-white hover:bg-green-600/90"
+                                    >
+                                        {loading && <Loader2Icon className="animate-spin" />}
+                                        Estimate Shipping Price
+                                    </Button>
+                                )}
                             </CardContent>
                         </Card>
                     </div>

@@ -195,7 +195,7 @@ const MyTableData = () => {
                                     )}
                                 </TableCell> */}
                                 <TableCell>
-                                    <Link className="hover:underline" href={`/admin/shops/${item.shop_id}`}>
+                                    <Link className="hover:underline" href={`/admin/shops/${item.shop_id}/edit`}>
                                         <Badge variant="outline" className="hover:underline">
                                             {item.shop?.name || '---'}
                                         </Badge>

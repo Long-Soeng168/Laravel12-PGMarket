@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\TelegramHelper;
 use App\Jobs\ProcessQueueJob;
 use App\Models\Order;
+use App\Models\Province;
 use App\Models\QueueJob;
 use App\Services\PayWayService;
 use Illuminate\Http\Request;
@@ -47,6 +48,7 @@ class ABAPaywayCheckout extends Controller
         // $hash = $this->payWayService->getHash($hashString);
 
         // dd($merchant_id);
+        $provinces = Province::orderBy('khmer_name')->get();
         return Inertia::render("nokor-tech/cart/ShoppingCart", [
             'req_time' => $req_time,
             'shipping' => (float) env('SHIPPING_PRICE'),
@@ -54,6 +56,7 @@ class ABAPaywayCheckout extends Controller
             'paymentOption' => "abapay_khqr",
             'merchant_id' => $merchant_id,
             'tran_id' => $tran_id,
+            'provinces' => $provinces,
             'app_url' => config('app.url'),
             'api_url' => config('payway.api_url'), // Assuming this is defined elsewhere
         ]);
@@ -98,6 +101,8 @@ class ABAPaywayCheckout extends Controller
     {
         // return $request->all();
         $order = Order::where('tran_id', $request->tran_id)->firstOrFail();
+
+        return $order;
 
         $req_time   = $order->req_time; // UTC format from DB
         $merchantId = config('payway.merchant_id');
