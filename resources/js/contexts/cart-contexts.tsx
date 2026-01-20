@@ -102,11 +102,14 @@ export function CartProvider({ children }) {
     };
 
     const getTotalWeightKg = () => {
-        return state.cartItems.reduce((total, item) => {
-            const weight = Number(item.weight_kg) || 0;
+        const total = state.cartItems.reduce((sum, item) => {
+            const itemWeight = Number(item.weight_kg) || 0;
             const qty = Number(item.cartQuantity) || 0;
-            return total + weight * qty;
+            return sum + itemWeight * qty;
         }, 0);
+
+        // Apollo requires minimum 1kg
+        return Math.max(1, Number(total.toFixed(2)));
     };
 
     return (
