@@ -6,6 +6,7 @@ use App\Helpers\TelegramHelper;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Services\ApolloService;
 use Illuminate\Support\Facades\DB;
 
 use Illuminate\Routing\Controllers\Middleware;
@@ -50,8 +51,19 @@ class OrderController extends Controller implements HasMiddleware
             'tableData' => $tableData,
         ]);
     }
-    public function show(Order $order)
+    public function show(Order $order,  ApolloService $apolloService)
     {
+        if ($order->apollo_parcel_code) {
+            $apolloResponse = $apolloService->bookingDetail($order->apollo_parcel_code);
+
+            if ($apolloResponse['parcel_status_title']) {
+                $order->update([
+                    'shipping_status' => $apolloResponse['parcel_status_title'],
+                ]);
+            }
+        }
+
+
         return Inertia::render('admin/orders/Show', [
             'order_detail' => $order->load('order_items.item.images', 'buyer', 'shop'),
             'readOnly' => true,

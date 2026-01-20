@@ -5,6 +5,7 @@ namespace App\Http\Controllers\UserDashboard;
 use App\Exports\ItemDailyViewExport;
 use App\Helpers\ImageHelper;
 use App\Helpers\TelegramHelper;
+use App\Http\Controllers\ApolloController;
 use App\Http\Controllers\Controller;
 use App\Models\Item;
 use App\Models\ItemBrand;
@@ -13,6 +14,7 @@ use App\Models\ItemDailyView;
 use App\Models\ItemImage;
 use App\Models\Order;
 use App\Models\Shop;
+use App\Services\ApolloService;
 use App\Services\PayWayService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -78,12 +80,24 @@ class UserOrderController extends Controller implements HasMiddleware
     /**
      * Display the specified resource.
      */
-    public function show(Order $user_order)
+    public function show(Order $user_order, ApolloService $apolloService)
     {
         if ($user_order->user_id != Auth::user()->id) {
             abort(403, 'Unauthorized resource');
         }
 
+        if ($user_order->apollo_parcel_code) {
+            $apolloResponse = $apolloService->bookingDetail($user_order->apollo_parcel_code);
+
+            if ($apolloResponse['parcel_status_title']) {
+                $user_order->update([
+                    'shipping_status' => $apolloResponse['parcel_status_title'],
+                ]);
+            }
+        }
+
+
+        // dd($apolloResponse['parcel_status_title']);
         $tran_id = $user_order->tran_id;
         $amount = $user_order->total_amount - $user_order->shipping_price;
         $shipping = $user_order->shipping_price;

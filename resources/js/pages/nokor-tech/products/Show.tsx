@@ -26,7 +26,7 @@ const ProductDetailPage = () => {
                         )}
 
                         {/* Product Details */}
-                        <div className="p-6 md:w-1/2">
+                        <div className="p-6 md:w-[60%]">
                             <h1 className="text-foreground text-2xl font-bold md:text-3xl">{itemShow?.name}</h1>
                             {itemShow?.brand?.name && (
                                 <p className="text-foreground mt-2 text-base">

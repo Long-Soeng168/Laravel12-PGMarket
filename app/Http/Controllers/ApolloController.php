@@ -11,20 +11,31 @@ use Inertia\Inertia;
 
 class ApolloController extends Controller
 {
-    public function createBookingFromOrder(int $orderId): string
+    public function createBookingFromOrder(int $orderId): array
     {
-        $order = Order::with(['shop', 'user'])->findOrFail($orderId);
+        $order = Order::with(['shop', 'buyer'])->findOrFail($orderId);
+
+        if ($order->apollo_parcel_code) {
+            return [
+                'success' => true,
+                'parcel_code' => $order->apollo_parcel_code,
+            ];
+        }
+
+        if (!$order->total_weight || $order->total_weight <= 0) {
+            // throw new \Exception('Order weight is invalid');
+        }
 
         if ($order->apollo_parcel_code) {
             return $order->apollo_parcel_code;
         }
 
         if (!$order->total_weight || $order->total_weight <= 0) {
-            throw new \Exception('Order weight is invalid');
+            // throw new \Exception('Order weight is invalid');
         }
 
         $shop = $order->shop;
-        $user = $order->user;
+        $user = $order->buyer;
 
         $payload = [
             'book_datetime' => now()->format('Y-m-d H:i:s'),
@@ -32,7 +43,7 @@ class ApolloController extends Controller
             /* ---------- SENDER ---------- */
             'sender_name' => $shop->name,
             'sender_phone' => $shop->phone,
-            'sender_address' => $shop->address,
+            'sender_address' => $shop->address ?? null,
             'sender_latitude' => $shop->latitude ?? null,
             'sender_longitude' => $shop->longitude ?? null,
             'sender_province_id' => $shop->province_id,
@@ -51,9 +62,12 @@ class ApolloController extends Controller
                 'parcel_weight' => (float) $order->total_weight,
 
                 /* ---------- RECEIVER ---------- */
+                'images' => [],
+                'parcel_dimension' => '',
+                'parcel_volume' => '',
                 'receiver_name' => $user->name,
                 'receiver_phone' => $user->phone,
-                'receiver_address' => $user->address,
+                'receiver_address' => $user->address ?? null,
                 'receiver_province_id' => $user->province_id,
                 'receiver_district_id' => null,
                 'receiver_commune_id' => null,
@@ -68,18 +82,17 @@ class ApolloController extends Controller
 
         $apollo = app(ApolloService::class);
         $response = $apollo->createBooking($payload);
-
+        //  return $response;
         if (!($response['success'] ?? false)) {
-            return false;
             // throw new \Exception($response['message'] ?? 'Apollo booking failed');
         }
 
         $order->update([
             'apollo_parcel_code' => $response['data']['parcel_code'],
+            'shipping_status' => 'Booked',
         ]);
 
-        // return $response['data']['parcel_code'];
-        return true;
+        return $response;
     }
 
     public function index(ApolloService $apollo)
@@ -136,9 +149,9 @@ class ApolloController extends Controller
                 'client_reference' => 'ORDER-' . now()->timestamp,
                 'fee_payer' => 'sender',
                 'images' => [],
-                'parcel_uom_qty' => 1,
                 'parcel_dimension' => '',
                 'parcel_volume' => '',
+                'parcel_uom_qty' => 1,
                 'parcel_weight' => $data['weight'],
                 'receiver_address' => '#K7, st288',
                 'receiver_name' => 'Test Receiver',

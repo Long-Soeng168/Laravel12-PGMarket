@@ -162,9 +162,9 @@ const Show = () => {
                                 {t('Buyer')} : <UserHoverCard user={order_detail?.buyer} />
                             </div>
                         )}
-                        <div className="flex items-center gap-2">
+                        {/* <div className="flex items-center gap-2">
                             {t('Buyer Note')} : <span className="text-base">{order_detail?.notes || '---'}</span>
-                        </div>
+                        </div> */}
                         <div className="flex items-center gap-2">
                             {t('Shipping Address')} : <span className="text-base">{order_detail?.shipping_address || '---'}</span>
                         </div>
@@ -183,6 +183,12 @@ const Show = () => {
                         </div>
                         <div className="flex items-center gap-2">
                             {t('Pyament Status')} : <StatusBadge status={order_detail?.payment_status} />
+                        </div>
+                        <div className="flex items-center gap-2">
+                            {t('Delivery Status')} :{' '}
+                            <span className="uppercase">
+                                <StatusBadge status={order_detail?.shipping_status} />
+                            </span>
                         </div>
                         <div className="flex items-center gap-2">
                             {t('Shipping Price')} : <span className="text-xl">$ {order_detail?.shipping_price}</span>

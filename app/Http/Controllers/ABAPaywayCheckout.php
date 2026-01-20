@@ -97,12 +97,13 @@ class ABAPaywayCheckout extends Controller
         ));
     }
 
-    public function callback(Request $request)
+    public function callback(Request $request, ApolloController $apollo)
     {
         // return $request->all();
         $order = Order::where('tran_id', $request->tran_id)->firstOrFail();
 
-        return $order;
+        $responseApollo = $apollo->createBookingFromOrder($order->id);
+        // return $responseApollo;
 
         $req_time   = $order->req_time; // UTC format from DB
         $merchantId = config('payway.merchant_id');
@@ -180,6 +181,9 @@ class ABAPaywayCheckout extends Controller
                             Log::warning('Telegram notify failed for order ' . $order->id . ': ' . $result['message']);
                         }
                     }
+
+                    $responseApollo = $apollo->createBookingFromOrder($order->id);
+                    // return $responseApollo;
                 }
 
 

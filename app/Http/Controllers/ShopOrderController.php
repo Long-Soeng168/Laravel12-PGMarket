@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Item;
 use App\Models\Order;
+use App\Services\ApolloService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -75,10 +76,20 @@ class ShopOrderController extends Controller implements HasMiddleware
     /**
      * Display the specified resource.
      */
-    public function show(Order $shop_order)
+    public function show(Order $shop_order, ApolloService $apolloService)
     {
         if ($shop_order->shop_id != Auth::user()->shop_id) {
             abort(403, 'Unauthorized resource');
+        }
+
+        if ($shop_order->apollo_parcel_code) {
+            $apolloResponse = $apolloService->bookingDetail($shop_order->apollo_parcel_code);
+
+            if ($apolloResponse['parcel_status_title']) {
+                $shop_order->update([
+                    'shipping_status' => $apolloResponse['parcel_status_title'],
+                ]);
+            }
         }
 
         return Inertia::render('user-dashboard/shop_orders/Show', [

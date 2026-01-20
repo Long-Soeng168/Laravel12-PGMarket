@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 
 // pick icons from lucide-react
 import MyNoData from '@/components/my-no-data';
+import PaymentMethodLabel from '@/components/PaymentMethodLabel';
 import StatusBadge from '@/pages/nokor-tech/components/StatusBadge';
 import { TransactionDetailDialog } from '@/pages/nokor-tech/components/TransactionDetailDialog';
 import OrderItemCard from '@/pages/user-dashboard/orders/components/OrderItemCard';
@@ -14,7 +15,6 @@ import { usePage } from '@inertiajs/react';
 import { CheckCircle2, Clock, CreditCard, Loader2, ShoppingCart, Truck } from 'lucide-react';
 import { ShopHoverCard } from './components/ShopHoverCard';
 import { UserHoverCard } from './components/UserHoverCard';
-import PaymentMethodLabel from '@/components/PaymentMethodLabel';
 
 const Show = () => {
     const { order_detail } = usePage().props;
@@ -156,9 +156,9 @@ const Show = () => {
                                 Buyer : <UserHoverCard user={order_detail?.buyer} />
                             </div>
                         )}
-                        <div className="flex items-center gap-2">
+                        {/* <div className="flex items-center gap-2">
                             Buyer Note : <span className="text-base">{order_detail?.notes || '---'}</span>
-                        </div>
+                        </div> */}
                         <div className="flex items-center gap-2">
                             Shipping Address : <span className="text-base">{order_detail?.shipping_address || '---'}</span>
                         </div>
@@ -170,9 +170,17 @@ const Show = () => {
                             </span>
                         </div>
                         <div className="flex items-center gap-2">Transaction ID : {order_detail?.tran_id}</div>
-                        <div className="flex items-center gap-2">Pyament Method : <PaymentMethodLabel value={order_detail?.payment_method} /></div>
+                        <div className="flex items-center gap-2">
+                            Pyament Method : <PaymentMethodLabel value={order_detail?.payment_method} />
+                        </div>
                         <div className="flex items-center gap-2">
                             Pyament Status : <StatusBadge status={order_detail?.payment_status} />
+                        </div>
+                        <div className="flex items-center gap-2">
+                            {t('Delivery Status')} :{' '}
+                            <span className="uppercase">
+                                <StatusBadge status={order_detail?.shipping_status} />
+                            </span>
                         </div>
                         <div className="flex items-center gap-2">
                             Shipping Price : <span className="text-xl">$ {order_detail?.shipping_price}</span>

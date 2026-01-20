@@ -63,7 +63,7 @@ export default function UpdateUserAddress() {
                         e.preventDefault();
                         submit();
                     }}
-                    className="space-y-6 pt-6"
+                    className="space-y-6"
                 >
                     {/* Name */}
                     <div>

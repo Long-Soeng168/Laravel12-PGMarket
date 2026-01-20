@@ -55,21 +55,23 @@ const CartItemList = () => {
                             <p className="text-muted-foreground">
                                 {cartItems.length} {t('items in your cart')}
                             </p>
-                            <p>Weight: {getTotalWeightKg()} kg</p>
-                            <p>receiver_name: {auth?.user?.name || '---'}</p>
-                            <p>receiver_phone: {auth?.user?.phone || '---'}</p>
-                            <p>receiver_address: {auth?.user?.address || '---'}</p>
-                            <p>receiver_province_id: {auth?.user?.province_id || '---'}</p>
-                            <p>Seller Name: {cartItems[0]?.shop?.name || '---'}</p>
-                            <p>Seller Province: {cartItems[0]?.shop?.province_id || '---'}</p>
-                            <p>Seller longitude: {cartItems[0]?.shop?.longitude || '---'}</p>
-                            <p>Seller latitude: {cartItems[0]?.shop?.latitude || '---'}</p>
-                            <p>Seller address: {cartItems[0]?.shop?.address || '---'}</p>
-                            <p>Seller phone: {cartItems[0]?.shop?.phone || '---'}</p>
-                            <p>service_type: {'same_day'}</p>
-                            <p>fee_payer: {'sender'}</p>
-                            <p>----</p>
-                            <p>Delivery Fee Caculated: {deliveryFee}</p>
+                            <div className='hidden'>
+                                <p>Weight: {getTotalWeightKg()} kg</p>
+                                <p>receiver_name: {auth?.user?.name || '---'}</p>
+                                <p>receiver_phone: {auth?.user?.phone || '---'}</p>
+                                <p>receiver_address: {auth?.user?.address || '---'}</p>
+                                <p>receiver_province_id: {auth?.user?.province_id || '---'}</p>
+                                <p>Seller Name: {cartItems[0]?.shop?.name || '---'}</p>
+                                <p>Seller Province: {cartItems[0]?.shop?.province_id || '---'}</p>
+                                <p>Seller longitude: {cartItems[0]?.shop?.longitude || '---'}</p>
+                                <p>Seller latitude: {cartItems[0]?.shop?.latitude || '---'}</p>
+                                <p>Seller address: {cartItems[0]?.shop?.address || '---'}</p>
+                                <p>Seller phone: {cartItems[0]?.shop?.phone || '---'}</p>
+                                <p>service_type: {'same_day'}</p>
+                                <p>fee_payer: {'sender'}</p>
+                                <p>----</p>
+                                <p>Delivery Fee Caculated: {deliveryFee}</p>
+                            </div>
                         </div>
 
                         <div className="space-y-4">
