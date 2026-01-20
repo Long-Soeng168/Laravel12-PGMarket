@@ -59,6 +59,9 @@ class OrderController extends Controller implements HasMiddleware
             if ($apolloResponse['parcel_status_title']) {
                 $order->update([
                     'shipping_status' => $apolloResponse['parcel_status_title'],
+                    'status' => ($apolloResponse['Finished'] ?? null) === 'completed'
+                        ? 'completed'
+                        : $order->status,
                 ]);
             }
         }
