@@ -55,7 +55,7 @@ const CartItemList = () => {
                             <p className="text-muted-foreground">
                                 {cartItems.length} {t('items in your cart')}
                             </p>
-                            <div className="">
+                            <div className="hidden">
                                 <p>Weight: {getTotalWeightKg()} kg</p>
                                 <p>receiver_name: {auth?.user?.name || '---'}</p>
                                 <p>receiver_phone: {auth?.user?.phone || '---'}</p>
