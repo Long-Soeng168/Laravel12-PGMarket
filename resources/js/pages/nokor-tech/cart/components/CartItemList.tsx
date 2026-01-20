@@ -22,7 +22,7 @@ const CartItemList = () => {
     const [loading, setLoading] = useState(false);
 
     const estimateFee = async () => {
-        if (!senderProvince || !receiverProvince) return alert('Select sender and receiver provinces!');
+        if (!senderProvince || !receiverProvince) return alert('Shop or Buyer address invalid province');
         setLoading(true);
         const weight = getTotalWeightKg();
         try {
@@ -55,7 +55,7 @@ const CartItemList = () => {
                             <p className="text-muted-foreground">
                                 {cartItems.length} {t('items in your cart')}
                             </p>
-                            <div className='hidden'>
+                            <div className="">
                                 <p>Weight: {getTotalWeightKg()} kg</p>
                                 <p>receiver_name: {auth?.user?.name || '---'}</p>
                                 <p>receiver_phone: {auth?.user?.phone || '---'}</p>
