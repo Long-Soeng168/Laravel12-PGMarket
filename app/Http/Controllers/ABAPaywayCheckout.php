@@ -102,9 +102,6 @@ class ABAPaywayCheckout extends Controller
         // return $request->all();
         $order = Order::where('tran_id', $request->tran_id)->firstOrFail();
 
-        $responseApollo = $apollo->createBookingFromOrder($order->id);
-        // return $responseApollo;
-
         $req_time   = $order->req_time; // UTC format from DB
         $merchantId = config('payway.merchant_id');
         $tran_id    = $order->tran_id;
