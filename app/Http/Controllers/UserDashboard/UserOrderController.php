@@ -102,7 +102,7 @@ class UserOrderController extends Controller implements HasMiddleware
 
         // dd($apolloResponse['parcel_status_title']);
         $tran_id = $user_order->tran_id;
-        $amount = (($user_order->total_amount * 100) - ($user_order->shipping_price * 100)) / 100;
+        $amount = $user_order->total_amount - $user_order->shipping_price;
         $shipping = $user_order->shipping_price;
         $currency = $user_order->currency;
         $email = $user_order->buyer->email;
