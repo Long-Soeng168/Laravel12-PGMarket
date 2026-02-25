@@ -54,7 +54,7 @@ class UserShopController extends Controller implements HasMiddleware
 
         $provinces = Province::orderBy('name')->get();
 
-        // return ($all_users);
+        // return ($provinces);
         return Inertia::render('user-dashboard/shops/Create', [
             'itemCategories' => $itemCategories,
             'provinces' => $provinces,
@@ -77,9 +77,9 @@ class UserShopController extends Controller implements HasMiddleware
             'logo' => 'required|image|mimes:jpeg,png,jpg,gif,webp,svg,webp|max:2048',
             'banner' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg,webp|max:2048',
             'province_id' => 'required|numeric|exists:provinces,id',
-            'location' => 'required|string',
-            'latitude' => 'required|numeric',
-            'longitude' => 'required|numeric',
+            'location' => 'nullable|string',
+            'latitude' => 'nullable|numeric',
+            'longitude' => 'nullable|numeric',
         ]);
 
         $user_shop = Shop::find(Auth::user()->shop_id);
@@ -157,9 +157,9 @@ class UserShopController extends Controller implements HasMiddleware
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg,webp|max:2048',
             'banner' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg,webp|max:2048',
             'province_id' => 'required|numeric|exists:provinces,id',
-            'location' => 'required|string',
-            'latitude' => 'required|numeric',
-            'longitude' => 'required|numeric',
+            'location' => 'nullable|string',
+            'latitude' => 'nullable|numeric',
+            'longitude' => 'nullable|numeric',
         ]);
 
         $validated['updated_by'] = $request->user()->id;

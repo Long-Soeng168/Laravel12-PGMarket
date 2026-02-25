@@ -146,9 +146,9 @@ class ShopController extends Controller implements HasMiddleware
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg,webp|max:2048',
             'banner' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg,webp|max:2048',
             'province_id' => 'required|numeric|exists:provinces,id',
-            'location' => 'required|string',
-            'latitude' => 'required|numeric',
-            'longitude' => 'required|numeric',
+            'location' => 'nullable|string',
+            'latitude' => 'nullable|numeric',
+            'longitude' => 'nullable|numeric',
         ]);
 
         $validated['created_by'] = $request->user()->id;
@@ -216,9 +216,9 @@ class ShopController extends Controller implements HasMiddleware
             'status' => 'nullable|string|in:active,inactive,pending,reject',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg,webp|max:2048',
             'banner' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg,webp|max:2048',
-            'location' => 'required|string',
-            'latitude' => 'required|numeric',
-            'longitude' => 'required|numeric',
+            'location' => 'nullable|string',
+            'latitude' => 'nullable|numeric',
+            'longitude' => 'nullable|numeric',
         ]);
 
         $validated['updated_by'] = $request->user()->id;
