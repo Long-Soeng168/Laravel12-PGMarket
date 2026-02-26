@@ -20,8 +20,7 @@ const PaymentMethods = () => {
         req_time,
         return_url,
         continue_success_url,
-        ios_scheme,
-        android_scheme,
+        return_deeplink,
         skip_success_page,
         currency,
     } = usePage<any>().props;
@@ -141,8 +140,7 @@ const PaymentMethods = () => {
                     <input type="hidden" name="payment_option" value={payment_option} />
                     <input type="hidden" name="return_url" value={return_url} />
                     <input type="hidden" name="continue_success_url" value={continue_success_url} />
-                    <input type="hidden" name="ios_scheme" value={ios_scheme} />
-                    <input type="hidden" name="android_scheme" value={android_scheme} />
+                    <input type="hidden" name="return_deeplink" value={return_deeplink} />
                     <input type="hidden" name="skip_success_page" value={skip_success_page} />
                 </form>
             </div>
