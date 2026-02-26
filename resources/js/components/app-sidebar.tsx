@@ -394,6 +394,12 @@ export function AppSidebar() {
             url: '/admin/orders',
             icon: ClipboardListIcon,
         },
+        // {
+        //     title: t('All Shippings'),
+        //     permission: 'order view',
+        //     url: '/admin/all-shippings',
+        //     icon: TruckIcon,
+        // },
         {
             title: t('All Payouts'),
             permission: 'payout view',

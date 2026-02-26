@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('/orders', [OrderController::class, 'store']);
 Route::post('/orders/{id}/payout', [ABAPayoutController::class, 'payout']);
 Route::post('/orders/{id}/status', [OrderController::class, 'updateStatus']);
+Route::post('/orders/{id}/shipping-status', [OrderController::class, 'updateShippingStatus']);
 
 
 // Testing

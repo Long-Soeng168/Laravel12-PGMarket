@@ -1,5 +1,14 @@
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle, Clock, PackageCheck, RefreshCcw, ShieldCheck, Truck, XCircle } from 'lucide-react';
+import { 
+    CheckCircle, 
+    Clock, 
+    PackageCheck, 
+    RefreshCcw, 
+    ShieldCheck, 
+    Truck, 
+    XCircle, 
+    CalendarCheck 
+} from 'lucide-react';
 import { JSX } from 'react';
 
 const statusColors: Record<string, string> = {
@@ -18,6 +27,11 @@ const statusColors: Record<string, string> = {
     shipped: 'bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300',
     refunded: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300',
     cancelled: 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300',
+
+    // 🔹 Shipping / Logistics statuses
+    Booked: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900 dark:text-indigo-300',
+    'On Delivery': 'bg-orange-100 text-orange-700 dark:bg-orange-900 dark:text-orange-300',
+    Finished: 'bg-emerald-500 text-white dark:bg-emerald-700 dark:text-white',
 };
 
 const statusIcons: Record<string, JSX.Element> = {
@@ -36,11 +50,19 @@ const statusIcons: Record<string, JSX.Element> = {
     completed: <PackageCheck className="mr-1 size-4" />,
     cancelled: <XCircle className="mr-1 size-4" />,
     refunded: <RefreshCcw className="mr-1 size-4" />,
+
+    // 🔹 Shipping / Logistics statuses
+    Booked: <CalendarCheck className="mr-1 size-4" />,
+    'On Delivery': <Truck className="mr-1 size-4" />,
+    Finished: <PackageCheck className="mr-1 size-4" />,
 };
 
 const StatusBadge = ({ status }: { status: string }) => {
     return (
-        <Badge className={statusColors[status] || 'bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300'}>
+        <Badge 
+            variant="outline" 
+            className={`${statusColors[status] || 'bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300'} border-transparent shadow-none`}
+        >
             {statusIcons[status]}
             {status}
         </Badge>

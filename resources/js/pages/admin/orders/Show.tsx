@@ -14,6 +14,7 @@ import OrderItemCard from '@/pages/user-dashboard/orders/components/OrderItemCar
 import { usePage } from '@inertiajs/react';
 import { CheckCircle2, Clock, CreditCard, Loader2, ShoppingCart, Truck } from 'lucide-react';
 import { ShopHoverCard } from './components/ShopHoverCard';
+import UpdateDeliveryStatus from './components/UpdateDeliveryStatus';
 import UpdateOrderStatus from './components/UpdateOrderStatus';
 import UpdatePayoutStatus from './components/UpdatePayoutStatus';
 import { UserHoverCard } from './components/UserHoverCard';
@@ -187,9 +188,15 @@ const Show = () => {
                         <div className="flex items-center gap-2">
                             {t('Delivery Status')} :{' '}
                             <span className="uppercase">
-                                <StatusBadge status={order_detail?.shipping_status} />
+                                <UpdateDeliveryStatus />
                             </span>
                         </div>
+                        {order_detail?.apollo_parcel_code && (
+                            <div className="flex items-center gap-2">
+                                {t('Apollo Delivery Code')} : <span>{order_detail?.apollo_parcel_code}</span>
+                            </div>
+                        )}
+
                         <div className="flex items-center gap-2">
                             {t('Shipping Price')} : <span className="text-xl">$ {order_detail?.shipping_price}</span>
                         </div>

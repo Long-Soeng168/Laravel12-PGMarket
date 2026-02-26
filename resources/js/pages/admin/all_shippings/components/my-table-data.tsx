@@ -1,4 +1,3 @@
-import DeleteButton from '@/components/delete-button';
 import MyImageGallery from '@/components/my-image-gallery';
 import MyNoData from '@/components/my-no-data';
 import { MyTooltipButton } from '@/components/my-tooltip-button';
@@ -8,7 +7,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import useRole from '@/hooks/use-role';
 import useTranslation from '@/hooks/use-translation';
 import StatusBadge from '@/pages/nokor-tech/components/StatusBadge';
-import { TransactionDetailDialog } from '@/pages/nokor-tech/components/TransactionDetailDialog';
 import { Link, router, usePage } from '@inertiajs/react';
 import { ArrowUpDown, ScanEyeIcon } from 'lucide-react';
 import { useState } from 'react';
@@ -53,15 +51,20 @@ const MyTableData = () => {
                 <Table>
                     <TableHeader>
                         <TableRow>
+                            <TableHead className="text-left">{t('Action')}</TableHead>
                             <TableHead onClick={() => handleSort('id')}>
                                 <span className="flex cursor-pointer items-center">
-                                    <ArrowUpDown size={16} /> {t('ID')}
+                                    <ArrowUpDown size={16} /> {t('Apollo Shipping ID')}
                                 </span>
                             </TableHead>
-                            <TableHead className="text-left">{t('Action')}</TableHead>
-                            <TableHead onClick={() => handleSort('status')}>
+                            <TableHead onClick={() => handleSort('shipping_status')}>
                                 <span className="flex cursor-pointer items-center">
-                                    <ArrowUpDown size={16} /> {t('Order Status')}
+                                    <ArrowUpDown size={16} /> {t('Shipping Status')}
+                                </span>
+                            </TableHead>
+                            <TableHead onClick={() => handleSort('shipping_price')}>
+                                <span className="flex cursor-pointer items-center">
+                                    <ArrowUpDown size={16} /> {t('Shipping Price')}
                                 </span>
                             </TableHead>
                             <TableHead onClick={() => handleSort('order_number')}>
@@ -103,16 +106,6 @@ const MyTableData = () => {
                                     <ArrowUpDown size={16} /> {t('Payment Status')}
                                 </span>
                             </TableHead>
-                            <TableHead onClick={() => handleSort('shipping_status')}>
-                                <span className="flex cursor-pointer items-center">
-                                    <ArrowUpDown size={16} /> {t('Shipping Status')}
-                                </span>
-                            </TableHead>
-                            <TableHead onClick={() => handleSort('apollo_parcel_code')}>
-                                <span className="flex cursor-pointer items-center">
-                                    <ArrowUpDown size={16} /> {t('Apollo Code')}
-                                </span>
-                            </TableHead>
 
                             {/* <TableHead onClick={() => handleSort('updated_at')}>
                                 <span className="flex cursor-pointer items-center">
@@ -124,7 +117,6 @@ const MyTableData = () => {
                     <TableBody>
                         {tableData?.data?.map((item: any, index: number) => (
                             <TableRow key={item.id}>
-                                <TableCell className="font-medium whitespace-nowrap capitalize">{item.id}</TableCell>
                                 <TableCell>
                                     <span className="flex h-full items-center justify-start gap-1">
                                         <Link href={`/admin/orders/${item.id}`}>
@@ -132,27 +124,15 @@ const MyTableData = () => {
                                                 <ScanEyeIcon /> View
                                             </MyTooltipButton>
                                         </Link>
-                                        {/* <Link href={`/user-orders/${item.id}/edit`}>
-                                            <MyTooltipButton title={t('Edit')} side="bottom" variant="ghost">
-                                                <EditIcon />
-                                            </MyTooltipButton>
-                                        </Link> */}
-
-                                        {/* Show Transaction Detail */}
-                                        <span className="rounded-md border">
-                                            <TransactionDetailDialog tranId={item?.tran_id} detail={item.transaction_detail || '---'} />
-                                        </span>
-                                        {/* End Show Transaction Detail */}
-                                        {item?.status == 'pending' && (
-                                            <span className="rounded-md border p-0.5">
-                                                <DeleteButton deletePath="/admin/orders/" id={item.id} />
-                                            </span>
-                                        )}
                                     </span>
                                 </TableCell>
+                                <TableCell className="font-medium whitespace-nowrap capitalize">{item.apollo_parcel_code}</TableCell>
+
                                 <TableCell className="font-medium whitespace-nowrap capitalize">
-                                    <StatusBadge status={item.status} />
+                                    <StatusBadge status={item.shipping_status} />
                                 </TableCell>
+                                <TableCell className="font-medium whitespace-nowrap capitalize">{item.shipping_price}</TableCell>
+
                                 <TableCell className="font-medium whitespace-nowrap">
                                     <div>
                                         <p className="font-bold">{item.order_number.split('-').slice(1).join('-')}</p>
@@ -189,10 +169,6 @@ const MyTableData = () => {
                                 <TableCell className="font-medium whitespace-nowrap capitalize">
                                     <StatusBadge status={item.payment_status} />
                                 </TableCell>
-                                <TableCell className="font-medium whitespace-nowrap capitalize">
-                                    <StatusBadge status={item.shipping_status} />
-                                </TableCell>
-                                <TableCell className="font-medium whitespace-nowrap capitalize">{item.apollo_parcel_code ?? '---'}</TableCell>
                                 {/* <TableCell>
                                     {item.images[0] ? (
                                         <button

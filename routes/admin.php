@@ -127,8 +127,10 @@ Route::middleware('auth')->group(function () {
 
     // Orders Route
     Route::resource('admin/orders', OrderController::class);
+    Route::get('admin/all-shippings', [OrderController::class, 'all_shippings']);
     Route::post('admin/orders/{order}/update', [OrderController::class, 'update']);
-    Route::post('admin/orders/{order}/update_status', [OrderController::class, 'update_status']);
+    // Route::post('admin/orders/{order}/update_status', [OrderController::class, 'update_status']);
+    Route::post('admin/orders/{order}/update_shipping_status', [OrderController::class, 'update_status']);
 
     Route::resource('admin/payouts', PayoutController::class);
     Route::get('/shop-payouts', [PayoutController::class, 'shop_payouts']);

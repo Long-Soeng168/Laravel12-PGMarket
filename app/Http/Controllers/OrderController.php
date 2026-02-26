@@ -50,6 +50,34 @@ class OrderController extends Controller implements HasMiddleware
             'tableData' => $tableData,
         ]);
     }
+    public function all_shippings(Request $request)
+    {
+        $search = $request->input('search', '');
+        $sortBy = $request->input('sortBy', 'id');
+        $sortDirection = $request->input('sortDirection', 'desc');
+        $status = $request->input('status');
+
+        $query = Order::query();
+
+        $query->with('buyer', 'shop');
+
+        if ($status) {
+            $query->where('status', $status);
+        }
+        $query->orderBy($sortBy, $sortDirection);
+
+        if ($search) {
+            $query->where(function ($sub_query) use ($search) {
+                return $sub_query->where('order_number', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $tableData = $query->withCount('order_items')->paginate(perPage: 10)->onEachSide(1);
+
+        return Inertia::render('admin/all_shippings/Index', [
+            'tableData' => $tableData,
+        ]);
+    }
     public function show(Order $order,  ApolloService $apolloService)
     {
         if ($order->apollo_parcel_code) {
@@ -96,6 +124,24 @@ class OrderController extends Controller implements HasMiddleware
             return back()->with('success', "Order status updated to {$order->status}");
         } catch (\Exception $e) {
             return back()->with('error', 'Failed to update order status: ' . $e->getMessage());
+        }
+    }
+    public function updateShippingStatus(Request $request, $id)
+    {
+        // return $request->all();
+        $request->validate([
+            'shipping_status' => 'required|string',
+        ]);
+
+        $order = Order::findOrFail($id);
+
+        try {
+            $order->shipping_status = $request->shipping_status;
+            $order->save();
+
+            return back()->with('success', "Shipping status updated to {$order->shipping_status}");
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to update Shipping status: ' . $e->getMessage());
         }
     }
 
