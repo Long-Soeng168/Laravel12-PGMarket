@@ -35,7 +35,10 @@ class TelegramController extends Controller
                     $user->save();
 
                     // Confirm to user
-                    $this->sendMessage($chatId, "✅ Telegram connected successfully.");
+                    $this->sendMessage(
+                        $chatId,
+                        "✅ Telegram connected successfully!\n\nGo to your dashboard:\nhttps://pgmarket.online/dashboard"
+                    );
                 }
             }
         }
