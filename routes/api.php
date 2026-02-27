@@ -106,3 +106,11 @@ Route::post('/bakong/check', function (\Illuminate\Http\Request $request) {
 
     return response()->json($response->json(), $response->status());
 });
+
+
+
+use App\Http\Controllers\TelegramController;
+
+Route::post('/telegram/webhook', [TelegramController::class, 'webhook']);
+Route::get('/telegram/test/{userId}', [TelegramController::class, 'sendTest']);
+
