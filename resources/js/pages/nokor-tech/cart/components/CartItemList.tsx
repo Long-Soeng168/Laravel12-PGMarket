@@ -13,7 +13,7 @@ import UpdateUserAddress from './UpdateUserAddress';
 
 const CartItemList = () => {
     const { cartItems, handleQuantityChange, removeFromCart, getTotalWeightKg } = useCart();
-    const { auth } = usePage().props;
+    const { auth } = usePage<any>().props;
 
     const [senderProvince, setSenderProvince] = useState(cartItems[0]?.shop?.province_id || '0');
     const [receiverProvince, setReceiverProvince] = useState(auth?.user?.province_id || '0');
@@ -43,7 +43,7 @@ const CartItemList = () => {
     const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.cartQuantity, 0);
     const total = Number(subtotal) + Number(deliveryFee || 0);
 
-    const { t } = useTranslation();
+    const { t, currentLocale } = useTranslation();
     return (
         <div>
             <div className="mx-auto w-full max-w-7xl p-4 md:p-6">
@@ -188,12 +188,21 @@ const CartItemList = () => {
                                 {/* Checkout Button */}
 
                                 <UpdateUserAddress />
+
+                                {(!auth?.user?.address || !auth?.user?.province_id) && (
+                                    <p className="text-red-500">
+                                        (!){' '}
+                                        {currentLocale == 'kh'
+                                            ? 'តម្រូវឱ្យបំពេញអាសយដ្ឋាន និង ខេត្ត/រាជធានី។'
+                                            : 'Address and province are required to proceed.'}
+                                    </p>
+                                )}
                                 {deliveryFee > 0 && total > 0 ? (
                                     <CheckoutButton shipping_price={deliveryFee} />
                                 ) : (
                                     <Button
                                         onClick={() => estimateFee()}
-                                        disabled={loading || total == 0}
+                                        disabled={loading || total == 0 || !auth?.user?.address || !auth?.user?.province_id}
                                         className="flex w-full bg-green-600 text-white hover:bg-green-600/90"
                                     >
                                         {loading && <Loader2Icon className="animate-spin" />}

@@ -12,6 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ProgressWithValue } from '@/components/ui/progress-with-value';
 import useTranslation from '@/hooks/use-translation';
+import { cn } from '@/lib/utils';
 import { useForm, usePage } from '@inertiajs/react';
 import { Loader } from 'lucide-react';
 import { toast } from 'sonner';
@@ -39,7 +40,7 @@ export default function UpdateUserAddress() {
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
-                <button type="button" className="bg-background hover:bg-muted w-full rounded-lg border px-4 py-3 text-left transition">
+                <button type="button" className={cn("bg-background hover:bg-muted w-full rounded-lg border px-4 py-3 text-left transition", (!auth?.user?.address || !auth?.user?.province_id) && 'border-destructive')}>
                     <div className="flex flex-col gap-1">
                         <span className="text-sm">
                             <span className="font-medium">{auth?.user?.name}</span> ({auth?.user?.phone || t('Add phone number')})
