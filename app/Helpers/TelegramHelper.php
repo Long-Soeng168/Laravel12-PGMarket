@@ -93,7 +93,7 @@ Please review and process the order.
                             [
                                 [
                                     'text' => 'Manage Order',
-                                    'url' => config('app.url') . "/shop/orders/{$order->id}"
+                                    'url' => config('app.url') . "/shop-orders/{$order->id}"
                                 ]
                             ]
                         ]
