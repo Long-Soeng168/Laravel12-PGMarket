@@ -84,7 +84,7 @@ const SectionCards = () => {
 
     return (
         <div>
-            <div className="mx-auto grid max-w-full gap-6 px-6 sm:grid-cols-2 xl:grid-cols-4">
+            <div className="mx-auto grid max-w-full gap-6 px-2 sm:grid-cols-2 xl:grid-cols-4">
                 {features.map((feature) =>
                     hasPermission(feature.permission) ? (
                         <Link

@@ -248,8 +248,6 @@ class OrderController extends Controller implements HasMiddleware
 
             // return redirect("/user-orders/{$order->id}");
 
-
-
             // Payment Process
             // if ($result['success']) {
             //     return response()->json([

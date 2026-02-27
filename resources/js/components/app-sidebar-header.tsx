@@ -11,7 +11,7 @@ export function AppSidebarHeader({ breadcrumbs = [] }: { breadcrumbs?: Breadcrum
     const { can_switch_language, auth } = usePage().props;
 
     return (
-        <header className="border-sidebar-border/50 sticky top-0 z-10 flex h-auto shrink-0 items-center gap-2 rounded-tl-lg rounded-tr-lg border-b bg-white/5 px-2 py-2 backdrop-blur-sm transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 md:px-4">
+        <header className="border-sidebar-border/50 sticky top-0 z-10 flex h-auto shrink-0 items-center gap-2 rounded-tl-lg rounded-tr-lg border-b bg-white/5 p-4 backdrop-blur-sm transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 md:px-4">
             <div className="flex w-full flex-wrap items-center gap-2">
                 <SidebarTrigger className="-ml-1" />
                 <div className="flex-1 flex-wrap">
@@ -20,7 +20,7 @@ export function AppSidebarHeader({ breadcrumbs = [] }: { breadcrumbs?: Breadcrum
                 {/* <span className='mr-1'>
                     <ToggleModeSwitch />
                 </span> */}
-                <div className="flex flex-wrap items-center gap-2">
+                <div className="flex flex-wrap justify-end w-full md:w-auto items-center gap-2">
                     {auth?.shop?.id && (
                         <MyTooltipButton title="View Shop Profile" size="icon" variant="ghost" className="hover:bg-foreground/5">
                             <Link href={'/shops/' + auth?.shop?.id} prefetch>

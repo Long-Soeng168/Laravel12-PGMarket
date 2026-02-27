@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Models\OrderItem;
 use App\Models\Item;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -24,6 +25,81 @@ class TelegramHelper
         try {
             $orderItems = OrderItem::where('order_id', $order->id)->get();
             $media = [];
+
+
+            /*
+|--------------------------------------------------------------------------
+| 1️⃣ Notify Buyer
+|--------------------------------------------------------------------------
+*/
+
+            $buyer = User::find($order->user_id);
+
+            if ($buyer && $buyer->telegram_chat_id) {
+
+                $buyerMessage = "
+Order Confirmation
+
+Order ID: #{$order->id}
+Total: {$order->total_amount} USD
+Payment Status: {$order->payment_status}
+
+Thank you for your purchase.
+";
+
+                Http::post("https://api.telegram.org/bot{$token}/sendMessage", [
+                    'chat_id' => $buyer->telegram_chat_id,
+                    'text' => $buyerMessage,
+                    'reply_markup' => json_encode([
+                        'inline_keyboard' => [
+                            [
+                                [
+                                    'text' => 'View Order',
+                                    'url' => config('app.url') . "/user-orders/{$order->id}"
+                                ]
+                            ]
+                        ]
+                    ])
+                ]);
+            }
+
+            /*
+|--------------------------------------------------------------------------
+| 2️⃣ Notify Shop Owner
+|--------------------------------------------------------------------------
+*/
+
+            $shopOwner = User::find($order->shop_id);
+
+            if ($shopOwner && $shopOwner->telegram_chat_id) {
+
+                $ownerMessage = "
+New Order Received
+
+Customer: {$buyer->name}
+Phone: {$buyer->phone}
+Order ID: #{$order->id}
+Total: {$order->total_amount} USD
+Payment Status: {$order->payment_status}
+
+Please review and process the order.
+";
+
+                Http::post("https://api.telegram.org/bot{$token}/sendMessage", [
+                    'chat_id' => $shopOwner->telegram_chat_id,
+                    'text' => $ownerMessage,
+                    'reply_markup' => json_encode([
+                        'inline_keyboard' => [
+                            [
+                                [
+                                    'text' => 'Manage Order',
+                                    'url' => config('app.url') . "/shop/orders/{$order->id}"
+                                ]
+                            ]
+                        ]
+                    ])
+                ]);
+            }
 
             foreach ($orderItems as $index => $orderItem) {
                 $item = Item::with('images')->find($orderItem->item_id);
