@@ -69,7 +69,7 @@ Thank you for your purchase.
 |--------------------------------------------------------------------------
 */
 
-            $shopOwner = User::find($order->shop_id);
+            $shopOwner = User::where('shop_id', $order->shop_id)->first();
 
             if ($shopOwner && $shopOwner->telegram_chat_id) {
 
