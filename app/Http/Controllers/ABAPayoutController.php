@@ -65,7 +65,7 @@ class ABAPayoutController extends Controller
         if ($order->payout_status === 'paid') {
             return back()->with('warning', 'Order already payout.');
         }
-        if ($order->status !== 'paid') {
+        if ($order->payment_status !== 'APPROVED') {
             return back()->with('warning', 'Order not paid.');
         }
 
@@ -143,7 +143,7 @@ class ABAPayoutController extends Controller
         $decodedResponse = json_decode($response, true);
 
         $job = QueueJob::where('order_id', $id)->first();
-        
+
         if ($job) {
             $job->update([
                 'respone_log' => json_encode($decodedResponse),
