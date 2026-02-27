@@ -38,6 +38,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\TeamCategoryController;
 use App\Http\Controllers\TeamController;
+use App\Http\Controllers\TelegramController;
 use App\Http\Controllers\TypeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VideoController;
@@ -274,4 +275,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/my_file_manager', function () {
         return Inertia::render('plugins/file-manager/MyFileManager');
     });
+
+
+    Route::get('/telegram-notify-disable', [TelegramController::class, 'notify_disable']);
 });

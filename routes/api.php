@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\ABAPaymentController;
 use App\Http\Controllers\ABAPayoutController;
 use App\Http\Controllers\Api\BannerController;
 use App\Http\Controllers\Api\BodyTypeController;
@@ -20,6 +19,7 @@ use App\Http\Controllers\Api\ShopController;
 use App\Http\Controllers\Api\SlideController;
 use App\Http\Controllers\Api\VideoController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TelegramController;
 
 Route::post('/api/orders/{id}/payout', [ABAPayoutController::class, 'payout']);
 
@@ -82,7 +82,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('garages_posts', [GaragePostController::class, 'store']);
     Route::post('garages_posts/{id}', [GaragePostController::class, 'update']);
     // Route::get('garages_posts/{id}/delete', [GaragePostController::class, 'destroy']);
+
 });
+
+
+Route::post('/telegram/webhook', [TelegramController::class, 'webhook']);
+Route::get('/telegram/test/{userId}', [TelegramController::class, 'sendTest']);
+
 
 
 // Auth API Route
@@ -106,11 +112,3 @@ Route::post('/bakong/check', function (\Illuminate\Http\Request $request) {
 
     return response()->json($response->json(), $response->status());
 });
-
-
-
-use App\Http\Controllers\TelegramController;
-
-Route::post('/telegram/webhook', [TelegramController::class, 'webhook']);
-Route::get('/telegram/test/{userId}', [TelegramController::class, 'sendTest']);
-

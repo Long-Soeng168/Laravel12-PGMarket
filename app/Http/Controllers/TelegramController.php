@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class TelegramController extends Controller
 {
@@ -61,6 +62,21 @@ class TelegramController extends Controller
         );
 
         return $response;
+    }
+    public function notify_disable()
+    {
+        $user = User::findOrFail(Auth::user()->id);
+
+        if (!$user->telegram_chat_id) {
+            return response()->json([
+                'error' => 'User has not connected Telegram yet'
+            ]);
+        }
+
+        $user->update([
+            'telegram_chat_id' => null,
+        ]);
+        return redirect()->back();
     }
 
     /**

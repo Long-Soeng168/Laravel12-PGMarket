@@ -35,6 +35,7 @@ class User extends Authenticatable
         'updated_by',
         'address',
         'province_id',
+        'telegram_chat_id',
     ];
 
     /**
