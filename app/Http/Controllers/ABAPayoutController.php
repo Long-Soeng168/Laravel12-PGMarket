@@ -142,6 +142,13 @@ class ABAPayoutController extends Controller
         $response = $this->sendRequest($url, $header, json_encode($jsonData));
         $decodedResponse = json_decode($response, true);
 
+        dd(
+            [
+                'Body' => $jsonData,
+                'Response' => $decodedResponse,
+            ]
+        );
+
         $job = QueueJob::where('order_id', $id)->first();
 
         if ($job) {
