@@ -82,6 +82,7 @@ $response = curl($url, $header, json_encode($jsonData));
 echo '<pre>';
 echo json_encode(
     [
+        'merchant_data_info' => $merchant_data_info,
         'url' => $url,
         'header' => $header,
         'request' => $jsonData,
