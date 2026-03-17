@@ -105,6 +105,10 @@ Route::get('/paymentBakong/success', function () {
    return view('bakong_success');
 });
 
+Route::get('/test_payout', function () {
+   return view('aba_merchant_payout');
+});
+
 Route::get('/test-telegram-notification/{id}', function ($id) {
 
    $order = Order::findOrFail($id);
