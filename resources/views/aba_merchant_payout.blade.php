@@ -50,8 +50,7 @@ $merchant_data_info = json_encode([
 ]);
 
 $currency = 'USD';
-// $amount = 1;
-$amount = number_format(1.00, 2, '.', '');
+$amount = 1;
 
 $customField = '{"timestamp":"2024-08-23 10:35:55.437","traceId":"63f9645fa3bd8678907ed4c038357385"}';
 
