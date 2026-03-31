@@ -3,7 +3,7 @@ import { Link, usePage } from '@inertiajs/react';
 
 export function MyPagination() {
     const { t } = useTranslation();
-    const { tableData } = usePage().props;
+    const { tableData } = usePage<any>().props;
     const links = tableData?.links || null;
     // console.log(links);
     const queryParams = new URLSearchParams(window.location.search);

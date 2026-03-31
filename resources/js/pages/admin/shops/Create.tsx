@@ -38,6 +38,8 @@ const formSchema = z.object({
     latitude: z.number().nullable().optional(),
     longitude: z.number().nullable().optional(),
     province_id: z.number().nullable().optional(),
+    delivery_type: z.enum(['system_delivery', 'seller_delivery']),
+    delivery_price_per_kg: z.string().optional().nullable(),
 });
 
 export default function Create({
@@ -83,6 +85,8 @@ export default function Create({
             latitude: editData?.latitude ?? null,
             longitude: editData?.longitude ?? null,
             province_id: Number(editData?.province_id) ?? '',
+            delivery_type: editData?.delivery_type || 'seller_delivery',
+            delivery_price_per_kg: editData?.delivery_price_per_kg?.toString() || '',
         },
     });
 
@@ -236,7 +240,9 @@ export default function Create({
                                             </FormControl>
                                             <SelectContent>
                                                 <SelectItem value="active">{t('Active')}</SelectItem>
+                                                <SelectItem value="pending">{t('Pending')}</SelectItem>
                                                 <SelectItem value="inactive">{t('Inactive')}</SelectItem>
+                                                <SelectItem value="rejected">{t('Rejected')}</SelectItem>
                                             </SelectContent>
                                         </Select>
                                         <FormMessage>{errors.status && <div>{errors.status}</div>}</FormMessage>
@@ -583,6 +589,7 @@ export default function Create({
                                     )}
                                 />
                             </div>
+
                             <div className="col-span-6">
                                 <FormField
                                     control={form.control}
@@ -597,6 +604,78 @@ export default function Create({
                                         </FormItem>
                                     )}
                                 />
+                            </div>
+                            {/* Delivery Section */}
+                            <div className="col-span-12 mt-6">
+                                <h3 className="mb-4 text-lg font-semibold tracking-tight">{t('Delivery Settings')}</h3>
+                                <div className="bg-muted/50 grid gap-6 rounded-xl border p-6 md:grid-cols-12">
+                                    {/* Delivery Type Selection */}
+                                    <div className="col-span-12 md:col-span-6">
+                                        <FormField
+                                            control={form.control}
+                                            name="delivery_type"
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <FormLabel>{t('Delivery Type')}</FormLabel>
+                                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                        <FormControl>
+                                                            <SelectTrigger className="bg-background">
+                                                                <SelectValue placeholder={t('Select delivery type')} />
+                                                            </SelectTrigger>
+                                                        </FormControl>
+                                                        <SelectContent>
+                                                            <SelectItem value="system_delivery">{t('System Delivery')}</SelectItem>
+                                                            <SelectItem value="seller_delivery">{t('Seller Delivery')}</SelectItem>
+                                                        </SelectContent>
+                                                    </Select>
+                                                    <FormDescription className="text-xs">
+                                                        {field.value === 'system_delivery'
+                                                            ? t('Orders will be handled by our system.')
+                                                            : t('Seller will manage their own shipping.')}
+                                                    </FormDescription>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+                                    </div>
+
+                                    {/* Price Per KG */}
+                                    <div className="col-span-12 md:col-span-6">
+                                        <FormField
+                                            control={form.control}
+                                            name="delivery_price_per_kg"
+                                            render={({ field }) => {
+                                                const isSeller = form.watch('delivery_type') === 'seller_delivery';
+                                                return (
+                                                    <FormItem className={cn(!isSeller && 'opacity-60')}>
+                                                        <FormLabel>
+                                                            {t('Delivery Price per KG ($)')}
+                                                            {isSeller && <span className="text-destructive ml-1">*</span>}
+                                                        </FormLabel>
+                                                        <FormControl>
+                                                            <Input
+                                                                className="bg-background"
+                                                                required={isSeller}
+                                                                disabled={!isSeller}
+                                                                placeholder={isSeller ? '0.00' : 'N/A'}
+                                                                type="number"
+                                                                step="0.01"
+                                                                {...field}
+                                                                value={field.value ?? ''}
+                                                            />
+                                                        </FormControl>
+                                                        <FormDescription className="text-xs">
+                                                            {isSeller
+                                                                ? t('Set the shipping rate based on weight.')
+                                                                : t('Pricing is handled automatically.')}
+                                                        </FormDescription>
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                );
+                                            }}
+                                        />
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -12,7 +12,7 @@ import NokorTechLayout from '../layouts/nokor-tech-layout';
 import SortBy from './components/sort-by';
 
 const Index = () => {
-    const { tableData } = usePage().props;
+    const { tableData } = usePage<any>().props;
     return (
         <NokorTechLayout>
             <div className="mx-auto mb-8 max-w-screen-xl">

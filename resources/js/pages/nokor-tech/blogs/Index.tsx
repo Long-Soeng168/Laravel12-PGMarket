@@ -9,7 +9,7 @@ import NokorTechLayout from '../layouts/nokor-tech-layout';
 import { MyFilterButton } from './my-filter-button';
 
 const Index = () => {
-    const { tableData } = usePage().props;
+    const { tableData } = usePage<any>().props;
     return (
         <NokorTechLayout>
             <div className="mx-auto max-w-screen-xl px-6 py-16 pt-6 xl:px-0">

@@ -11,7 +11,7 @@ import EditButton from './edit-button';
 import ViewButton from './view-button';
 
 const MyTableData = () => {
-    const { tableData } = usePage().props;
+    const { tableData } = usePage<any>().props;
     const { t } = useTranslation();
 
     const queryParams = new URLSearchParams(window.location.search);

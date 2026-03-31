@@ -15,7 +15,7 @@ const MyTableData = () => {
 
     const hasRole = useRole();
 
-    const { tableData } = usePage().props;
+    const { tableData } = usePage<any>().props;
     const queryParams = new URLSearchParams(window.location.search);
     const currentPath = window.location.pathname; // Get dynamic path
 

@@ -10,7 +10,7 @@ import EditButton from './edit-button';
 
 const MyTableData = () => {
     const hasPermission = usePermission();
-    const { tableData } = usePage().props;
+    const { tableData } = usePage<any>().props;
     const queryParams = new URLSearchParams(window.location.search);
     const currentPath = window.location.pathname; // Get dynamic path
     const { t } = useTranslation();

@@ -1,7 +1,7 @@
 import { Link, usePage } from '@inertiajs/react';
 
 export function Pagination() {
-    const { tableData } = usePage().props;
+    const { tableData } = usePage<any>().props;
     // const links = tableData?.links || null;
     const links = [
         {

@@ -12,7 +12,7 @@ import EditButton from './edit-button';
 import ViewButton from './view-button';
 
 const MyTableData = () => {
-    const { tableData } = usePage().props;
+    const { tableData } = usePage<any>().props;
     const { t } = useTranslation();
     // console.log(tableData);
     const queryParams = new URLSearchParams(window.location.search);

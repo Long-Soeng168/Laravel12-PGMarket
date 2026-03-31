@@ -10,7 +10,7 @@ import EditButton from './edit-button';
 import ViewButton from './view-button';
 
 const MyTableData = () => {
-    const { tableData } = usePage().props;
+    const { tableData } = usePage<any>().props;
     const queryParams = new URLSearchParams(window.location.search);
     const currentPath = window.location.pathname; // Get dynamic path
     const { t } = useTranslation();
