@@ -80,6 +80,14 @@ class UserShopController extends Controller implements HasMiddleware
             'location' => 'nullable|string',
             'latitude' => 'nullable|numeric',
             'longitude' => 'nullable|numeric',
+            'delivery_type' => 'required|string|in:system_delivery,seller_delivery',
+            'delivery_price_per_kg' => [
+                'required_if:delivery_type,seller_delivery',
+                'nullable',
+                'numeric',
+                'min:0',
+                'max:99999999.99'
+            ],
         ]);
 
         $user_shop = Shop::find(Auth::user()->shop_id);
@@ -160,6 +168,14 @@ class UserShopController extends Controller implements HasMiddleware
             'location' => 'nullable|string',
             'latitude' => 'nullable|numeric',
             'longitude' => 'nullable|numeric',
+            'delivery_type' => 'required|string|in:system_delivery,seller_delivery',
+            'delivery_price_per_kg' => [
+                'required_if:delivery_type,seller_delivery',
+                'nullable',
+                'numeric',
+                'min:0',
+                'max:99999999.99'
+            ],
         ]);
 
         $validated['updated_by'] = $request->user()->id;
