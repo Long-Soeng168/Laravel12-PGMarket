@@ -142,12 +142,12 @@ class ABAPayoutController extends Controller
         $response = $this->sendRequest($url, $header, json_encode($jsonData));
         $decodedResponse = json_decode($response, true);
 
-        dd(
-            [
-                'Body' => $jsonData,
-                'Response' => $decodedResponse,
-            ]
-        );
+        // dd(
+        //     [
+        //         'Body' => $jsonData,
+        //         'Response' => $decodedResponse,
+        //     ]
+        // );
 
         $job = QueueJob::where('order_id', $id)->first();
 
@@ -180,7 +180,12 @@ class ABAPayoutController extends Controller
             // Update order payout status
             $order->update(['payout_status' => 'paid']);
         } else {
-            dd($decodedResponse);
+            dd(
+                [
+                    'Body' => $jsonData,
+                    'Response' => $decodedResponse,
+                ]
+            );
             return back()->with('error', 'Payout Error');
         }
         return back()->with('success', 'Payout Successfully');
