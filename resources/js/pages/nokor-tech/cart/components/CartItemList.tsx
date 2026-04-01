@@ -22,9 +22,28 @@ const CartItemList = () => {
     const [loading, setLoading] = useState(false);
 
     const estimateFee = async () => {
-        if (!senderProvince || !receiverProvince) return alert('Shop or Buyer address invalid province');
-        setLoading(true);
+        const shop = cartItems[0]?.shop;
+
+        if (!shop) return;
+
         const weight = getTotalWeightKg();
+
+        // 👉 If seller handles delivery → calculate directly
+        if (shop.delivery_type === 'seller_delivery') {
+            const pricePerKg = Number(shop.delivery_price_per_kg || 0);
+            const total = weight * pricePerKg;
+
+            setDeliveryFee(total);
+            return; // stop here, no API call
+        }
+
+        // 👉 Otherwise use system delivery (API)
+        if (!senderProvince || !receiverProvince) {
+            return alert('Shop or Buyer address invalid province');
+        }
+
+        setLoading(true);
+
         try {
             const res = await axios.post('/apollo/estimate', {
                 sender_province_id: senderProvince,
@@ -32,6 +51,7 @@ const CartItemList = () => {
                 weight,
                 service_type: serviceType,
             });
+
             setDeliveryFee(res.data.delivery_fee_usd);
         } catch (e) {
             alert('Failed to estimate fee.');
@@ -188,7 +208,6 @@ const CartItemList = () => {
                                 {/* Checkout Button */}
 
                                 <UpdateUserAddress />
-
                                 {(!auth?.user?.address || !auth?.user?.province_id) && (
                                     <p className="text-red-500">
                                         (!){' '}

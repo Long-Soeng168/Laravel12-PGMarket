@@ -8,6 +8,7 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { ProgressWithValue } from '@/components/ui/progress-with-value';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import useTranslation from '@/hooks/use-translation';
 import AppLayout from '@/layouts/app-layout';
 import { cn } from '@/lib/utils';
@@ -24,7 +25,6 @@ import CategorySelect from './components/category-select';
 import ShopSuspended from './components/shop-inactive';
 import ShopPending from './components/shop-pending';
 import ShopReject from './components/shop-reject';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const formSchema = z.object({
     owner_user_id: z.string(),
@@ -453,7 +453,10 @@ export default function Create({
                                     name="province_id"
                                     render={({ field }) => (
                                         <FormItem className="flex flex-col">
-                                            <FormLabel>{t('Province')}</FormLabel>
+                                            <FormLabel>
+                                                {t('Province')}
+                                                <span className="text-destructive ml-1">*</span>
+                                            </FormLabel>
 
                                             <Popover>
                                                 <PopoverTrigger asChild>
@@ -541,7 +544,10 @@ export default function Create({
                                             name="delivery_type"
                                             render={({ field }) => (
                                                 <FormItem>
-                                                    <FormLabel>{t('Delivery Type')}</FormLabel>
+                                                    <FormLabel>
+                                                        {t('Delivery Type')}
+                                                        <span className="text-destructive ml-1">*</span>
+                                                    </FormLabel>
                                                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                                                         <FormControl>
                                                             <SelectTrigger className="bg-background">

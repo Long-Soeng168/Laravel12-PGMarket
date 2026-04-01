@@ -15,6 +15,7 @@ import { usePage } from '@inertiajs/react';
 import { CheckCircle2, Clock, CreditCard, Loader2, ShoppingCart, Truck } from 'lucide-react';
 import { ShopHoverCard } from './components/ShopHoverCard';
 import { UserHoverCard } from './components/UserHoverCard';
+import UpdateDeliveryStatus from '@/pages/admin/orders/components/UpdateDeliveryStatus';
 
 const Show = () => {
     const { order_detail } = usePage().props;

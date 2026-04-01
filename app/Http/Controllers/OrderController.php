@@ -136,8 +136,10 @@ class OrderController extends Controller implements HasMiddleware
         $order = Order::findOrFail($id);
 
         try {
-            $order->shipping_status = $request->shipping_status;
-            $order->save();
+            $order->update([
+                'shipping_status' => $request->shipping_status,
+                'status' => ($request->shipping_status == 'Finished' && $order->status == 'paid') ? 'completed' : $order->status,
+            ]);
 
             return back()->with('success', "Shipping status updated to {$order->shipping_status}");
         } catch (\Exception $e) {

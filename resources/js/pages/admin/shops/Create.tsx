@@ -528,7 +528,10 @@ export default function Create({
                                     name="province_id"
                                     render={({ field }) => (
                                         <FormItem className="flex flex-col">
-                                            <FormLabel>{t('Province')}</FormLabel>
+                                            <FormLabel>
+                                                {t('Province')}
+                                                <span className="text-destructive ml-1">*</span>
+                                            </FormLabel>
 
                                             <Popover>
                                                 <PopoverTrigger asChild>
@@ -616,7 +619,10 @@ export default function Create({
                                             name="delivery_type"
                                             render={({ field }) => (
                                                 <FormItem>
-                                                    <FormLabel>{t('Delivery Type')}</FormLabel>
+                                                    <FormLabel>
+                                                        {t('Delivery Type')}
+                                                        <span className="text-destructive ml-1">*</span>
+                                                    </FormLabel>
                                                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                                                         <FormControl>
                                                             <SelectTrigger className="bg-background">
