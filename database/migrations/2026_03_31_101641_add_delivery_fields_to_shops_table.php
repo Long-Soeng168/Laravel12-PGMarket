@@ -18,6 +18,7 @@ return new class extends Migration
 
             $table->decimal('delivery_price_per_kg', 10, 2)
                 ->nullable()
+                ->default(1)
                 ->after('delivery_type');
         });
     }
