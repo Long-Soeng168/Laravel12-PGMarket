@@ -179,7 +179,9 @@ class ABAPaywayCheckout extends Controller
                         }
                     }
 
-                    $responseApollo = $apollo->createBookingFromOrder($order->id);
+                    if ($order->delivery_type == 'system_delivery') {
+                        $responseApollo = $apollo->createBookingFromOrder($order->id);
+                    }
                     // return $responseApollo;
                 }
 

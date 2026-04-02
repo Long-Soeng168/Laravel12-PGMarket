@@ -6,6 +6,7 @@ use App\Helpers\TelegramHelper;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Shop;
 use App\Services\ApolloService;
 use Illuminate\Support\Facades\DB;
 
@@ -181,6 +182,7 @@ class OrderController extends Controller implements HasMiddleware
 
             // Create Order Number Sequent base on each shop
             $shopId = $validated['shop_id'];
+            $shop = Shop::findOrFail($shopId);
 
             $lastOrder = Order::where('shop_id', $shopId)
                 ->orderBy('id', 'desc')
@@ -204,6 +206,7 @@ class OrderController extends Controller implements HasMiddleware
                 'shop_id' => $validated['shop_id'],
                 'user_id' => $request->user()->id ?? null,
 
+                'delivery_type' => $shop->delivery_type,
                 'shipping_price' => $request->shipping_price ??  (float) env('SHIPPING_PRICE') ?? null,
                 'total_weight' => $request->total_weight ?? 0,
                 'shipping_address' => $request->user()?->address ?? 'N/A',
