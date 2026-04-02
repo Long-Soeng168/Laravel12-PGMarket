@@ -106,10 +106,20 @@ class ABAPayoutController extends Controller
         $merchantTranId = 'A' . (microtime(true) * 10000);
 
         // Beneficiaries array
-        $beneficiaries = [
-            ['account' => $shop_bank_account, 'amount' => (float) $shop_receive_amount],
-            ['account' => $shipping_bank_account, 'amount' => (float) $shipping_receive_amount],
-        ];
+
+        if ($order->delivery_type == 'seller_delivery') {
+            $shop_receive_amount = $shop_receive_amount + $shipping_receive_amount;
+
+            $beneficiaries = [
+                ['account' => $shop_bank_account, 'amount' => (float) $shop_receive_amount],
+            ];
+        } else {
+            $beneficiaries = [
+                ['account' => $shop_bank_account, 'amount' => (float) $shop_receive_amount],
+                ['account' => $shipping_bank_account, 'amount' => (float) $shipping_receive_amount],
+            ];
+        }
+
         $merchantDataInfo = json_encode($beneficiaries);
 
         // Custom field
