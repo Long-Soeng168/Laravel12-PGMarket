@@ -139,7 +139,7 @@ class OrderController extends Controller implements HasMiddleware
         try {
             $order->update([
                 'shipping_status' => $request->shipping_status,
-                'status' => ($request->shipping_status == 'Finished' && $order->status == 'paid') ? 'completed' : $order->status,
+                'status' => ($request->shipping_status == 'Finished' && $order->status == 'paid' && $order->delivery_type == 'seller_delivery') ? 'completed' : $order->status,
             ]);
 
             return back()->with('success', "Shipping status updated to {$order->shipping_status}");
