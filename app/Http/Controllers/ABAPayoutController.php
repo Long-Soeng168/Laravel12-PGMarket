@@ -108,7 +108,7 @@ class ABAPayoutController extends Controller
         // Beneficiaries array
 
         if ($order->delivery_type == 'seller_delivery') {
-            $shop_receive_amount = $shop_receive_amount + $shipping_receive_amount;
+            $shop_receive_amount = (($shop_receive_amount * 100) + ($shipping_receive_amount  * 100)) / 100;
 
             $beneficiaries = [
                 ['account' => $shop_bank_account, 'amount' => (float) $shop_receive_amount],
